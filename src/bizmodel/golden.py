@@ -9,7 +9,7 @@ from pathlib import Path
 
 from bizmodel.schemas import Gate, GoldenScore, Run
 
-COLUMNS = ["компания", "чем занимается", "сайт", "критерий", "цитаты из источников", "ответ"]
+COLUMNS = ["компания", "описание", "сайт", "критерий", "цитаты из источников", "ответ"]
 ANSWERS = {"да": "pass", "нет": "fail", "не знаю": "unknown"}
 IN_RUSSIAN = {"pass": "да", "fail": "нет", "unknown": "не знаю"}
 
@@ -30,7 +30,7 @@ def export(run: Run, path: Path) -> int:
             rows.append(
                 {
                     "компания": company.name,
-                    "чем занимается": company.one_liner,
+                    "описание": company.description[:400],
                     "сайт": company.website,
                     "критерий": tree.title,
                     "цитаты из источников": quotes(gate, tree.path),
@@ -47,11 +47,12 @@ def export(run: Run, path: Path) -> int:
 
 def quotes(gate: Gate, path: list[str]) -> str:
     on_path = {f"gate.{question_id}" for question_id in path}
-    return "\n".join(
+    lines = [
         f"«{passport.quote}» ({passport.source_url})"
         for passport in gate.passports
         if passport.id in on_path and passport.quote
-    )
+    ]
+    return "\n".join(dict.fromkeys(lines))
 
 
 def score(run: Run, path: Path) -> GoldenScore:
