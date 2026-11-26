@@ -104,7 +104,9 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
         control=ControlSample(
             slugs=control,
             wrongly_rejected=[
-                slug for slug in control if slug in gates and gates[slug].outcome == "pass"
+                slug
+                for slug in control
+                if slug in gates and not confirmed(prescreens[slug], gates[slug])
             ],
         ),
         costs=costs(journal),
@@ -119,6 +121,12 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
     )
     (folder / "run.json").write_text(result.model_dump_json(indent=1), encoding="utf-8")
     return result
+
+
+def confirmed(screened, checked) -> bool:
+    """Отказ дешёвого слоя подтверждён, если глубокая проверка провалила хотя бы один из его критериев."""
+    failed = {tree.tree_id for tree in checked.trees if tree.outcome == "fail"}
+    return any(violation.criterion in failed for violation in screened.violations)
 
 
 def attempt(stage: str, items: list, work: Callable, ctx: Context, failures: list[Failure]) -> dict:

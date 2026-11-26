@@ -6,7 +6,6 @@ import anthropic
 import openai
 from pydantic import BaseModel
 
-
 ANSWER_TIMEOUT = 240.0
 LONG_ANSWER_TIMEOUT = 300.0
 

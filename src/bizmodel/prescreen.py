@@ -13,31 +13,43 @@ from bizmodel.schemas import BusinessModel, Company, Prescreen, RevenueType, Vio
 UNCHECKABLE_FROM_DESCRIPTION = "proven_at_scale"
 
 
+class Check(BaseModel):
+    criterion: str
+    violated: bool
+    reason: str
+
+
 class Screening(BaseModel):
     payer: str
     pays_for: str
     frequency: str
     revenue_type: RevenueType
-    violations: list[Violation]
+    checks: list[Check]
     speed: Literal[1, 2, 3, 4, 5]
     speed_reason: str
 
 
 def screen(company: Company, ctx: Context) -> Prescreen:
-    forest = ctx.settings.forest
+    checkable = [
+        tree for tree in ctx.settings.forest.trees if tree.id != UNCHECKABLE_FROM_DESCRIPTION
+    ]
     answer = ctx.llm.ask(
         "prescreen",
         ctx.settings.roles.prescreen,
         ctx.settings.prompt("prescreen"),
         {
-            "Owner's criteria": "\n".join(f"- {tree.id}: {tree.title}" for tree in forest.trees),
+            "Owner's criteria": "\n".join(f"- {tree.id}: {tree.title}" for tree in checkable),
             "Company": describe(company),
         },
         Screening,
         slug=company.slug,
     )
-    checkable = {tree.id for tree in forest.trees} - {UNCHECKABLE_FROM_DESCRIPTION}
-    violations = [violation for violation in answer.violations if violation.criterion in checkable]
+    ids = {tree.id for tree in checkable}
+    violations = [
+        Violation(criterion=check.criterion, reason=check.reason)
+        for check in answer.checks
+        if check.violated and check.criterion in ids
+    ]
     return Prescreen(
         slug=company.slug,
         business_model=BusinessModel(
