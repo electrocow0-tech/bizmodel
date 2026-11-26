@@ -1,0 +1,27 @@
+{% import "_macros.html.j2" as ui %}
+{% set carded = cards|length %}
+<section class="panel" id="panel-rating" data-panel="rating" aria-labelledby="h-rating">
+  <header class="hero">
+    {% if cards %}
+    <h1 id="h-rating">До карточки {{ carded|plural("дошла", "дошли", "дошли") }} {{ carded }} {{ carded|plural("модель", "модели", "моделей") }} из {{ run.funnel.sourced }}</h1>
+    {% else %}
+    <h1 id="h-rating">До карточки не дошла ни одна модель из {{ run.funnel.sourced }}</h1>
+    {% endif %}
+    <p>Балл от 0 до 100 показывает, насколько реально за три месяца запустить тест, проверить спрос и получить первую оплату. Чем выше балл, тем ярче карточка.</p>
+  </header>
+  {% if cards %}
+  <div class="switch" role="group" aria-label="Порядок карточек">
+    <button type="button" data-order="asc" aria-pressed="true">От слабой к перспективной</button>
+    <button type="button" data-order="desc" aria-pressed="false">От перспективной к слабой</button>
+  </div>
+  <ol class="ladder" id="ladder">
+    {% for card in cards %}{{ ui.card_item(card, carded) }}{% endfor %}
+  </ol>
+  {% endif %}
+  {% if run.memo %}
+  <section class="memo">
+    <h2>Что запускать первым {{ ui.tag("суждение модели") }}</h2>
+    <div class="prose">{{ run.memo|md }}</div>
+  </section>
+  {% endif %}
+</section>

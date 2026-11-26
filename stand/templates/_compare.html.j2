@@ -1,0 +1,90 @@
+{% import "_macros.html.j2" as ui %}
+{% set strongest_first = cards|reverse|list %}
+{% set preselected = strongest_first[:3]|map(attribute="slug")|list %}
+{% set rows = namespace(all=[("payer", "Кто платит"), ("pays_for", "За что"), ("frequency", "Как часто")]) %}
+{% if cards %}
+  {% for rubric in cards[0].rubrics %}
+    {% set rows.all = rows.all + [("rubric:" ~ loop.index0, rubric.title ~ ", вес " ~ rubric.weight)] %}
+  {% endfor %}
+{% endif %}
+{% set rows.all = rows.all + [
+  ("objections", "Почему может не сработать"),
+  ("test", "Набросок теста"),
+  ("upsell", "Кому это допродаётся"),
+  ("budget", "Сколько вложить в тест"),
+  ("step", "Первый шаг на этой неделе"),
+  ("risk", "Главный риск"),
+  ("stop", "Когда остановить тест"),
+  ("human", "Что нужно от человека"),
+  ("trust", "Доверие к карточке"),
+] %}
+
+{% macro cell(card, key, caption) %}
+<div class="cmp__cell" data-row="{{ key }}">
+  <small class="cmp__cap">{{ caption }}</small>
+  {% if key == "payer" %}{{ card.business_model.payer }}
+  {% elif key == "pays_for" %}{{ card.business_model.pays_for }}
+  {% elif key == "frequency" %}{{ card.business_model.frequency }}
+  {% elif key.startswith("rubric:") %}
+    {% set rubric = card.rubrics[key.split(":")[1]|int] %}
+    <p class="cmp__level">{{ ui.meter(rubric.level) }}<span>{{ rubric.level }} из {{ ui.top_level }}</span></p>
+    <p class="cmp__why">{{ rubric.why }}</p>
+  {% elif key == "objections" %}
+    <ul class="cmp__list">
+      {% for objection in card.objections if objection.sent_to_verifier %}
+      <li>{{ objection.text }} {{ ui.verdict_tag(objection) }}</li>
+      {% endfor %}
+    </ul>
+  {% elif key == "test" %}
+    <p>{{ card.test_sketch.channel }}</p>
+    <p class="cmp__why">{{ card.test_sketch.offer }}</p>
+    <p class="cmp__why">Успех: {{ card.test_sketch.success_sign }}</p>
+  {% elif key == "upsell" %}{{ card.upsell }}
+  {% elif key == "budget" %}{{ card.advice.test_budget if card.advice else "нет совета" }}
+  {% elif key == "step" %}{{ card.advice.first_step if card.advice else "нет совета" }}
+  {% elif key == "risk" %}{{ card.advice.main_risk if card.advice else "нет совета" }}
+  {% elif key == "stop" %}{{ card.advice.stop_signal if card.advice else "нет совета" }}
+  {% elif key == "human" %}
+    {% if card.needs_human %}
+    <ul class="cmp__list">{% for item in card.needs_human %}<li>{{ item }}</li>{% endfor %}</ul>
+    {% else %}<span class="quiet">открытых вопросов нет</span>{% endif %}
+  {% elif key == "trust" %}
+    {{ ui.tag(card.trust.level|label("trust"), card.trust.level|tone("trust")) }}
+    <p class="cmp__why">первоисточник {{ card.trust.by_method.get("primary_source", 0) }}, суждение модели {{ card.trust.by_method.get("model_judgment", 0) }}, нужен человек {{ card.trust.by_method.get("needs_human", 0) }}</p>
+  {% endif %}
+</div>
+{% endmacro %}
+
+<section class="panel" id="panel-compare" data-panel="compare" aria-labelledby="h-compare">
+  <header class="hero">
+    <h1 id="h-compare">Три карточки рядом</h1>
+    <p>Строки стоят на одной высоте, поэтому различия читаются поперёк. Отметьте до трёх моделей.</p>
+  </header>
+  {% if cards %}
+  <div class="picker" role="group" aria-label="Карточки для сравнения">
+    {% for card in strongest_first %}
+    <button type="button" class="pick" data-pick="{{ card.slug }}" aria-pressed="{{ 'true' if card.slug in preselected else 'false' }}" aria-disabled="{{ 'true' if card.slug not in preselected and preselected|length == 3 else 'false' }}"><span>{{ card.name }}</span><b>{{ card.score|round|int }}</b></button>
+    {% endfor %}
+  </div>
+  <p class="picker__count" id="pick-count" aria-live="polite">{% if preselected|length == 3 %}Выбрано 3 из 3. Чтобы взять другую модель, снимите одну.{% else %}Выбрано {{ preselected|length }} из 3{% endif %}</p>
+  <div class="cmp" id="cmp" style="--rows:{{ rows.all|length + 1 }}">
+    <div class="cmp__col cmp__col--labels">
+      <div class="cmp__cell cmp__cell--head"></div>
+      {% for key, caption in rows.all %}<div class="cmp__cell" data-row="{{ key }}">{{ caption }}</div>{% endfor %}
+    </div>
+    {% for card in strongest_first %}
+    <div class="cmp__col" data-col="{{ card.slug }}"{% if card.slug not in preselected %} hidden{% endif %}>
+      <div class="cmp__cell cmp__cell--head" style="--lum:{{ (card.score / 100)|round(2) }}">
+        <p class="cmp__name">{{ card.name }}</p>
+        <p class="cmp__score"><b>{{ card.score|round|int }}</b><small>из 100, место {{ card.rank }}</small></p>
+        <p class="cmp__state">{{ ui.advice_tag(card) }}</p>
+        <p><a href="#rating/{{ card.slug }}">Открыть карточку</a></p>
+      </div>
+      {% for key, caption in rows.all %}{{ cell(card, key, caption) }}{% endfor %}
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="quiet">Сравнивать пока нечего: в этом прогоне нет карточек.</p>
+  {% endif %}
+</section>

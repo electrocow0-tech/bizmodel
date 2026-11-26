@@ -1,0 +1,212 @@
+{% set top_level = 5 %}
+
+{% macro tag(text, tone="plain") -%}
+<span class="tag tag--{{ tone }}">{{ text }}</span>
+{%- endmacro %}
+
+{% macro meter(level) -%}
+<span class="meter" role="img" aria-label="{{ level }} из {{ top_level }}">
+  {%- for step in range(1, top_level + 1) %}<i{% if step <= level %} class="on"{% endif %}></i>{% endfor -%}
+</span>
+{%- endmacro %}
+
+{% macro advice_tag(card) -%}
+{% set key = card.advice.verdict if card.advice else "missing" %}
+{{ tag(key|label("advice"), key|tone("advice")) }}
+{%- endmacro %}
+
+{% macro verdict_tag(objection) -%}
+{% set key = (objection.verdict or "failed") if objection.sent_to_verifier else "unchecked" %}
+{{ tag(key|label("verdict"), key|tone("verdict")) }}
+{%- endmacro %}
+
+{% macro trust_tag(card) -%}
+{{ tag("доверие " ~ card.trust.level|label("trust"), card.trust.level|tone("trust")) }}
+{%- endmacro %}
+
+{% macro fingerprint(card) -%}
+<span class="print" role="img" aria-label="Шесть оценок: {% for rubric in card.rubrics %}{{ rubric.level }}{% if not loop.last %}, {% endif %}{% endfor %}">
+  {%- for rubric in card.rubrics %}<i style="--h:{{ rubric.level / top_level }}" title="{{ rubric.title }}: {{ rubric.level }} из {{ top_level }}"></i>{% endfor -%}
+</span>
+{%- endmacro %}
+
+{% macro votes(decision) -%}
+<span class="votes" role="img" aria-label="Голоса: {% for vote in decision.votes %}{{ vote.answer|label('answer') }}{% if not loop.last %}, {% endif %}{% endfor %}">
+  {%- for vote in decision.votes %}<i class="vote vote--{{ vote.answer }}" title="{{ vote.voter }}: {{ vote.answer|label('answer') }}{% if vote.quote %}. «{{ vote.quote }}»{% endif %}"></i>{% endfor -%}
+</span>
+{%- endmacro %}
+
+{% macro ruling(decision) -%}
+{% set agreed = (decision.agreement * decision.votes|length)|round|int %}
+<b>{{ decision.answer|label("answer") }}</b>
+<span>{{ decision.decided_by|label("decided_by") }}{% if decision.votes %}, согласны {{ agreed }} из {{ decision.votes|length }}{% endif %}</span>
+{% if decision.votes %}{{ votes(decision) }}{% endif %}
+{%- endmacro %}
+
+{% macro source(url) -%}
+<a href="{{ url }}" rel="noopener" target="_blank">{{ url|host }}</a>
+{%- endmacro %}
+
+{% macro proof(passport) %}
+{% if passport %}
+<p class="path__proof">
+  {{ tag(passport.method|label("method"), passport.method|tone("method")) }}
+  {{ tag("уверенность " ~ passport.confidence|label("confidence"), passport.confidence|tone("confidence")) }}
+  {% if passport.source_url %}{{ source(passport.source_url) }}{% endif %}
+  {% if passport.quote %}<q>{{ passport.quote }}</q>{% endif %}
+</p>
+{% endif %}
+{% endmacro %}
+
+{% macro objection_item(objection) %}
+<li class="objection">
+  <p class="objection__text">{{ objection.text }}</p>
+  <p class="objection__meta">{{ verdict_tag(objection) }} <span>сила {{ objection.strength }} из {{ top_level }}</span></p>
+  <p class="objection__why">{{ objection.reasoning }}</p>
+  {% if objection.quote %}
+  <blockquote>«{{ objection.quote }}»{% if objection.source_url %} <cite>{{ source(objection.source_url) }}{% if objection.source_date %}, {{ objection.source_date|day }}{% endif %}</cite>{% endif %}</blockquote>
+  {% endif %}
+  {% if objection.verifier_note or objection.verifier_quote %}
+  <p class="objection__check"><b>Проверяющий:</b> {{ objection.verifier_note }}{% if objection.verifier_quote %} «{{ objection.verifier_quote }}»{% endif %}</p>
+  {% endif %}
+</li>
+{% endmacro %}
+
+{% macro card_item(card, cards_total) %}
+<li class="card foldable" id="card-{{ card.slug }}" data-slug="{{ card.slug }}" data-score="{{ card.score }}" style="--lum:{{ (card.score / 100)|round(2) }}">
+  <button class="card__head" type="button" data-fold aria-expanded="false" aria-controls="card-body-{{ card.slug }}">
+    <span class="card__grid">
+      <span class="card__rank"><b>{{ card.rank }}</b><small>место из {{ cards_total }}</small></span>
+      <span class="card__title">
+        <span class="card__name">{{ card.name }}</span>
+        <span class="card__line">{{ card.one_liner }}</span>
+      </span>
+      {{ fingerprint(card) }}
+      <span class="card__score"><b>{{ card.score|round|int }}</b><small>из 100</small></span>
+      <span class="card__state">{{ advice_tag(card) }}{{ trust_tag(card) }}</span>
+      <span class="chev" aria-hidden="true"></span>
+    </span>
+    <span class="schema">
+      <span><small>Кто платит</small>{{ card.business_model.payer }}</span>
+      <span><small>За что</small>{{ card.business_model.pays_for }}</span>
+      <span><small>Как часто</small>{{ card.business_model.frequency }}</span>
+    </span>
+  </button>
+  <div class="fold">
+    <div class="fold__in" id="card-body-{{ card.slug }}">
+      <div class="card__body">
+        <div class="card__main">
+          <section data-section="scores">
+            <h3>Оценки</h3>
+            <ul class="rubrics">
+              {% for rubric in card.rubrics %}
+              <li class="rubric">
+                <p class="rubric__top"><b>{{ rubric.title }}</b><span>вес {{ rubric.weight }}</span>{{ meter(rubric.level) }}<span>{{ rubric.level }} из {{ top_level }}</span></p>
+                <p class="rubric__why">{{ rubric.why }}</p>
+              </li>
+              {% endfor %}
+            </ul>
+          </section>
+          <section data-section="objections">
+            <h3>Почему это может не сработать</h3>
+            {% set checked = card.objections|selectattr("sent_to_verifier")|list %}
+            {% set unchecked = card.objections|rejectattr("sent_to_verifier")|list %}
+            <ul class="objections">
+              {% for objection in checked %}{{ objection_item(objection) }}{% endfor %}
+            </ul>
+            {% if unchecked %}
+            <div class="more foldable">
+              <button class="more__head" type="button" data-fold aria-expanded="false">Ещё {{ unchecked|length }} {{ unchecked|length|plural("возражение", "возражения", "возражений") }} без проверки источника<span class="chev" aria-hidden="true"></span></button>
+              <div class="fold"><div class="fold__in"><ul class="objections">
+                {% for objection in unchecked %}{{ objection_item(objection) }}{% endfor %}
+              </ul></div></div>
+            </div>
+            {% endif %}
+          </section>
+        </div>
+        <div class="card__side">
+          <section class="advice" data-section="advice">
+            <h3>Совет {{ tag("суждение модели") }}</h3>
+            {% if card.advice %}
+            <p class="advice__verdict">{{ card.advice.verdict|label("advice") }}</p>
+            <dl>
+              <dt>Сколько вложить в тест</dt><dd>{{ card.advice.test_budget }}</dd>
+              <dt>Первый шаг на этой неделе</dt><dd>{{ card.advice.first_step }}</dd>
+              <dt>Главный риск</dt><dd>{{ card.advice.main_risk }}</dd>
+              <dt>Когда остановить тест</dt><dd>{{ card.advice.stop_signal }}</dd>
+            </dl>
+            {% if card.advice.flagged_numbers %}
+            <p class="quiet">В совете есть числа вне карточки: {{ card.advice.flagged_numbers|join(", ") }}.</p>
+            {% endif %}
+            {% else %}
+            <p class="quiet">Шаг советника для этой карточки не выполнен.</p>
+            {% endif %}
+          </section>
+          <section data-section="test">
+            <h3>Набросок теста</h3>
+            <dl>
+              <dt>Канал</dt><dd>{{ card.test_sketch.channel }}</dd>
+              <dt>Предложение</dt><dd>{{ card.test_sketch.offer }}</dd>
+              <dt>Признак успеха</dt><dd>{{ card.test_sketch.success_sign }}</dd>
+            </dl>
+          </section>
+          <section data-section="upsell">
+            <h3>Кому это допродаётся</h3>
+            <p>{{ card.upsell }}</p>
+          </section>
+          <section data-section="human">
+            <h3>Что нужно от человека</h3>
+            {% if card.needs_human %}
+            <ul class="plain">{% for item in card.needs_human %}<li>{{ item }}</li>{% endfor %}</ul>
+            {% else %}
+            <p class="quiet">Открытых вопросов нет.</p>
+            {% endif %}
+          </section>
+          <section data-section="trust">
+            <h3>Доверие к карточке {{ tag(card.trust.level|label("trust"), card.trust.level|tone("trust")) }}</h3>
+            <p class="quiet">Считается отдельно от балла: по тому, на чём держатся утверждения.</p>
+            <dl class="counts">
+              {% for method in ["primary_source", "calculation", "model_judgment", "needs_human"] %}
+              <dt>{{ method|label("method") }}</dt><dd>{{ card.trust.by_method.get(method, 0) }}</dd>
+              {% endfor %}
+            </dl>
+            <dl class="counts">
+              {% for level in ["high", "medium", "low"] %}
+              <dt>уверенность {{ level|label("confidence") }}</dt><dd>{{ card.trust.by_confidence.get(level, 0) }}</dd>
+              {% endfor %}
+            </dl>
+          </section>
+          <section data-section="anchor">
+            <h3>Компания-пример</h3>
+            <p>{{ card.anchor }}</p>
+            <p class="links">{{ source(card.website) }} <a href="{{ card.yc_url }}" rel="noopener" target="_blank">страница в каталоге</a> <a href="#forest/{{ card.slug }}">путь по критериям</a></p>
+          </section>
+        </div>
+        <section class="card__wide" data-section="passports">
+          <h3>Паспорта утверждений</h3>
+          <div class="more foldable">
+          <button class="more__head" type="button" data-fold aria-expanded="false">{{ card.passports|length }} {{ card.passports|length|plural("утверждение", "утверждения", "утверждений") }}: источник, дата, метод, уверенность<span class="chev" aria-hidden="true"></span></button>
+          <div class="fold"><div class="fold__in">
+          <div class="passports" role="table" aria-label="Паспорта утверждений">
+            <div class="passports__head" role="row">
+              <span role="columnheader">Утверждение</span><span role="columnheader">Источник</span><span role="columnheader">Дата источника</span><span role="columnheader">Обращение</span><span role="columnheader">Метод</span><span role="columnheader">Уверенность</span>
+            </div>
+            {% for passport in card.passports %}
+            <div class="passport" role="row">
+              <span role="cell" class="passport__claim">{{ passport.claim }}<small>{{ passport.origin|label("origin") }}{% if passport.note %}. {{ passport.note }}{% endif %}</small></span>
+              <span role="cell" data-cap="Источник">{% if passport.source_url %}{{ source(passport.source_url) }}{% else %}<span class="quiet">нет</span>{% endif %}{% if passport.quote %}<q>{{ passport.quote }}</q>{% endif %}</span>
+              <span role="cell" data-cap="Дата источника">{{ passport.source_date|day_or_none }}</span>
+              <span role="cell" data-cap="Обращение">{{ passport.accessed|day_or_none }}</span>
+              <span role="cell" data-cap="Метод">{{ tag(passport.method|label("method"), passport.method|tone("method")) }}</span>
+              <span role="cell" data-cap="Уверенность">{{ tag(passport.confidence|label("confidence"), passport.confidence|tone("confidence")) }}</span>
+            </div>
+            {% endfor %}
+          </div>
+          </div></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</li>
+{% endmacro %}

@@ -1,0 +1,97 @@
+labels:
+  outcome:
+    pass: прошла
+    fail: отказ
+    unknown: не удалось проверить
+  answer:
+    "yes": да
+    "no": нет
+    unknown: неизвестно
+  method:
+    primary_source: первоисточник
+    calculation: расчёт
+    model_judgment: суждение модели
+    needs_human: нужен человек
+  confidence:
+    high: высокая
+    medium: средняя
+    low: низкая
+  trust:
+    high: высокое
+    medium: среднее
+    low: низкое
+  verdict:
+    supported: подтверждено источником
+    not_supported: источник не подтверждает
+    contradicts: источник говорит иное
+    source_unavailable: источник недоступен
+    no_source: без источника
+    unchecked: не проверялось
+    failed: проверка не выполнена
+  advice:
+    launch: Запускать
+    postpone: Отложить
+    needs_human: Нужен человек
+    missing: Совета нет
+  revenue_type:
+    subscription: подписка
+    usage_fee: плата за использование
+    transaction_commission: комиссия с операций
+    one_time: разовая продажа
+    advertising: реклама
+    other: другое
+  prescreen:
+    rejected: отказ по описанию
+    queued: в очереди
+    selected: глубокая проверка
+    failed: сбой шага
+  decided_by:
+    vote: голосование
+    arbiter: арбитр
+    human: человек
+    unresolved: не решено
+  origin:
+    gate: фильтр
+    critic: критик
+    card: карточка
+    advisor: советник
+  role:
+    prescreen: дешёвый слой
+    planner: поисковые запросы
+    voter: голосующий
+    arbiter: арбитр
+    critic: критик
+    verifier: проверяющий
+    card: сборщик карточки
+    advisor: советник
+  stage:
+    prescreen: дешёвый слой
+    evidence: сбор источников
+    forest: лес решений
+    critic: критик
+    verifier: проверяющий
+    card: сборка карточки
+    advisor: советник
+  validator:
+    schema_retries: Повторы из-за ответа не по схеме
+    schema_failures: Шаги, сорванные ответом не по схеме
+    quotes_checked: Цитат сверено с текстом источника
+    quotes_dropped: Цитат снято, в источнике их нет
+    advice_numbers_flagged: Чисел советника без опоры в карточке
+    cards_rejected: Карточек отклонено проверкой
+
+tones:
+  outcome: {pass: pos, fail: neg, unknown: warn}
+  answer: {"yes": plain, "no": plain, unknown: warn}
+  confidence: {high: pos, medium: plain, low: warn}
+  trust: {high: pos, medium: plain, low: warn}
+  verdict:
+    supported: neg
+    not_supported: pos
+    contradicts: pos
+    source_unavailable: warn
+    no_source: plain
+    unchecked: plain
+    failed: warn
+  advice: {launch: pos, postpone: plain, needs_human: warn, missing: plain}
+  method: {primary_source: pos, calculation: plain, model_judgment: plain, needs_human: warn}

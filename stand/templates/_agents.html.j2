@@ -1,0 +1,127 @@
+{% import "_macros.html.j2" as ui %}
+{% set leaks = run.isolation|selectattr("leaked")|list|length %}
+{% set checks = run.isolation|length %}
+
+{% macro call(agent) %}
+<div class="call">
+  <p><b>{{ agent.role|label("role") }}</b> <span>{{ agent.model }}</span></p>
+  <p class="quiet">Отпечаток запроса <code>{{ agent.input_sha[:12] }}</code></p>
+  <ul class="plain">{% for part in agent.inputs %}<li>{{ part }}</li>{% endfor %}</ul>
+</div>
+{% endmacro %}
+
+<section class="panel" id="panel-agents" data-panel="agents" aria-labelledby="h-agents">
+  <header class="hero">
+    <h1 id="h-agents">Критик и проверяющий не видят выводов друг друга</h1>
+    <p>Проверяющий получает только текст утверждения и ссылку на источник: без рассуждений критика, без оценки силы и без вердикта. Ниже записано, что ушло каждому агенту, и результат проверки на утечку.</p>
+  </header>
+
+  <dl class="facts">
+    <div><dt>проверок изоляции</dt><dd>{{ checks }}</dd></div>
+    <div><dt>{{ leaks|plural("утечка", "утечки", "утечек") }}</dt><dd>{{ leaks }}</dd></div>
+    <div><dt>цитат сверено с источником</dt><dd>{{ run.validators.quotes_checked }}</dd></div>
+    <div><dt>расход на прогон, $</dt><dd>{{ spend.total|usd }}</dd></div>
+  </dl>
+
+  <section class="block">
+    <h2>Что получил каждый агент</h2>
+    <p class="lead">Отпечаток считается от полного текста запроса. В списке под ним перечислено всё, что в запрос вошло.</p>
+    <ul class="rows">
+      {% for check in run.isolation %}
+      <li class="row foldable" id="iso-{{ check.slug }}" data-slug="{{ check.slug }}">
+        <button class="row__head" type="button" data-fold aria-expanded="false" aria-controls="iso-body-{{ check.slug }}">
+          <span class="row__grid">
+            <span class="row__title">
+              <span class="row__name">{{ run.companies[check.slug].name }}</span>
+              <span class="row__line">Критик: 1 запрос. Проверяющий: {{ check.verifier|length }} {{ check.verifier|length|plural("запрос", "запроса", "запросов") }}, по одному на утверждение.</span>
+            </span>
+            <span class="row__state">{% if check.leaked %}{{ ui.tag("утечка", "neg") }}{% else %}{{ ui.tag("утечек нет", "pos") }}{% endif %}</span>
+            <span class="chev" aria-hidden="true"></span>
+          </span>
+        </button>
+        <div class="fold">
+          <div class="fold__in" id="iso-body-{{ check.slug }}">
+            <div class="row__body">
+              {% if check.leaked %}
+              <p class="alert">В запросы проверяющего попало то, чего там быть не должно: {{ check.leaked|join(", ") }}.</p>
+              {% endif %}
+              <div class="calls">
+                {{ call(check.critic) }}
+                {% for agent in check.verifier %}{{ call(agent) }}{% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>Учебный сбой провайдера</h2>
+    {% if run.outage_drill %}
+    {% set drill = run.outage_drill %}
+    <p class="lead">Для роли «{{ drill.role|label("role") }}» намеренно отключён маршрут <code>{{ drill.failed_route }}</code>. Запрос обслужил запасной маршрут <code>{{ drill.served_by }}</code>, переключение заняло {{ "%.1f"|format(drill.seconds)|replace(".", ",") }} с.</p>
+    <p class="quiet">Ошибка основного маршрута: {{ drill.error }}</p>
+    {% else %}
+    <p class="lead">В этом прогоне учебный сбой не проводился.</p>
+    {% endif %}
+  </section>
+
+  <section class="block">
+    <h2>Что поймал валидатор</h2>
+    <p class="lead">Проверки выполняет код, а не модель. Цитата, которой нет в сохранённом тексте источника, снимается, а утверждение понижается до суждения модели.</p>
+    <dl class="ledger">
+      {% for name, count in run.validators.model_dump().items() %}
+      <div><dt>{{ name|label("validator") }}</dt><dd>{{ count }}</dd></div>
+      {% endfor %}
+    </dl>
+  </section>
+
+  <section class="block">
+    <h2>Сбойные шаги</h2>
+    {% if run.failures %}
+    <p class="lead">Модель со сбойным шагом получает статус «не проверено» и в рейтинг не попадает. Оценок на глаз вместо пропущенного шага нет.</p>
+    <ul class="reasons reasons--open">
+      {% for failure in run.failures %}
+      <li><b>{{ run.companies[failure.slug].name if failure.slug in run.companies else failure.slug }}</b><span>{{ failure.stage|label("stage") }}: {{ failure.error }}</span></li>
+      {% endfor %}
+    </ul>
+    {% else %}
+    <p class="lead">Все шаги выполнены.</p>
+    {% endif %}
+  </section>
+
+  <section class="block">
+    <h2>Расходы по ролям</h2>
+    <div class="spend" role="table" aria-label="Расходы по ролям">
+      <div class="spend__head" role="row">
+        <span role="columnheader">Роль</span><span role="columnheader">Модель</span><span role="columnheader">Вызовы</span><span role="columnheader">Из кеша</span><span role="columnheader">Токены, вход</span><span role="columnheader">Токены, выход</span><span role="columnheader">$</span>
+      </div>
+      {% for cost in run.costs %}
+      <div class="spend__row" role="row">
+        <span role="cell" class="spend__role">{{ cost.role|label("role") }}</span>
+        <span role="cell" data-cap="Модель">{{ cost.model }}<small>{{ cost.provider }}</small></span>
+        <span role="cell" data-cap="Вызовы">{{ cost.calls }}</span>
+        <span role="cell" data-cap="Из кеша">{{ cost.cached }}</span>
+        <span role="cell" data-cap="Токены, вход">{{ cost.input_tokens|thousands }}</span>
+        <span role="cell" data-cap="Токены, выход">{{ cost.output_tokens|thousands }}</span>
+        <span role="cell" data-cap="$">{{ cost.usd|usd }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="quiet">{% for provider, amount in spend.by_provider.items() %}{{ provider }}: ${{ amount|usd }}{% if not loop.last %}, {% endif %}{% endfor %}. Всего ${{ spend.total|usd }}.</p>
+  </section>
+
+  <section class="block">
+    <h2>Сверка с разметкой человека</h2>
+    {% if run.golden %}
+    <p class="lead">Человек вслепую ответил на {{ run.golden.labelled }} {{ run.golden.labelled|plural("вопрос", "вопроса", "вопросов") }}, лес совпал с ним в {{ run.golden.agreed }}.</p>
+    {% if run.golden.disagreements %}
+    <ul class="plain">{% for item in run.golden.disagreements %}<li>{{ item }}</li>{% endfor %}</ul>
+    {% endif %}
+    {% else %}
+    <p class="lead">Разметка человеком ещё не внесена, сверять не с чем.</p>
+    {% endif %}
+  </section>
+</section>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ru" data-tab="rating">
+<head><style>html,body{background:#000;color:#f5f5f7}</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Конвейер бизнес-моделей: рейтинг и карточки</title>
+<script>
+(function () {
+  var tab = location.hash.slice(1).split('/')[0];
+  if (['rating', 'compare', 'forest', 'agents', 'documents'].indexOf(tab) > -1) {
+    document.documentElement.dataset.tab = tab;
+  }
+  if (!/Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent)) {
+    ['inter-latin', 'inter-cyrillic'].forEach(function (name) {
+      var link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'font';
+      link.type = 'font/woff2';
+      link.crossOrigin = 'anonymous';
+      link.href = 'assets/fonts/' + name + '.woff2';
+      document.head.appendChild(link);
+    });
+  }
+})();
+</script>
+<link rel="stylesheet" href="{{ assets['style.css'] }}">
+</head>
+<body>
+<header class="top">
+  <div class="top__in">
+    <a class="top__name" href="#rating">Конвейер бизнес-моделей</a>
+    <nav class="tabs" aria-label="Разделы">
+      <a class="tab" href="#rating" data-tab="rating">Рейтинг</a>
+      <a class="tab" href="#compare" data-tab="compare">Сравнение</a>
+      <a class="tab" href="#forest" data-tab="forest">Воронка и лес</a>
+      <a class="tab" href="#agents" data-tab="agents">Агенты и изоляция</a>
+      <a class="tab" href="#documents" data-tab="documents">Решения и честный список</a>
+    </nav>
+    <p class="top__run">Прогон {{ run.finished|day }}{% if run.profile == "fixture" %}, демонстрационные данные{% endif %}</p>
+  </div>
+</header>
+<main class="wrap">
+{% include "_rating.html.j2" %}
+{% include "_compare.html.j2" %}
+{% include "_forest.html.j2" %}
+{% include "_agents.html.j2" %}
+{% include "_documents.html.j2" %}
+<footer class="foot">Прогон {{ run.finished|day }}{% if run.profile == "fixture" %}, демонстрационные данные: компании вымышлены{% endif %}</footer>
+</main>
+<script src="{{ assets['app.js'] }}"></script>
+</body>
+</html>
