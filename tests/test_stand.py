@@ -93,3 +93,19 @@ def test_page_loads_nothing_from_outside(site: Path, page: str):
         assert (site / path).is_file()
         assert version
     assert (site / ".nojekyll").exists()
+
+
+def test_model_text_cannot_inject_markup(tmp_path):
+    run = Run.model_validate_json(FIXTURE.read_text(encoding="utf-8"))
+    run.memo = "Первый абзац.\n\n<script>alert(1)</script> **не разметка**"
+    build(run, tmp_path, {"decisions": "", "limitations": ""})
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "<script>alert(1)</script>" not in page
+    assert "&lt;script&gt;alert(1)&lt;/script&gt; **не разметка**" in page
+
+
+def test_only_web_addresses_become_links(tmp_path):
+    run = Run.model_validate_json(FIXTURE.read_text(encoding="utf-8"))
+    run.cards[0].yc_url = "javascript:alert(1)"
+    build(run, tmp_path, {"decisions": "", "limitations": ""})
+    assert "javascript:alert(1)" not in (tmp_path / "index.html").read_text(encoding="utf-8")

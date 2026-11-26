@@ -54,6 +54,8 @@ def _environment(wording: dict) -> Environment:
     env.filters["tone"] = lambda value, group: tones[group].get(value, "plain")
     env.filters["plural"] = _plural
     env.filters["md"] = _markdown
+    env.filters["paragraphs"] = _paragraphs
+    env.filters["web"] = _web_address
     env.filters["host"] = lambda url: urlparse(url).netloc.removeprefix("www.")
     env.filters["day"] = _day
     env.filters["day_or_none"] = lambda moment: _day(moment) if moment else Markup(NO_DATE)
@@ -71,7 +73,19 @@ def _plural(number: int, one: str, few: str, many: str) -> str:
 
 
 def _markdown(text: str) -> Markup:
+    """Только для документов из репозитория: их разметка считается доверенной."""
     return Markup(markdown.markdown(text, extensions=["tables"]))
+
+
+def _paragraphs(text: str) -> Markup:
+    """Текст от модели выводится экранированными абзацами, без разметки."""
+    parts = [part.strip() for part in text.split("\n\n") if part.strip()]
+    return Markup("").join(Markup("<p>{}</p>").format(part) for part in parts)
+
+
+def _web_address(url: str | None) -> str:
+    """Адреса приходят из каталога и поиска: в ссылку идут только http и https."""
+    return url if url and urlparse(url).scheme in ("http", "https") else "#"
 
 
 def _day(moment: str) -> str:

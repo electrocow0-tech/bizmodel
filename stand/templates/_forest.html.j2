@@ -102,7 +102,7 @@
                 <h3>Открытые источники</h3>
                 <ul class="sources">
                   {% for evidence in gate.evidence %}
-                  <li><span>{{ evidence.id }}</span><a href="{{ evidence.url }}" rel="noopener" target="_blank">{{ evidence.title }}</a><span>{{ evidence.url|host }}, {% if evidence.published %}источник от {{ evidence.published|day }}{% else %}дата источника не указана{% endif %}, открыт {{ evidence.accessed|day }}</span><code>{{ evidence.sha256[:12] }}</code></li>
+                  <li><span>{{ evidence.id }}</span><a href="{{ evidence.url|web }}" rel="noopener" target="_blank">{{ evidence.title }}</a><span>{{ evidence.url|host }}, {% if evidence.published %}источник от {{ evidence.published|day }}{% else %}дата источника не указана{% endif %}, открыт {{ evidence.accessed|day }}</span><code>{{ evidence.sha256[:12] }}</code></li>
                   {% endfor %}
                 </ul>
               </section>

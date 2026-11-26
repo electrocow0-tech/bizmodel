@@ -44,7 +44,7 @@
 {%- endmacro %}
 
 {% macro source(url) -%}
-<a href="{{ url }}" rel="noopener" target="_blank">{{ url|host }}</a>
+<a href="{{ url|web }}" rel="noopener" target="_blank">{{ url|host }}</a>
 {%- endmacro %}
 
 {% macro proof(passport) %}
@@ -179,7 +179,7 @@
           <section data-section="anchor">
             <h3>Компания-пример</h3>
             <p>{{ card.anchor }}</p>
-            <p class="links">{{ source(card.website) }} <a href="{{ card.yc_url }}" rel="noopener" target="_blank">страница в каталоге</a> <a href="#forest/{{ card.slug }}">путь по критериям</a></p>
+            <p class="links">{{ source(card.website) }} <a href="{{ card.yc_url|web }}" rel="noopener" target="_blank">страница в каталоге</a> <a href="#forest/{{ card.slug }}">путь по критериям</a></p>
           </section>
         </div>
         <section class="card__wide" data-section="passports">

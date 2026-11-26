@@ -21,7 +21,7 @@
   {% if run.memo %}
   <section class="memo">
     <h2>Что запускать первым {{ ui.tag("суждение модели") }}</h2>
-    <div class="prose">{{ run.memo|md }}</div>
+    <div class="prose">{{ run.memo|paragraphs }}</div>
   </section>
   {% endif %}
 </section>
