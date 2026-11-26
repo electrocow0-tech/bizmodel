@@ -29,6 +29,7 @@ prices:
   anthropic/claude-opus-5.5: [4.00, 20.00]
   meta-llama/llama-4-maverick: [0.35, 1.00]
   google/gemma-4-26b-a4b-it: [0.09, 0.30]
+  deepseek/deepseek-v4.1-flash: [0.051, 0.203]
   meta-llama/llama-4-scout: [0.10, 0.30]
   mistralai/mistral-small-2603: [0.15, 0.60]
   openai/gpt-6-luna: [0.10, 0.50]
@@ -46,6 +47,7 @@ profiles:
       - routes: ["openrouter:google/gemma-4-26b-a4b-it"]
       - routes: ["openrouter:meta-llama/llama-4-maverick"]
       - routes: ["openrouter:mistralai/mistral-small-2603"]
+      - routes: ["openrouter:deepseek/deepseek-v4.1-flash"]
       - routes: ["openrouter:openai/gpt-6-luna"]
       - routes: ["anthropic:claude-sonnet-5-5", "openrouter:anthropic/claude-sonnet-5.5"]
     arbiter:

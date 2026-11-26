@@ -85,6 +85,8 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
         started=started,
         finished=datetime.now().isoformat(timespec="seconds"),
         profile=settings.profile,
+        voters=[voter.routes[0].split(":", 1)[1] for voter in settings.roles.voters],
+        quorum=min(settings.gate.quorum, len(settings.roles.voters)),
         funnel=Funnel(
             sourced=len(companies),
             prescreen_rejected=rejected,

@@ -254,6 +254,8 @@ class Run(BaseModel):
     started: str
     finished: str
     profile: str
+    voters: list[str]
+    quorum: int
     funnel: Funnel
     companies: dict[str, Company]
     prescreens: list[Prescreen]

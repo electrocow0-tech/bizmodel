@@ -25,7 +25,7 @@ funnel:
   control_sample: 10
 
 gate:
-  quorum: 4
+  quorum: 5
   search_queries: 4
 
 critic:
