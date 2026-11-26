@@ -86,12 +86,12 @@ tones:
   confidence: {high: pos, medium: plain, low: warn}
   trust: {high: pos, medium: plain, low: warn}
   verdict:
-    supported: neg
-    not_supported: pos
-    contradicts: pos
+    supported: pos
+    not_supported: neg
+    contradicts: neg
     source_unavailable: warn
     no_source: plain
     unchecked: plain
     failed: warn
   advice: {launch: pos, postpone: plain, needs_human: warn, missing: plain}
-  method: {primary_source: pos, calculation: plain, model_judgment: plain, needs_human: warn}
+  method: {primary_source: pos, calculation: info, model_judgment: plain, needs_human: warn}

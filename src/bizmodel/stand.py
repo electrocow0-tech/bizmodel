@@ -2,6 +2,7 @@
 
 import hashlib
 import shutil
+from collections import Counter
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -16,6 +17,9 @@ STAND = Path(__file__).resolve().parents[2] / "stand"
 NO_DATE = '<span class="quiet">нет</span>'
 VOTE_EXAMPLE_ORDER = {"arbiter": 0, "human": 1, "unresolved": 1}
 VERDICT_EXAMPLE_ORDER = {"supported": 0, "contradicts": 1, "not_supported": 2}
+VERDICT_ORDER = [
+    "supported", "contradicts", "not_supported", "source_unavailable", "no_source", "failed", "unchecked",
+]  # fmt: skip
 MONTHS = [
     "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря",
@@ -61,6 +65,8 @@ def _environment(wording: dict) -> Environment:
     env.filters["tone"] = lambda value, group: tones[group].get(value, "plain")
     env.filters["plural"] = _plural
     env.filters["merged"] = lambda base, extra: base | extra
+    env.filters["verdict_key"] = _verdict_key
+    env.filters["verdict_counts"] = _verdict_counts
     env.filters["md"] = _markdown
     env.filters["paragraphs"] = _paragraphs
     env.filters["web"] = _web_address
@@ -70,6 +76,18 @@ def _environment(wording: dict) -> Environment:
     env.filters["usd"] = lambda amount: f"{amount:.2f}".replace(".", ",")
     env.filters["thousands"] = lambda number: f"{number:,}".replace(",", " ")
     return env
+
+
+def _verdict_key(objection: Objection) -> str:
+    """Возражение без отправки проверяющему не проверялось, отправленное без вердикта сорвалось."""
+    if not objection.sent_to_verifier:
+        return "unchecked"
+    return objection.verdict or "failed"
+
+
+def _verdict_counts(card: Card) -> list[tuple[str, int]]:
+    counts = Counter(_verdict_key(objection) for objection in card.objections)
+    return [(key, counts[key]) for key in VERDICT_ORDER if counts[key]]
 
 
 def _plural(number: int, one: str, few: str, many: str) -> str:

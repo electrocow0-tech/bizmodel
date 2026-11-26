@@ -9,12 +9,13 @@ from bizmodel.stand import build
 
 FIXTURE = Path(__file__).parent / "fixtures" / "run.json"
 CARD_SECTIONS = [
+    "advice",
+    "risk",
+    "test",
     "scores",
     "objections",
-    "advice",
-    "test",
-    "upsell",
     "human",
+    "upsell",
     "trust",
     "anchor",
     "passports",
@@ -58,7 +59,7 @@ def test_cards_share_one_structure(run: Run, page: str):
 
     for block in card_blocks(page).values():
         assert re.findall(r'data-section="(\w+)"', block) == CARD_SECTIONS
-        assert re.findall(r'class="rubric__top"><b>([^<]+)</b>', block) == rubric_titles
+        assert re.findall(r'class="rubric__name">([^<]+)</span>', block) == rubric_titles
 
 
 def test_rating_runs_from_weak_to_promising(run: Run, page: str):

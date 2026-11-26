@@ -33,6 +33,11 @@
 {% set text %}Самая перспективная модель: {{ card.name }}, {{ card.score|round|int }} из 100. В шапке схема денег: кто платит, за что и как часто.{% endset %}
 {% set _ = steps.append(at_card|merged({"title": "Карточка модели", "text": text, "open": ["card-" ~ card.slug], "target": "card-head-" ~ card.slug})) %}
 
+{% if card.advice %}
+{% set text %}Советник читает готовую карточку и пишет, что делать: здесь «{{ card.advice.verdict|label("advice") }}». На балл и место в рейтинге он не влияет.{% endset %}
+{% set _ = steps.append(at_card|merged({"title": "Совет собственнику", "text": text, "open": ["card-" ~ card.slug], "target": "advice-" ~ card.slug})) %}
+{% endif %}
+
 {% if card.rubrics|length > 1 %}
 {% set heavy = card.rubrics|sort(attribute="weight", reverse=true) %}
 {% set text %}Балл складывается из {{ card.rubrics|length }} оценок с весами, больше всего весят «{{ heavy[0].title }}» и «{{ heavy[1].title }}». Модель ставит только уровень по шкале, итог считает код.{% endset %}
@@ -40,9 +45,9 @@
 {% endif %}
 
 {% if tour.objection %}
-{% set verdict = tour.objection.verdict or "failed" %}
+{% set verdict = tour.objection|verdict_key %}
 {% set text %}Первый агент ищет, почему модель не сработает, второй открывает его источник и сверяет. У этого возражения итог проверки: {{ verdict|label("verdict") }}.{% endset %}
-{% set _ = steps.append(at_card|merged({"title": "Критик и проверяющий", "text": text, "open": ["card-" ~ card.slug], "target": "obj-" ~ card.slug ~ "-" ~ tour.objection.id})) %}
+{% set _ = steps.append(at_card|merged({"title": "Критик и проверяющий", "text": text, "open": ["card-" ~ card.slug, "obj-" ~ card.slug ~ "-" ~ tour.objection.id], "target": "obj-" ~ card.slug ~ "-" ~ tour.objection.id})) %}
 {% endif %}
 {% endif %}
 
@@ -57,10 +62,7 @@
 {% set text %}У каждого утверждения есть паспорт: источник, дата, метод и уверенность. Доверие к карточке считается отдельно от балла, у {{ card.name }} оно {{ card.trust.level|label("trust") }}.{% endset %}
 {% set _ = steps.append(at_card|merged({"title": "Паспорта и доверие", "text": text, "open": ["card-" ~ card.slug, "pp-" ~ card.slug], "target": "pp-table-" ~ card.slug})) %}
 
-{% if card.advice %}
-{% set text %}Советник читает готовую карточку и пишет, что делать: здесь «{{ card.advice.verdict|label("advice") }}». На балл и место в рейтинге он не влияет.{% endset %}
-{% set _ = steps.append(at_card|merged({"title": "Совет собственнику", "text": text, "open": ["card-" ~ card.slug], "target": "advice-" ~ card.slug})) %}
-{% endif %}
+
 {% endif %}
 
 {% if tour.best|length > 1 %}
