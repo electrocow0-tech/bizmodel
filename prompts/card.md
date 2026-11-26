@@ -12,4 +12,6 @@ Fill in:
 
 Weigh the objections by verdict. `supported` is an established risk. `not_supported` and `contradicts` are not risks. `no_source`, `source_unavailable` and `not_checked` are open questions.
 
+When two facts in the input disagree (two different prices, two valuations, a fact and an objection that says otherwise), score on the more cautious one, mention both with their sources in `why`, and add the conflict to `needs_human`.
+
 Write everything in Russian. Do not invent numbers: use only figures present in the input.
