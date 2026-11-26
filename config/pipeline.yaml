@@ -35,6 +35,7 @@ critic:
 search:
   results_per_query: 3
   snippet_chars: 1500
+  site_chars: 3000
   page_chars: 12000
 
 # Допущения о том, кто такие «мы». На них опираются оценки и советник.

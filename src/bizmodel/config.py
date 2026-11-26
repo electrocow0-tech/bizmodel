@@ -5,7 +5,7 @@ import yaml
 from pydantic import BaseModel, model_validator
 
 from bizmodel import forest
-from bizmodel.schemas import Confidence, Verdict
+from bizmodel.schemas import Answer, Confidence, Verdict
 
 
 class Provider(BaseModel):
@@ -64,6 +64,7 @@ class CriticSettings(BaseModel):
 class SearchSettings(BaseModel):
     results_per_query: int
     snippet_chars: int
+    site_chars: int
     page_chars: int
 
 
@@ -115,6 +116,7 @@ class Settings(BaseModel):
     scoring: Scoring
     forest: forest.Forest
     holding: list[HoldingCompany]
+    overrides: dict[str, dict[str, Answer]]
 
     @property
     def roles(self) -> Roles:
@@ -137,5 +139,6 @@ def load(root: Path, profile: str | None = None) -> Settings:
         scoring=read("scoring.yaml"),
         forest=forest.load(root / "config" / "criteria.yaml"),
         holding=read("holding.yaml")["companies"],
+        overrides=read("overrides.yaml") or {},
         **pipeline,
     )

@@ -105,6 +105,7 @@ class Gate(BaseModel):
     trees: list[TreeResult]
     decisions: list[Decision]
     evidence: list[Evidence]
+    passports: list[Passport]
     forest_version: str
 
 
@@ -115,6 +116,7 @@ class Objection(BaseModel):
     strength: int
     source_url: str | None = None
     quote: str | None = None
+    source_date: str | None = None
     sent_to_verifier: bool = False
     verdict: Verdict | None = None
     verifier_quote: str | None = None
@@ -142,6 +144,7 @@ class Advice(BaseModel):
     first_step: str
     main_risk: str
     stop_signal: str
+    flagged_numbers: list[str] = []
 
 
 class Trust(BaseModel):

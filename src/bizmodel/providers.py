@@ -7,6 +7,10 @@ import openai
 from pydantic import BaseModel
 
 
+ANSWER_TIMEOUT = 240.0
+LONG_ANSWER_TIMEOUT = 300.0
+
+
 class ProviderError(Exception):
     """Провайдер не ответил. Вызывающий может попробовать следующий маршрут."""
 
@@ -21,7 +25,7 @@ class Completion:
 
 class Anthropic:
     def __init__(self, key: str):
-        self.client = anthropic.Anthropic(api_key=key)
+        self.client = anthropic.Anthropic(api_key=key, timeout=LONG_ANSWER_TIMEOUT)
 
     def complete(
         self, model: str, system: str, user: str, answer: type[BaseModel], effort: str
@@ -53,7 +57,9 @@ class Anthropic:
 
 class OpenAICompatible:
     def __init__(self, key: str, base_url: str):
-        self.client = openai.OpenAI(api_key=key, base_url=base_url)
+        self.client = openai.OpenAI(
+            api_key=key, base_url=base_url, timeout=ANSWER_TIMEOUT, max_retries=1
+        )
 
     def complete(
         self, model: str, system: str, user: str, answer: type[BaseModel], effort: str

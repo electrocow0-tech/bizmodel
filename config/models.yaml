@@ -27,7 +27,8 @@ prices:
   anthropic/claude-haiku-5.5: [0.10, 0.50]
   anthropic/claude-sonnet-5.5: [2.00, 10.00]
   anthropic/claude-opus-5.5: [4.00, 20.00]
-  qwen/qwen3.8-27b: [0.06, 1.96]
+  qwen/qwen3.6-35b-a3b: [0.10, 0.89]
+  meta-llama/llama-4-maverick: [0.35, 1.00]
   meta-llama/llama-4-scout: [0.10, 0.30]
   mistralai/mistral-small-2603: [0.15, 0.60]
   openai/gpt-6-luna: [0.10, 0.50]
@@ -40,10 +41,10 @@ profiles:
     prescreen:
       routes: ["anthropic:claude-haiku-5-5", "openrouter:anthropic/claude-haiku-5.5"]
     planner:
-      routes: ["anthropic:claude-haiku-5-5", "openrouter:anthropic/claude-haiku-5.5"]
+      routes: ["anthropic:claude-sonnet-5-5", "openrouter:anthropic/claude-sonnet-5.5"]
     voters:
-      - routes: ["openrouter:qwen/qwen3.8-27b"]
-      - routes: ["openrouter:meta-llama/llama-4-scout"]
+      - routes: ["openrouter:qwen/qwen3.6-35b-a3b"]
+      - routes: ["openrouter:meta-llama/llama-4-maverick"]
       - routes: ["openrouter:mistralai/mistral-small-2603"]
       - routes: ["openrouter:openai/gpt-6-luna"]
       - routes: ["anthropic:claude-sonnet-5-5", "openrouter:anthropic/claude-sonnet-5.5"]

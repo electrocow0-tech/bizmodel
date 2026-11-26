@@ -6,13 +6,15 @@
 trees:
   - id: online_legal
     title: Законно и полностью онлайн, без своей лицензии до первого клиента
-    root: legal
+    root: illegal
     nodes:
-      legal:
-        label: Деятельность законна
-        ask: Is the company's core activity legal in its home market?
-        "yes": online
-        "no": {fail: "Основная деятельность незаконна на домашнем рынке"}
+      illegal:
+        label: Признаки незаконной деятельности
+        ask: >-
+          Does the evidence show that the company's core activity is illegal or banned in its
+          home market (unlicensed gambling, controlled substances, sanctions evasion, piracy)?
+        "yes": {fail: "Основная деятельность незаконна на домашнем рынке"}
+        "no": online
       online:
         label: Продаётся и оказывается полностью онлайн
         ask: >-
@@ -96,14 +98,16 @@ trees:
       named:
         label: Названа компания с такой же моделью
         ask: >-
-          Does the evidence name a company (this one or another) that runs the same business
-          model: same kind of payer, same thing paid for, same payment frequency?
+          Does the evidence name a company (the one being checked, the comparable candidate
+          or another) that runs the same business model: the same kind of payer, the same kind
+          of product paid for, the same way of charging? The product need not be identical.
         "yes": size
         "no": {unknown: "В источниках не названа компания с такой же моделью"}
       size:
         label: Её размер порядка $300 млн
         ask: >-
-          Does the evidence state that this company's valuation, market cap or acquisition
-          price is on the order of $300 million or more (roughly $200 million and up)?
+          Does the evidence state that a company running the same business model (the one
+          being checked, the comparable candidate or another) has a valuation, market cap or
+          acquisition price on the order of $300 million or more (roughly $200 million and up)?
         "yes": {pass: "Размер компании с такой моделью подтверждён источником"}
         "no": {unknown: "Размер компании-аналога источниками не подтверждён"}

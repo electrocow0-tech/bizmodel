@@ -38,7 +38,7 @@ def test_one_time_sales_are_rejected_with_a_reason(settings):
 
 
 def test_unanswered_question_is_not_a_rejection(settings):
-    result = walk(tree(settings, "online_legal"), answers(legal="yes", online="unknown"))
+    result = walk(tree(settings, "online_legal"), answers(illegal="no", online="unknown"))
     assert result.outcome == "unknown"
     assert result.reason.startswith("Не удалось проверить")
 
@@ -77,6 +77,6 @@ def test_branch_to_a_missing_node_is_a_config_error():
 def test_version_changes_with_the_trees(settings):
     version = settings.forest.version
     changed = settings.forest.model_copy(deep=True)
-    changed.trees[0].nodes["legal"].ask += " "
+    changed.trees[0].nodes["illegal"].ask += " "
     assert len(version) == 12
     assert changed.version != version
