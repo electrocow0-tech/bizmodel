@@ -1,6 +1,7 @@
 """Глубокая проверка по критериям: свидетельства из сети, голоса моделей, арбитр при расхождении."""
 
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import replace
 from datetime import date
 
@@ -121,13 +122,21 @@ def gather(company: Company, ctx: Context) -> tuple[dict[str, Page], str]:
 def collect_votes(
     company: Company, sections: dict[str, str], pages: dict[str, Page], ctx: Context
 ) -> dict[str, list[Vote]]:
-    votes = {question_id: [] for question_id in ctx.settings.forest.questions}
-    for voter in ctx.settings.roles.voters:
+    def ballot_of(voter):
         try:
-            ballot = ctx.llm.ask(
+            return ctx.llm.ask(
                 "voter", voter, ctx.settings.prompt("voter"), sections, Ballot, slug=company.slug
             )
         except StepFailed:
+            return None
+
+    voters = ctx.settings.roles.voters
+    with ThreadPoolExecutor(len(voters)) as pool:
+        ballots = list(pool.map(ballot_of, voters))
+
+    votes = {question_id: [] for question_id in ctx.settings.forest.questions}
+    for voter, ballot in zip(voters, ballots):
+        if ballot is None:
             continue
         name = voter.routes[0].split(":", 1)[1]
         for reply in ballot.replies:
