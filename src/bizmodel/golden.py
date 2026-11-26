@@ -45,6 +45,14 @@ def export(run: Run, path: Path) -> int:
     return len(rows)
 
 
+def answered(path: Path) -> int:
+    """Сколько строк человек уже разметил: такой файл нельзя перезаписывать."""
+    if not path.exists():
+        return 0
+    with path.open(encoding="utf-8-sig", newline="") as file:
+        return sum(bool(row.get("ответ", "").strip()) for row in csv.DictReader(file))
+
+
 def quotes(gate: Gate, path: list[str]) -> str:
     on_path = {f"gate.{question_id}" for question_id in path}
     lines = [

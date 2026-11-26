@@ -56,6 +56,9 @@ def drill(run_id: str = RUN_ID) -> None:
 @app.command()
 def labels(run_id: str = RUN_ID) -> None:
     """Выгрузить таблицу для разметки человеком: без ответов моделей."""
+    if golden.answered(LABELS):
+        typer.echo(f"В {LABELS.relative_to(ROOT)} уже есть ответы человека, файл не перезаписан.")
+        raise typer.Exit(1)
     rows = golden.export(load(run_id), LABELS)
     typer.echo(
         f"{rows} строк: {LABELS.relative_to(ROOT)}. Заполните столбец «ответ»: да, нет, не знаю"
