@@ -2,8 +2,8 @@
 {% set leaks = run.isolation|selectattr("leaked")|list|length %}
 {% set checks = run.isolation|length %}
 
-{% macro call(agent) %}
-<div class="call">
+{% macro call(agent, anchor="") %}
+<div class="call"{% if anchor %} id="{{ anchor }}"{% endif %}>
   <p><b>{{ agent.role|label("role") }}</b> <span>{{ agent.model }}</span></p>
   <p class="quiet">Отпечаток запроса <code>{{ agent.input_sha[:12] }}</code></p>
   <ul class="plain">{% for part in agent.inputs %}<li>{{ part }}</li>{% endfor %}</ul>
@@ -47,7 +47,7 @@
               {% endif %}
               <div class="calls">
                 {{ call(check.critic) }}
-                {% for agent in check.verifier %}{{ call(agent) }}{% endfor %}
+                {% for agent in check.verifier %}{{ call(agent, "call-" ~ check.slug ~ "-verifier" if loop.first else "") }}{% endfor %}
               </div>
             </div>
           </div>

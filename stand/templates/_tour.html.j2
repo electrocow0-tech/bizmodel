@@ -1,0 +1,75 @@
+{% autoescape false %}
+{% set f = run.funnel %}
+{% set steps = [] %}
+{% set carded = cards|length %}
+
+{% set text %}{% if carded %}До карточки {{ carded|plural("дошла", "дошли", "дошли") }} {{ carded }} {{ carded|plural("модель", "модели", "моделей") }} из {{ f.sourced }}. Балл от 0 до 100 показывает, насколько реально за три месяца запустить тест и получить первую оплату.{% else %}До карточки не дошла ни одна модель из {{ f.sourced }}. Где они отсеялись, видно на вкладке «Воронка и лес».{% endif %}{% endset %}
+{% set _ = steps.append({"title": "Итог прогона", "text": text, "tab": "rating", "hash": "rating", "open": [], "pick": [], "target": "h-rating"}) %}
+
+{% set text %}Из каталога {{ f.sourced|plural("взята", "взяты", "взято") }} {{ f.sourced }} {{ f.sourced|plural("модель", "модели", "моделей") }}: {{ f.prescreen_rejected }} {{ f.prescreen_rejected|plural("отсеяна", "отсеяны", "отсеяно") }} по описанию, {{ f.deep_checked }} {{ f.deep_checked|plural("ушла", "ушли", "ушли") }} в глубокую проверку. Все критерии {{ f.gate_passed|plural("прошла", "прошли", "прошли") }} {{ f.gate_passed }}{% if f.gate_failed %}, отказ у {{ f.gate_failed }}{% endif %}{% if f.gate_unknown %}, проверить не удалось у {{ f.gate_unknown }}{% endif %}.{% endset %}
+{% set _ = steps.append({"title": "Как отбирали модели", "text": text, "tab": "forest", "hash": "forest", "open": [], "pick": [], "target": "funnel"}) %}
+
+{% if tour.refusal %}
+{% set slug = tour.refusal.gate.slug %}
+{% set tree = tour.refusal.tree %}
+{% set reason = tree.reason|trim or "Причина записана на её пути по критериям." %}
+{% set text %}{{ run.companies[slug].name }} не прошла критерий «{{ tree.title }}». {{ reason }}{% if reason[-1] not in ".!?" %}.{% endif %}{% endset %}
+{% set _ = steps.append({"title": "Отказ с причиной", "text": text, "tab": "forest", "hash": "forest/" ~ slug, "open": ["gate-" ~ slug], "pick": [], "target": "tree-" ~ slug ~ "-" ~ tree.tree_id}) %}
+{% endif %}
+
+{% if tour.vote %}
+{% set slug = tour.vote.gate.slug %}
+{% set decision = tour.vote.decision %}
+{% set voters = run.voters|length %}
+{% set agreed = tour.vote.agreed %}
+{% set text %}На вопрос «{{ decision.question }}» по {{ run.companies[slug].name }} отвечают {{ voters }} {{ voters|plural("модель", "модели", "моделей") }}, ответ принят, если согласны {{ run.quorum }} из {{ voters }}. {% if decision.decided_by == "arbiter" %}Здесь согласны только {{ agreed }}, поэтому решал арбитр; если не уверен и он, вопрос уходит человеку.{% elif decision.decided_by in ("human", "unresolved") %}Здесь согласны только {{ agreed }}, арбитр тоже не уверен, поэтому вопрос передан человеку.{% else %}Здесь согласны {{ agreed }}; при расхождении решал бы арбитр, а после него человек.{% endif %}{% endset %}
+{% set _ = steps.append({"title": "Голоса моделей", "text": text, "tab": "forest", "hash": "forest/" ~ slug, "open": ["gate-" ~ slug], "pick": [], "target": "q-" ~ slug ~ "-" ~ decision.question_id}) %}
+{% endif %}
+
+{% if tour.top %}
+{% set card = tour.top %}
+{% set at_card = {"tab": "rating", "hash": "rating/" ~ card.slug, "pick": []} %}
+
+{% set text %}Самая перспективная модель: {{ card.name }}, {{ card.score|round|int }} из 100. В шапке схема денег: кто платит, за что и как часто.{% endset %}
+{% set _ = steps.append(at_card|merged({"title": "Карточка модели", "text": text, "open": ["card-" ~ card.slug], "target": "card-head-" ~ card.slug})) %}
+
+{% if card.rubrics|length > 1 %}
+{% set heavy = card.rubrics|sort(attribute="weight", reverse=true) %}
+{% set text %}Балл складывается из {{ card.rubrics|length }} оценок с весами, больше всего весят «{{ heavy[0].title }}» и «{{ heavy[1].title }}». Модель ставит только уровень по шкале, итог считает код.{% endset %}
+{% set _ = steps.append(at_card|merged({"title": "Из чего складывается балл", "text": text, "open": ["card-" ~ card.slug], "target": "scores-" ~ card.slug})) %}
+{% endif %}
+
+{% if tour.objection %}
+{% set verdict = tour.objection.verdict or "failed" %}
+{% set text %}Первый агент ищет, почему модель не сработает, второй открывает его источник и сверяет. У этого возражения итог проверки: {{ verdict|label("verdict") }}.{% endset %}
+{% set _ = steps.append(at_card|merged({"title": "Критик и проверяющий", "text": text, "open": ["card-" ~ card.slug], "target": "obj-" ~ card.slug ~ "-" ~ tour.objection.id})) %}
+{% endif %}
+{% endif %}
+
+{% if tour.isolation %}
+{% set slug = tour.isolation.slug %}
+{% set leaks = run.isolation|selectattr("leaked")|list|length %}
+{% set text %}Проверяющему ушли только текст утверждения и страница источника, без рассуждений критика. Утечек в этом прогоне: {{ leaks }}.{% endset %}
+{% set _ = steps.append({"title": "Агенты не видят выводов друг друга", "text": text, "tab": "agents", "hash": "agents/" ~ slug, "open": ["iso-" ~ slug], "pick": [], "target": "call-" ~ slug ~ "-verifier"}) %}
+{% endif %}
+
+{% if tour.top %}
+{% set text %}У каждого утверждения есть паспорт: источник, дата, метод и уверенность. Доверие к карточке считается отдельно от балла, у {{ card.name }} оно {{ card.trust.level|label("trust") }}.{% endset %}
+{% set _ = steps.append(at_card|merged({"title": "Паспорта и доверие", "text": text, "open": ["card-" ~ card.slug, "pp-" ~ card.slug], "target": "pp-table-" ~ card.slug})) %}
+
+{% if card.advice %}
+{% set text %}Советник читает готовую карточку и пишет, что делать: здесь «{{ card.advice.verdict|label("advice") }}». На балл и место в рейтинге он не влияет.{% endset %}
+{% set _ = steps.append(at_card|merged({"title": "Совет собственнику", "text": text, "open": ["card-" ~ card.slug], "target": "advice-" ~ card.slug})) %}
+{% endif %}
+{% endif %}
+
+{% if tour.best|length > 1 %}
+{% set slugs = tour.best|map(attribute="slug")|list %}
+{% set text %}{{ {2: "Две", 3: "Три"}[slugs|length] }} лучшие модели рядом: строки стоят на одной высоте, поэтому различия читаются поперёк. Выбор можно поменять кнопками над таблицей.{% endset %}
+{% set _ = steps.append({"title": "Сравнение рядом", "text": text, "tab": "compare", "hash": "compare/" ~ slugs|join(","), "open": [], "pick": slugs, "target": "cmp"}) %}
+{% endif %}
+
+{% set text %}Здесь записано, почему конвейер устроен именно так, и честный список того, что работает криво. Дальше можно смотреть самостоятельно.{% endset %}
+{% set _ = steps.append({"title": "Решения и честный список", "text": text, "tab": "documents", "hash": "documents", "open": [], "pick": [], "target": "h-documents", "final": true}) %}
+<script type="application/json" id="tour-steps">{{ steps|tojson }}</script>
+{% endautoescape %}

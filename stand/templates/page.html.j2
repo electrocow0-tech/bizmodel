@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="ru" data-tab="rating">
+<html lang="ru" data-tab="rating" data-tour="off">
 <head><style>html,body{background:#000;color:#f5f5f7}</style>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -26,6 +26,9 @@
 <link rel="stylesheet" href="{{ assets['style.css'] }}">
 </head>
 <body>
+<div class="glow" aria-hidden="true"><div class="glow__dim"><div class="glow__drift">
+  <i class="glow__blob glow__blob--a"></i><i class="glow__blob glow__blob--b"></i><i class="glow__blob glow__blob--c"></i><i class="glow__blob glow__blob--d"></i>
+</div></div></div>
 <header class="top">
   <div class="top__in">
     <a class="top__name" href="#rating">Конвейер бизнес-моделей</a>
@@ -36,7 +39,6 @@
       <a class="tab" href="#agents" data-tab="agents">Агенты и изоляция</a>
       <a class="tab" href="#documents" data-tab="documents">Решения и честный список</a>
     </nav>
-    <p class="top__run">Прогон {{ run.finished|day }}{% if run.profile == "fixture" %}, демонстрационные данные{% endif %}</p>
   </div>
 </header>
 <main class="wrap">
@@ -45,8 +47,36 @@
 {% include "_forest.html.j2" %}
 {% include "_agents.html.j2" %}
 {% include "_documents.html.j2" %}
-<footer class="foot">Прогон {{ run.finished|day }}{% if run.profile == "fixture" %}, демонстрационные данные: компании вымышлены{% endif %}</footer>
 </main>
+<div class="spot" id="spot" aria-hidden="true"></div>
+<div class="coach" id="coach" role="status" aria-live="polite">
+  <i class="coach__arrow"></i>
+  <small class="coach__title"></small>
+  <p class="coach__text"></p>
+  <button class="btn btn--small" type="button" data-tour-act="show" hidden>Показать</button>
+</div>
+<section class="dock" id="dock" aria-label="Демонстрация">
+  <div class="dock__in">
+    <div class="dock__idle">
+      <p>Данные прогона от {{ run.finished|day }}{% if run.profile == "fixture" %}. Компании вымышлены{% endif %}</p>
+      <button class="btn btn--primary" type="button" data-tour-act="start">Пройти демонстрацию</button>
+    </div>
+    <div class="dock__tour">
+      <span class="ring" aria-hidden="true"><span></span></span>
+      <div class="dock__text">
+        <p class="dock__title"></p>
+        <p class="dock__count"></p>
+      </div>
+      <div class="dock__acts">
+        <button class="btn btn--icon-narrow" type="button" data-tour-act="back" aria-label="Назад"><span class="btn__label">Назад</span><i class="btn__chevron" aria-hidden="true"></i></button>
+        <button class="btn btn--primary btn--next" type="button" data-tour-act="next"><span class="btn__label">Дальше</span></button>
+        <button class="btn btn--quiet btn--icon-narrow" type="button" data-tour-act="exit" aria-label="Выйти"><span class="btn__label">Выйти</span><i class="btn__cross" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+{% include "_tour.html.j2" %}
 <script src="{{ assets['app.js'] }}"></script>
+<script src="{{ assets['tour.js'] }}"></script>
 </body>
 </html>

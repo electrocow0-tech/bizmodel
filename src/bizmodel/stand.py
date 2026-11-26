@@ -2,7 +2,6 @@
 
 import hashlib
 import shutil
-from datetime import datetime
 from pathlib import Path
 from urllib.parse import urlparse
 
@@ -11,13 +10,19 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from markupsafe import Markup
 
-from bizmodel.schemas import Run, TreeResult
+from bizmodel.schemas import Card, Decision, Gate, Isolation, Objection, Run, TreeResult
 
 STAND = Path(__file__).resolve().parents[2] / "stand"
 NO_DATE = '<span class="quiet">нет</span>'
+VOTE_EXAMPLE_ORDER = {"arbiter": 0, "human": 1, "unresolved": 1}
+VERDICT_EXAMPLE_ORDER = {"supported": 0, "contradicts": 1, "not_supported": 2}
 MONTHS = [
     "января", "февраля", "марта", "апреля", "мая", "июня",
     "июля", "августа", "сентября", "октября", "ноября", "декабря",
+]  # fmt: skip
+MONTHS_ALONE = [
+    "январь", "февраль", "март", "апрель", "май", "июнь",
+    "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь",
 ]  # fmt: skip
 
 
@@ -33,6 +38,7 @@ def build(run: Run, out: Path, documents: dict[str, str]) -> None:
             forest=_forest(run),
             cheap_layer=_cheap_layer(run),
             spend=_spend(run),
+            tour=_tour(run),
             documents=documents,
             assets=_publish_assets(out),
         )
@@ -49,10 +55,12 @@ def _environment(wording: dict) -> Environment:
         trim_blocks=True,
         lstrip_blocks=True,
     )
+    env.policies["json.dumps_kwargs"] = {"ensure_ascii": False}
     labels, tones = wording["labels"], wording["tones"]
     env.filters["label"] = lambda value, group: labels[group].get(value, value)
     env.filters["tone"] = lambda value, group: tones[group].get(value, "plain")
     env.filters["plural"] = _plural
+    env.filters["merged"] = lambda base, extra: base | extra
     env.filters["md"] = _markdown
     env.filters["paragraphs"] = _paragraphs
     env.filters["web"] = _web_address
@@ -89,8 +97,18 @@ def _web_address(url: str | None) -> str:
 
 
 def _day(moment: str) -> str:
-    date = datetime.fromisoformat(moment)
-    return f"{date.day} {MONTHS[date.month - 1]} {date.year}"
+    """Источники дают дату целиком, только месяц или только год: показываем столько, сколько есть."""
+    try:
+        numbers = [int(part) for part in moment[:10].split("-")]
+    except ValueError:
+        return moment
+    if len(numbers) == 1:
+        return f"{numbers[0]} год"
+    if not 1 <= numbers[1] <= 12:
+        return moment
+    if len(numbers) == 2:
+        return f"{MONTHS_ALONE[numbers[1] - 1]} {numbers[0]}"
+    return f"{numbers[2]} {MONTHS[numbers[1] - 1]} {numbers[0]}"
 
 
 def _publish_assets(out: Path) -> dict[str, str]:
@@ -126,9 +144,6 @@ def _forest(run: Run) -> list[dict]:
                 "is_control": gate.slug in control,
                 "wrongly_rejected": gate.slug in wrongly_rejected,
                 "has_card": gate.slug in carded,
-                "voters": [vote.voter for vote in gate.decisions[0].votes]
-                if gate.decisions
-                else [],
                 "trees": [{"tree": tree, "steps": _steps(tree, answers)} for tree in gate.trees],
                 "off_path": [
                     answer for question, answer in answers.items() if question not in walked
@@ -178,3 +193,73 @@ def _spend(run: Run) -> dict:
     for cost in run.costs:
         by_provider[cost.provider] = by_provider.get(cost.provider, 0.0) + cost.usd
     return {"by_provider": by_provider, "total": sum(by_provider.values())}
+
+
+def _tour(run: Run) -> dict:
+    """Примеры для демонстрации берутся из данных прогона: имена компаний заранее не известны."""
+    control = set(run.control.slugs)
+    checked = [gate for gate in run.gates if gate.slug not in control]
+    ranked = sorted(run.cards, key=lambda card: card.rank)
+    top = ranked[0] if ranked else None
+    return {
+        "refusal": _refusal_example(checked),
+        "vote": _vote_example(checked),
+        "top": top,
+        "objection": _objection_example(top),
+        "isolation": _isolation_example(run.isolation, top),
+        "best": ranked[:3],
+    }
+
+
+def _refusal_example(gates: list[Gate]) -> dict | None:
+    for gate in gates:
+        tree = next((tree for tree in gate.trees if tree.outcome == "fail"), None)
+        if gate.outcome == "fail" and tree:
+            return {"gate": gate, "tree": tree}
+    return None
+
+
+def _vote_example(gates: list[Gate]) -> dict | None:
+    """Лучше всего механизм видно на вопросе, где решал арбитр, хуже всего на единогласном."""
+    candidates = [
+        (gate, decision)
+        for gate in gates
+        for decision in gate.decisions
+        if decision.votes and decision.question_id in {q for t in gate.trees for q in t.path}
+    ]
+    if not candidates:
+        return None
+    gate, decision = min(candidates, key=lambda pair: _vote_example_rank(pair[1]))
+    return {"gate": gate, "decision": decision, "agreed": _agreed(decision)}
+
+
+def _vote_example_rank(decision: Decision) -> int:
+    if decision.decided_by in VOTE_EXAMPLE_ORDER:
+        return VOTE_EXAMPLE_ORDER[decision.decided_by]
+    if decision.answer == "unknown":
+        return 4
+    return 2 if decision.agreement < 1 else 3
+
+
+def _agreed(decision: Decision) -> int:
+    return round(decision.agreement * len(decision.votes))
+
+
+def _objection_example(card: Card | None) -> Objection | None:
+    checked = (
+        [objection for objection in card.objections if objection.sent_to_verifier] if card else []
+    )
+    return min(
+        checked,
+        key=lambda objection: (
+            VERDICT_EXAMPLE_ORDER.get(objection.verdict, 3),
+            -objection.strength,
+        ),
+        default=None,
+    )
+
+
+def _isolation_example(checks: list[Isolation], card: Card | None) -> Isolation | None:
+    usable = [check for check in checks if check.verifier]
+    own = [check for check in usable if card and check.slug == card.slug]
+    return (own or usable or [None])[0]

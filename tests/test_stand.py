@@ -1,3 +1,4 @@
+import json
 import re
 from pathlib import Path
 
@@ -109,3 +110,52 @@ def test_only_web_addresses_become_links(tmp_path):
     run.cards[0].yc_url = "javascript:alert(1)"
     build(run, tmp_path, {"decisions": "", "limitations": ""})
     assert "javascript:alert(1)" not in (tmp_path / "index.html").read_text(encoding="utf-8")
+
+
+def test_partial_source_dates_are_shown_as_given(tmp_path):
+    run = Run.model_validate_json(FIXTURE.read_text(encoding="utf-8"))
+    run.cards[0].objections[0].source_date = "2026-01"
+    run.cards[0].passports[0].source_date = "2025"
+    build(run, tmp_path, {"decisions": "", "limitations": ""})
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    assert "январь 2026" in page
+    assert "2025 год" in page
+
+
+def tour_steps(page: str) -> list[dict]:
+    found = re.search(
+        r'<script type="application/json" id="tour-steps">(.*?)</script>', page, re.DOTALL
+    )
+    return json.loads(found.group(1))
+
+
+def test_tour_targets_exist_in_the_page(page: str):
+    steps = tour_steps(page)
+
+    assert steps[-1]["final"] is True
+    assert sum(not step.get("final") for step in steps) == 11
+    for step in steps:
+        for element in [step["target"], *step["open"]]:
+            assert f'id="{element}"' in page, (step["title"], element)
+
+
+def test_tour_uses_voters_and_quorum_of_the_run(run: Run, page: str):
+    votes = next(step for step in tour_steps(page) if step["title"] == "Голоса моделей")
+
+    assert f"согласны {run.quorum} из {len(run.voters)}" in votes["text"]
+
+
+def test_tour_skips_examples_the_run_does_not_have(tmp_path):
+    run = Run.model_validate_json(FIXTURE.read_text(encoding="utf-8"))
+    run.gates = [gate for gate in run.gates if gate.outcome != "fail"]
+    for gate in run.gates:
+        for decision in gate.decisions:
+            decision.decided_by = "vote"
+    build(run, tmp_path, {"decisions": "", "limitations": ""})
+    page = (tmp_path / "index.html").read_text(encoding="utf-8")
+    steps = tour_steps(page)
+
+    assert "Отказ с причиной" not in [step["title"] for step in steps]
+    assert "решал арбитр" not in next(s for s in steps if s["title"] == "Голоса моделей")["text"]
+    for step in steps:
+        assert f'id="{step["target"]}"' in page

@@ -14,12 +14,13 @@
   const grid = document.getElementById('cmp');
   const picks = [...document.querySelectorAll('[data-pick]')];
   const pickCount = document.getElementById('pick-count');
+  const glow = document.querySelector('.glow');
 
   async function swap(leaving, change) {
     await leaving.animate([SHOWN, HIDDEN], LEAVE).finished;
     const entering = change() || leaving;
     leaving.getAnimations().forEach((animation) => animation.cancel());
-    entering.animate([HIDDEN, SHOWN], ENTER);
+    await entering.animate([HIDDEN, SHOWN], ENTER).finished;
   }
 
   function route() {
@@ -39,9 +40,14 @@
     });
   }
 
-  function setOpen(item, open) {
+  function setOpen(item, open, instant) {
+    if (instant) item.classList.add('is-instant');
     item.classList.toggle('is-open', open);
     item.querySelector(':scope > [data-fold]').setAttribute('aria-expanded', open);
+    if (instant) {
+      void item.offsetHeight;
+      requestAnimationFrame(() => item.classList.remove('is-instant'));
+    }
   }
 
   function reveal(tab, target, smooth) {
@@ -56,18 +62,26 @@
     scrollTo({ top, behavior: smooth && !still ? 'smooth' : 'auto' });
   }
 
+  function switchTab(tab, prepare) {
+    if (tab === root.dataset.tab) {
+      prepare();
+      return Promise.resolve();
+    }
+    return swap(panel(root.dataset.tab), () => {
+      root.dataset.tab = tab;
+      markTab(true);
+      scrollTo(0, 0);
+      prepare();
+      return panel(tab);
+    });
+  }
+
   async function show({ tab, target }) {
     if (tab === root.dataset.tab) {
       reveal(tab, target, true);
       return;
     }
-    await swap(panel(root.dataset.tab), () => {
-      root.dataset.tab = tab;
-      markTab(true);
-      scrollTo(0, 0);
-      reveal(tab, target, false);
-      return panel(tab);
-    });
+    await switchTab(tab, () => reveal(tab, target, false));
   }
 
   function reorder(direction) {
@@ -109,6 +123,13 @@
     remember(next.join(','));
   }
 
+  let glowQueued = false;
+  function fadeGlow() {
+    glowQueued = false;
+    const depth = Math.min(1, scrollY / (innerHeight * 0.6));
+    glow.style.opacity = (1 - 0.8 * depth).toFixed(3);
+  }
+
   document.addEventListener('click', (event) => {
     const fold = event.target.closest('[data-fold]');
     const order = event.target.closest('[data-order]');
@@ -126,8 +147,25 @@
   });
 
   addEventListener('hashchange', () => show(route()));
+  addEventListener(
+    'scroll',
+    () => {
+      if (glowQueued) return;
+      glowQueued = true;
+      requestAnimationFrame(fadeGlow);
+    },
+    { passive: true },
+  );
+
+  window.Stand = {
+    switchTab,
+    setOpen,
+    choose: (slugs) => grid && choose(slugs),
+    remember: (hash) => history.replaceState(null, '', `#${hash}`),
+  };
 
   markTab(false);
+  fadeGlow();
   if (grid) choose(chosen());
   reveal(route().tab, route().target, false);
 })();

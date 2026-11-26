@@ -38,12 +38,14 @@ rng = random.Random(7)
 TODAY = "2026-11-26"
 FOREST_VERSION = "3f9c2a71"
 VOTERS = [
-    "qwen/qwen3.8-27b",
-    "meta-llama/llama-4-scout",
+    "google/gemma-4-26b-a4b-it",
+    "meta-llama/llama-4-maverick",
     "mistralai/mistral-small-2603",
+    "deepseek/deepseek-v4.1-flash",
     "openai/gpt-6-luna",
     "claude-sonnet-5-5",
 ]
+QUORUM = 5
 
 TREES = [
     ("online", "Законно и полностью онлайн, без своей лицензии", "all", [
@@ -424,19 +426,22 @@ def decide(
 ) -> tuple[Decision, str]:
     """Возвращает решение по узлу и ответ, с которым дальше идёт обход дерева.
 
-    Особые случаи: blank — все голоса «неизвестно», arbiter — голоса 3 против 2 и решает арбитр,
-    unresolved — голоса 3 против 2 и арбитр не решил.
+    Особые случаи: blank — все голоса «неизвестно», arbiter — голоса 4 против 2 (меньше порога)
+    и решает арбитр, unresolved — голоса 4 против 2 и арбитр не решил.
     """
     opposite = {"yes": "no", "no": "yes"}
+    seats = len(VOTERS)
     if truth == "blank":
-        answers, answer, decided_by = ["unknown"] * 5, "unknown", "vote"
+        answers, answer, decided_by = ["unknown"] * seats, "unknown", "vote"
     elif truth in ("arbiter", "unresolved"):
-        answers = rng.sample([passing] * 3 + [opposite[passing]] * 2, 5)
+        answers = rng.sample(
+            [passing] * (QUORUM - 1) + [opposite[passing]] * (seats - QUORUM + 1), seats
+        )
         answer = passing if truth == "arbiter" else "unknown"
         decided_by = truth
     else:
-        dissent = [opposite[truth]] if rng.random() < 0.22 else []
-        answers = rng.sample([truth] * (5 - len(dissent)) + dissent, 5)
+        dissent = [opposite[truth]] * (seats - QUORUM) if rng.random() < 0.22 else []
+        answers = rng.sample([truth] * (seats - len(dissent)) + dissent, seats)
         answer, decided_by = truth, "vote"
     counted = answer if answer in answers else Counter(answers).most_common(1)[0][0]
     votes = [
@@ -453,7 +458,7 @@ def decide(
         question=label,
         votes=votes,
         answer=answer,
-        agreement=answers.count(counted) / 5,
+        agreement=answers.count(counted) / seats,
         decided_by=decided_by,
     )
     return decision, answer
@@ -740,6 +745,8 @@ def build() -> Run:
         started="2026-11-26T09:12:40",
         finished="2026-11-26T09:41:05",
         profile="fixture",
+        voters=VOTERS,
+        quorum=QUORUM,
         funnel=Funnel(
             sourced=len(companies),
             prescreen_rejected=117,
@@ -760,8 +767,9 @@ def build() -> Run:
         costs=[
             Cost(provider="anthropic", role="prescreen", model="claude-haiku-5-5", calls=200, cached=0, input_tokens=131400, output_tokens=58200, usd=0.04),
             Cost(provider="anthropic", role="planner", model="claude-haiku-5-5", calls=25, cached=0, input_tokens=21300, output_tokens=6100, usd=0.01),
-            Cost(provider="openrouter", role="voter", model="qwen/qwen3.8-27b", calls=25, cached=0, input_tokens=148200, output_tokens=17400, usd=0.04),
-            Cost(provider="openrouter", role="voter", model="meta-llama/llama-4-scout", calls=25, cached=0, input_tokens=148200, output_tokens=16900, usd=0.02),
+            Cost(provider="openrouter", role="voter", model="google/gemma-4-26b-a4b-it", calls=25, cached=0, input_tokens=148200, output_tokens=17400, usd=0.03),
+            Cost(provider="openrouter", role="voter", model="meta-llama/llama-4-maverick", calls=25, cached=0, input_tokens=148200, output_tokens=16900, usd=0.06),
+            Cost(provider="openrouter", role="voter", model="deepseek/deepseek-v4.1-flash", calls=25, cached=0, input_tokens=148200, output_tokens=18800, usd=0.03),
             Cost(provider="openrouter", role="voter", model="mistralai/mistral-small-2603", calls=25, cached=0, input_tokens=148200, output_tokens=18300, usd=0.03),
             Cost(provider="openrouter", role="voter", model="openai/gpt-6-luna", calls=25, cached=0, input_tokens=148200, output_tokens=17100, usd=0.02),
             Cost(provider="anthropic", role="voter", model="claude-sonnet-5-5", calls=25, cached=0, input_tokens=151900, output_tokens=24800, usd=0.55),

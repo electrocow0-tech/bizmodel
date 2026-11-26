@@ -58,8 +58,8 @@
 {% endif %}
 {% endmacro %}
 
-{% macro objection_item(objection) %}
-<li class="objection">
+{% macro objection_item(objection, owner) %}
+<li class="objection" id="obj-{{ owner }}-{{ objection.id }}">
   <p class="objection__text">{{ objection.text }}</p>
   <p class="objection__meta">{{ verdict_tag(objection) }} <span>сила {{ objection.strength }} из {{ top_level }}</span></p>
   <p class="objection__why">{{ objection.reasoning }}</p>
@@ -74,7 +74,7 @@
 
 {% macro card_item(card, cards_total) %}
 <li class="card foldable" id="card-{{ card.slug }}" data-slug="{{ card.slug }}" data-score="{{ card.score }}" style="--lum:{{ (card.score / 100)|round(2) }}">
-  <button class="card__head" type="button" data-fold aria-expanded="false" aria-controls="card-body-{{ card.slug }}">
+  <button class="card__head" id="card-head-{{ card.slug }}" type="button" data-fold aria-expanded="false" aria-controls="card-body-{{ card.slug }}">
     <span class="card__grid">
       <span class="card__rank"><b>{{ card.rank }}</b><small>место из {{ cards_total }}</small></span>
       <span class="card__title">
@@ -96,7 +96,7 @@
     <div class="fold__in" id="card-body-{{ card.slug }}">
       <div class="card__body">
         <div class="card__main">
-          <section data-section="scores">
+          <section id="scores-{{ card.slug }}" data-section="scores">
             <h3>Оценки</h3>
             <ul class="rubrics">
               {% for rubric in card.rubrics %}
@@ -112,20 +112,20 @@
             {% set checked = card.objections|selectattr("sent_to_verifier")|list %}
             {% set unchecked = card.objections|rejectattr("sent_to_verifier")|list %}
             <ul class="objections">
-              {% for objection in checked %}{{ objection_item(objection) }}{% endfor %}
+              {% for objection in checked %}{{ objection_item(objection, card.slug) }}{% endfor %}
             </ul>
             {% if unchecked %}
             <div class="more foldable">
               <button class="more__head" type="button" data-fold aria-expanded="false">Ещё {{ unchecked|length }} {{ unchecked|length|plural("возражение", "возражения", "возражений") }} без проверки источника<span class="chev" aria-hidden="true"></span></button>
               <div class="fold"><div class="fold__in"><ul class="objections">
-                {% for objection in unchecked %}{{ objection_item(objection) }}{% endfor %}
+                {% for objection in unchecked %}{{ objection_item(objection, card.slug) }}{% endfor %}
               </ul></div></div>
             </div>
             {% endif %}
           </section>
         </div>
         <div class="card__side">
-          <section class="advice" data-section="advice">
+          <section class="advice" id="advice-{{ card.slug }}" data-section="advice">
             <h3>Совет {{ tag("суждение модели") }}</h3>
             {% if card.advice %}
             <p class="advice__verdict">{{ card.advice.verdict|label("advice") }}</p>
@@ -184,10 +184,10 @@
         </div>
         <section class="card__wide" data-section="passports">
           <h3>Паспорта утверждений</h3>
-          <div class="more foldable">
+          <div class="more foldable" id="pp-{{ card.slug }}">
           <button class="more__head" type="button" data-fold aria-expanded="false">{{ card.passports|length }} {{ card.passports|length|plural("утверждение", "утверждения", "утверждений") }}: источник, дата, метод, уверенность<span class="chev" aria-hidden="true"></span></button>
           <div class="fold"><div class="fold__in">
-          <div class="passports" role="table" aria-label="Паспорта утверждений">
+          <div class="passports" id="pp-table-{{ card.slug }}" role="table" aria-label="Паспорта утверждений">
             <div class="passports__head" role="row">
               <span role="columnheader">Утверждение</span><span role="columnheader">Источник</span><span role="columnheader">Дата источника</span><span role="columnheader">Обращение</span><span role="columnheader">Метод</span><span role="columnheader">Уверенность</span>
             </div>

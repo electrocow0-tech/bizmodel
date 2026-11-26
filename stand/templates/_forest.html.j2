@@ -7,10 +7,10 @@
 <section class="panel" id="panel-forest" data-panel="forest" aria-labelledby="h-forest">
   <header class="hero">
     <h1 id="h-forest">Из {{ funnel.sourced }} моделей все пять критериев {{ funnel.gate_passed|plural("прошла", "прошли", "прошли") }} {{ funnel.gate_passed }}</h1>
-    <p>Дешёвый слой читает описание и отсекает явные нарушения. Лучшие идут в глубокую проверку: пять деревьев вопросов, на каждый вопрос отвечают пять независимых моделей, исход считает код.</p>
+    <p>Дешёвый слой читает описание и отсекает явные нарушения. Лучшие идут в глубокую проверку: пять деревьев вопросов, на каждый вопрос отвечают {{ run.voters|length }} независимых {{ run.voters|length|plural("модель", "модели", "моделей") }}, ответ принят, если согласны {{ run.quorum }} из {{ run.voters|length }}. Исход считает код.</p>
   </header>
 
-  <ol class="funnel">
+  <ol class="funnel" id="funnel">
     <li style="--w:1"><b>{{ funnel.sourced }}</b><span>взято из каталога</span><i></i><small>случайная выборка по отраслям</small></li>
     <li style="--w:{{ (through / whole)|round(3) }}"><b>{{ through }}</b><span>прошли дешёвый слой</span><i></i><small>{{ funnel.prescreen_rejected }} отсеяно по описанию{% if cheap_layer.failed %}, {{ cheap_layer.failed|length }} со сбоем{% endif %}</small></li>
     <li style="--w:{{ (funnel.deep_checked / whole)|round(3) }}"><b>{{ funnel.deep_checked }}</b><span>глубокая проверка</span><i></i><small>{{ funnel.queued }} ждут в очереди</small></li>
@@ -67,14 +67,14 @@
         <div class="fold">
           <div class="fold__in" id="gate-body-{{ gate.slug }}">
             <div class="row__body">
-              <p class="quiet">Порядок голосов: {{ item.voters|join(", ") }}. Версия леса {{ gate.forest_version }}.</p>
+              <p class="quiet">Порядок голосов: {{ run.voters|join(", ") }}. Версия леса {{ gate.forest_version }}.</p>
               <div class="trees">
                 {% for view in item.trees %}
-                <section class="tree">
+                <section class="tree" id="tree-{{ gate.slug }}-{{ view.tree.tree_id }}">
                   <h3>{{ view.tree.title }}</h3>
                   <ol class="path">
                     {% for step in view.steps %}
-                    <li class="path__step is-{{ step.state }}">
+                    <li class="path__step is-{{ step.state }}" id="q-{{ gate.slug }}-{{ step.decision.question_id }}">
                       <span class="path__node">{{ loop.index }}</span>
                       <div class="path__body">
                         <p class="path__question">{{ step.decision.question }}</p>
@@ -93,7 +93,7 @@
                 <h3>Вопросы вне пройденного пути</h3>
                 <ul class="offpath">
                   {% for step in item.off_path %}
-                  <li><span>{{ step.decision.question }}</span><span class="path__ruling">{{ ui.ruling(step.decision) }}</span></li>
+                  <li id="q-{{ gate.slug }}-{{ step.decision.question_id }}"><span>{{ step.decision.question }}</span><span class="path__ruling">{{ ui.ruling(step.decision) }}</span></li>
                   {% endfor %}
                 </ul>
               </section>
