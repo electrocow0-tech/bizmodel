@@ -1,0 +1,109 @@
+# Лес решений: по одному дереву на каждый критерий собственника.
+# Модели отвечают только на вопросы узлов (yes / no / unknown), путь и исход считает код.
+# Узел ведёт либо к следующему узлу, либо к листу: {pass: "причина"}, {fail: "причина"}, {unknown: "причина"}.
+# Ответ unknown без явной ветки даёт исход «не удалось проверить».
+
+trees:
+  - id: online_legal
+    title: Законно и полностью онлайн, без своей лицензии до первого клиента
+    root: legal
+    nodes:
+      legal:
+        label: Деятельность законна
+        ask: Is the company's core activity legal in its home market?
+        "yes": online
+        "no": {fail: "Основная деятельность незаконна на домашнем рынке"}
+      online:
+        label: Продаётся и оказывается полностью онлайн
+        ask: >-
+          Can the product be sold and delivered fully online, with no physical goods,
+          hardware, on-site work or in-person service?
+        "yes": license
+        "no": {fail: "Нужны физические товары, оборудование или работа на месте"}
+      license:
+        label: Своя лицензия до первого клиента
+        ask: >-
+          Would an operator of this business need its own regulatory license or registration
+          (financial, medical, legal, insurance, gambling, telecom) before serving the first
+          paying customer?
+        "yes": {fail: "До первого клиента нужна своя лицензия"}
+        "no": {pass: "Лицензия до первого клиента не нужна"}
+
+  - id: recurring
+    title: "Деньги повторяются: подписка или комиссия с регулярных операций"
+    root: subscription
+    nodes:
+      subscription:
+        label: Подписка или регулярная плата
+        ask: >-
+          Do customers pay a recurring subscription, seat fee or usage fee billed on a
+          regular schedule?
+        "yes": {pass: "Клиенты платят по подписке"}
+        "no": commission
+      commission:
+        label: Комиссия с регулярных операций
+        ask: >-
+          Does the company take a fee or commission on transactions that the same customers
+          repeat regularly?
+        "yes": {pass: "Комиссия с операций, которые клиенты повторяют"}
+        "no": {fail: "Продажи разовые, повторяющегося дохода нет"}
+
+  - id: no_balance_sheet_risk
+    title: Мы не берём на себя кредит, страховку или хранение чужих денег
+    root: lending
+    nodes:
+      lending:
+        label: Выдаёт кредиты за свой счёт
+        ask: Does the company itself lend money or carry credit risk on its own balance sheet?
+        "yes": {fail: "Компания сама несёт кредитный риск"}
+        "no": insurance
+      insurance:
+        label: Сама страхует риски
+        ask: Does the company itself underwrite insurance risk?
+        "yes": {fail: "Компания сама несёт страховой риск"}
+        "no": custody
+      custody:
+        label: Хранит чужие деньги
+        ask: >-
+          Does the company itself hold or safeguard customer funds or assets
+          (deposits, wallets, escrow, custody)?
+        "yes": {fail: "Компания хранит деньги или активы клиентов"}
+        "no": {pass: "Чужих денег и рисков на балансе нет"}
+
+  - id: not_trading_or_government
+    title: Не трейдинг и не государственный сервис
+    root: trading
+    nodes:
+      trading:
+        label: Трейдинг или инвестиции
+        ask: >-
+          Is the core product trading or investing in securities, crypto, FX or other
+          financial instruments (brokerage, exchange, trading bots, funds)?
+        "yes": {fail: "Основной продукт - трейдинг или инвестиции"}
+        "no": government
+      government:
+        label: Государственный сервис
+        ask: >-
+          Is the product a public service delivered by or on behalf of a government,
+          or sold primarily to government agencies?
+        "yes": {fail: "Сервис государственный или продаётся в основном госорганам"}
+        "no": {pass: "Частный продукт для частных клиентов"}
+
+  - id: proven_at_scale
+    title: Есть компания с такой моделью размером порядка $300 млн и больше
+    root: named
+    nodes:
+      named:
+        label: Названа компания с такой же моделью
+        ask: >-
+          Does the evidence name a company (this one or another) that runs the same business
+          model: same kind of payer, same thing paid for, same payment frequency?
+        "yes": size
+        "no": {unknown: "В источниках не названа компания с такой же моделью"}
+      size:
+        label: Её размер порядка $300 млн
+        ask: >-
+          Does the evidence state that this company's valuation, market cap or acquisition
+          price is on the order of $300 million or more (roughly $200 million and up)?
+        "yes": {pass: "Размер компании с такой моделью подтверждён источником"}
+        "no": {unknown: "Размер компании-аналога источниками не подтверждён"}
