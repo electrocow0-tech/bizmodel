@@ -1,0 +1,89 @@
+# Маршрут записывается как "провайдер:модель". У роли цепочка маршрутов:
+# первый основной, остальные запасные на случай сбоя провайдера.
+# Любой OpenAI-совместимый адрес (OpenRouter, vLLM, llama.cpp) подключается
+# одной записью в providers, код при этом не меняется.
+
+providers:
+  anthropic:
+    kind: anthropic
+    key_env: ANTHROPIC_API_KEY
+    budget_usd: 10
+  openrouter:
+    kind: openai_compatible
+    base_url: https://openrouter.ai/api/v1
+    key_env: OPENROUTER_API_KEY
+    budget_usd: 1
+  local:
+    kind: openai_compatible
+    base_url: http://127.0.0.1:8080/v1
+    key_env: LOCAL_API_KEY
+    budget_usd: null
+
+# Доллары за миллион токенов, вход / выход. Каталоги провайдеров на 2026-11-26.
+prices:
+  claude-haiku-5-5: [0.10, 0.50]
+  claude-sonnet-5-5: [2.00, 10.00]
+  claude-opus-5-5: [4.00, 20.00]
+  anthropic/claude-haiku-5.5: [0.10, 0.50]
+  anthropic/claude-sonnet-5.5: [2.00, 10.00]
+  anthropic/claude-opus-5.5: [4.00, 20.00]
+  qwen/qwen3.8-27b: [0.06, 1.96]
+  meta-llama/llama-4-scout: [0.10, 0.30]
+  mistralai/mistral-small-2603: [0.15, 0.60]
+  openai/gpt-6-luna: [0.10, 0.50]
+  openai/gpt-6.2-sol: [2.00, 10.00]
+  google/gemini-4-carbon: [2.00, 10.00]
+  qwen: [0, 0]
+
+profiles:
+  showcase:
+    prescreen:
+      routes: ["anthropic:claude-haiku-5-5", "openrouter:anthropic/claude-haiku-5.5"]
+    planner:
+      routes: ["anthropic:claude-haiku-5-5", "openrouter:anthropic/claude-haiku-5.5"]
+    voters:
+      - routes: ["openrouter:qwen/qwen3.8-27b"]
+      - routes: ["openrouter:meta-llama/llama-4-scout"]
+      - routes: ["openrouter:mistralai/mistral-small-2603"]
+      - routes: ["openrouter:openai/gpt-6-luna"]
+      - routes: ["anthropic:claude-sonnet-5-5", "openrouter:anthropic/claude-sonnet-5.5"]
+    arbiter:
+      routes: ["anthropic:claude-opus-5-5", "openrouter:anthropic/claude-opus-5.5"]
+      effort: medium
+    critic:
+      routes: ["anthropic:claude-opus-5-5", "openrouter:anthropic/claude-opus-5.5"]
+      effort: high
+    verifier:
+      routes: ["openrouter:openai/gpt-6.2-sol", "openrouter:google/gemini-4-carbon"]
+    card:
+      routes: ["anthropic:claude-sonnet-5-5", "openrouter:anthropic/claude-sonnet-5.5"]
+      effort: medium
+    advisor:
+      routes: ["anthropic:claude-sonnet-5-5", "openrouter:anthropic/claude-sonnet-5.5"]
+      effort: medium
+
+  # Дешёвый профиль для разработки: те же роли на недорогих моделях.
+  dev:
+    prescreen: {routes: ["anthropic:claude-haiku-5-5"]}
+    planner: {routes: ["anthropic:claude-haiku-5-5"]}
+    voters:
+      - routes: ["openrouter:meta-llama/llama-4-scout"]
+      - routes: ["openrouter:mistralai/mistral-small-2603"]
+      - routes: ["anthropic:claude-haiku-5-5"]
+    arbiter: {routes: ["anthropic:claude-sonnet-5-5"]}
+    critic: {routes: ["anthropic:claude-sonnet-5-5"]}
+    verifier: {routes: ["openrouter:openai/gpt-6-luna"]}
+    card: {routes: ["anthropic:claude-haiku-5-5"]}
+    advisor: {routes: ["anthropic:claude-haiku-5-5"]}
+
+  # Всё на своём железе: один локальный сервер с открытой моделью.
+  local:
+    prescreen: {routes: ["local:qwen"]}
+    planner: {routes: ["local:qwen"]}
+    voters:
+      - routes: ["local:qwen"]
+    arbiter: {routes: ["local:qwen"]}
+    critic: {routes: ["local:qwen"]}
+    verifier: {routes: ["local:qwen"]}
+    card: {routes: ["local:qwen"]}
+    advisor: {routes: ["local:qwen"]}

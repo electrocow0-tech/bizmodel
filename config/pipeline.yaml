@@ -1,0 +1,47 @@
+profile: showcase
+
+source:
+  url: https://yc-oss.github.io/api/companies/all.json
+  sample_size: 200
+  seed: 20261126
+  min_description_chars: 200
+  excluded_regions:
+    - Russia
+    - Belarus
+    - Ukraine
+    - Kazakhstan
+    - Kyrgyzstan
+    - Georgia
+    - Armenia
+    - Azerbaijan
+    - Moldova
+    - Tajikistan
+    - Turkmenistan
+    - Uzbekistan
+
+funnel:
+  deep_check: 15
+  per_industry_cap: 3
+  control_sample: 10
+
+gate:
+  quorum: 4
+  search_queries: 4
+
+critic:
+  search_queries: 4
+  objections_to_verify: 3
+
+search:
+  results_per_query: 3
+  snippet_chars: 1500
+  page_chars: 12000
+
+# Допущения о том, кто такие «мы». На них опираются оценки и советник.
+assumptions:
+  team: 2-3 человека без собственной тяжёлой разработки
+  test_budget_usd: 10000
+  horizon_weeks: 12
+  market: англоязычный
+
+concurrency: 8

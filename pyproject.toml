@@ -1,0 +1,35 @@
+[project]
+name = "bizmodel"
+version = "0.1.0"
+description = "Screens business models with independent LLM agents and ranks the survivors"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic",
+    "httpx",
+    "jinja2",
+    "markdown",
+    "openai",
+    "pydantic>=2.8",
+    "python-dotenv",
+    "pyyaml",
+    "typer",
+]
+
+[project.scripts]
+bizmodel = "bizmodel.cli:app"
+
+[dependency-groups]
+dev = ["pytest", "ruff"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/bizmodel"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
