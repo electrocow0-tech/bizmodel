@@ -51,9 +51,9 @@ def passport(method, origin="gate"):
 
 def test_trust_is_the_share_of_facts_backed_by_a_quote(settings):
     backed, guessed = passport("primary_source"), passport("model_judgment")
-    assert trust_in([backed] * 7 + [guessed] * 3, settings.scoring).level == "high"
-    assert trust_in([backed] * 4 + [guessed] * 6, settings.scoring).level == "medium"
-    assert trust_in([backed] * 1 + [guessed] * 9, settings.scoring).level == "low"
+    assert trust_in([backed] * 8 + [guessed] * 2, settings.scoring).level == "high"
+    assert trust_in([backed] * 7 + [guessed] * 3, settings.scoring).level == "medium"
+    assert trust_in([backed] * 6 + [guessed] * 4, settings.scoring).level == "low"
 
 
 def test_score_passport_does_not_inflate_trust(settings):

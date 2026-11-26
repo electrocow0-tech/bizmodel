@@ -32,8 +32,8 @@ def test_unanimous_vote_with_a_real_quote_is_a_confident_fact(ctx, company):
     assert passport.quote == QUOTE and passport.source_url == "https://acme.example/pricing"
 
 
-def test_four_of_five_decides_but_lowers_confidence(ctx, company):
-    decision, passport = decide(ctx, company, votes("yes", "yes", "yes", "yes", "no"))
+def test_five_of_six_decides_but_lowers_confidence(ctx, company):
+    decision, passport = decide(ctx, company, votes("yes", "yes", "yes", "yes", "yes", "no"))
     assert (decision.answer, decision.decided_by) == ("yes", "vote")
     assert passport.confidence == "medium"
 
