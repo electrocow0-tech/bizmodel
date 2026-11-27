@@ -17,4 +17,5 @@ rsync -az --delete \
   "$ROOT/" "$HOST:/opt/bizmodel/app/"
 rsync -az "$RUN" "$HOST:/opt/bizmodel/app/runs/$(basename "$RUN")/"
 rsync -az "$ROOT/cache/llm" "$ROOT/cache/search" "$HOST:/opt/bizmodel/app/cache/"
-ssh "$HOST" 'cd /opt/bizmodel && docker compose up -d --build && docker compose ps'
+# Перезапуск пересобирает стенд из последнего прогона и свежих документов; идущий прогон при этом прервётся.
+ssh "$HOST" 'cd /opt/bizmodel && docker compose up -d --build && docker compose restart && docker compose ps'
