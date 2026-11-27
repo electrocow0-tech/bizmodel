@@ -1,8 +1,6 @@
 (() => {
   const root = document.documentElement;
-  const TABS = ['rating', 'compare', 'forest', 'agents', 'settings', 'decisions', 'improve'];
-  const ANCHORS = { rating: 'card', forest: 'gate', agents: 'iso' };
-  const PICK_LIMIT = 3;
+  const TABS = ['how', 'rating', 'run', 'improve'];
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const LEAVE = { duration: still ? 0 : 130, easing: 'ease-in', fill: 'forwards' };
   const ENTER = { duration: still ? 0 : 220, easing: 'cubic-bezier(.2,.7,.2,1)' };
@@ -11,9 +9,6 @@
 
   const panel = (tab) => document.getElementById(`panel-${tab}`);
   const ladder = document.getElementById('ladder');
-  const grid = document.getElementById('cmp');
-  const picks = [...document.querySelectorAll('[data-pick]')];
-  const pickCount = document.getElementById('pick-count');
   const glow = document.querySelector('.glow');
 
   async function swap(leaving, change) {
@@ -25,7 +20,7 @@
 
   function route() {
     const [tab, target = ''] = decodeURIComponent(location.hash.slice(1)).split('/');
-    return { tab: TABS.includes(tab) ? tab : 'rating', target };
+    return { tab: TABS.includes(tab) ? tab : 'how', target };
   }
 
   function remember(target) {
@@ -51,11 +46,7 @@
   }
 
   function reveal(tab, target, smooth) {
-    if (tab === 'compare') {
-      if (target) choose(target.split(',').slice(0, PICK_LIMIT));
-      return;
-    }
-    const item = target && document.getElementById(`${ANCHORS[tab]}-${target}`);
+    const item = tab === 'rating' && target && document.getElementById(`card-${target}`);
     if (!item) return;
     setOpen(item, true);
     const top = item.getBoundingClientRect().top + scrollY - document.querySelector('.top').offsetHeight - 16;
@@ -69,6 +60,7 @@
     }
     return swap(panel(root.dataset.tab), () => {
       root.dataset.tab = tab;
+      root.dispatchEvent(new CustomEvent('tabchange'));
       markTab(true);
       scrollTo(0, 0);
       prepare();
@@ -84,6 +76,25 @@
     await switchTab(tab, () => reveal(tab, target, false));
   }
 
+  function selectStage(key, instant) {
+    const current = document.querySelector('[data-stage-panel]:not([hidden])');
+    const next = document.querySelector(`[data-stage-panel="${key}"]`);
+    if (!next || current === next) return Promise.resolve();
+    document.querySelectorAll('[data-stage]').forEach((node) => {
+      node.setAttribute('aria-pressed', node.dataset.stage === key);
+    });
+    const change = () => {
+      if (current) current.hidden = true;
+      next.hidden = false;
+      return next;
+    };
+    if (instant || !current) {
+      change();
+      return Promise.resolve();
+    }
+    return swap(current, change);
+  }
+
   function reorder(direction) {
     const sign = direction === 'asc' ? 1 : -1;
     swap(ladder, () => {
@@ -96,33 +107,6 @@
     });
   }
 
-  function chosen() {
-    return picks.filter((pick) => pick.getAttribute('aria-pressed') === 'true').map((pick) => pick.dataset.pick);
-  }
-
-  function choose(slugs) {
-    const full = slugs.length >= PICK_LIMIT;
-    picks.forEach((pick) => {
-      const on = slugs.includes(pick.dataset.pick);
-      pick.setAttribute('aria-pressed', on);
-      pick.setAttribute('aria-disabled', !on && full);
-    });
-    grid.querySelectorAll('[data-col]').forEach((column) => {
-      column.hidden = !slugs.includes(column.dataset.col);
-    });
-    pickCount.textContent = full
-      ? `Выбрано ${PICK_LIMIT} из ${PICK_LIMIT}. Чтобы взять другую модель, снимите одну.`
-      : `Выбрано ${slugs.length} из ${PICK_LIMIT}`;
-  }
-
-  function togglePick(slug) {
-    const now = chosen();
-    if (!now.includes(slug) && now.length >= PICK_LIMIT) return;
-    const next = now.includes(slug) ? now.filter((other) => other !== slug) : [...now, slug];
-    swap(grid, () => choose(next));
-    remember(next.join(','));
-  }
-
   let glowQueued = false;
   function fadeGlow() {
     glowQueued = false;
@@ -133,7 +117,7 @@
   document.addEventListener('click', (event) => {
     const fold = event.target.closest('[data-fold]');
     const order = event.target.closest('[data-order]');
-    const pick = event.target.closest('[data-pick]');
+    const stage = event.target.closest('[data-stage]');
     if (fold) {
       const item = fold.closest('.foldable');
       const open = !item.classList.contains('is-open');
@@ -141,8 +125,8 @@
       if (item.dataset.slug) remember(open ? item.dataset.slug : '');
     } else if (order && order.getAttribute('aria-pressed') !== 'true') {
       reorder(order.dataset.order);
-    } else if (pick) {
-      togglePick(pick.dataset.pick);
+    } else if (stage) {
+      selectStage(stage.dataset.stage, false);
     }
   });
 
@@ -160,12 +144,11 @@
   window.Stand = {
     switchTab,
     setOpen,
-    choose: (slugs) => grid && choose(slugs),
+    stage: selectStage,
     remember: (hash) => history.replaceState(null, '', `#${hash}`),
   };
 
   markTab(false);
   fadeGlow();
-  if (grid) choose(chosen());
   reveal(route().tab, route().target, false);
 })();

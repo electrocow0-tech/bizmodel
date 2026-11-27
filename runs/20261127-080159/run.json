@@ -1,7 +1,7 @@
 {
- "id": "20261127-074216",
- "started": "2026-11-27T07:42:16",
- "finished": "2026-11-27T07:43:03",
+ "id": "20261127-080159",
+ "started": "2026-11-27T08:01:59",
+ "finished": "2026-11-27T08:02:52",
  "profile": "showcase",
  "voters": [
   "google/gemma-4-26b-a4b-it",
@@ -166,13 +166,13 @@
     "anthropic": {
      "kind": "anthropic",
      "key_env": "ANTHROPIC_API_KEY",
-     "budget_usd": 10
+     "budget_usd": 10.0
     },
     "openrouter": {
      "kind": "openai_compatible",
      "base_url": "https://openrouter.ai/api/v1",
      "key_env": "OPENROUTER_API_KEY",
-     "budget_usd": 1
+     "budget_usd": 5.0
     },
     "local": {
      "kind": "openai_compatible",
@@ -446,6 +446,16 @@
      "Tajikistan",
      "Turkmenistan",
      "Uzbekistan"
+    ],
+    "industries": [
+     "B2B",
+     "Consumer",
+     "Education",
+     "Fintech",
+     "Government",
+     "Healthcare",
+     "Industrials",
+     "Real Estate and Construction"
     ]
    },
    "funnel": {
@@ -473,7 +483,14 @@
     "horizon_weeks": 12,
     "market": "англоязычный"
    },
-   "concurrency": 8
+   "concurrency": 8,
+   "stand": {
+    "live_url": "https://bizmodel.87-199-207-214.sslip.io",
+    "budget_usd": {
+     "anthropic": 10,
+     "openrouter": 5
+    }
+   }
   },
   "scoring": {
    "rubrics": [
@@ -23873,7 +23890,7 @@
       "proven_at_scale.named",
       "proven_at_scale.size"
      ],
-     "reason": "Не удалось проверить: её размер порядка $300 млн"
+     "reason": "Размер компании-аналога источниками не подтверждён"
     }
    ],
    "decisions": [
@@ -23897,6 +23914,12 @@
        "voter": "mistralai/mistral-small-2603",
        "answer": "no",
        "quote": "Marketplace for culinary experience including cooking, baking and tasting classes",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
        "evidence_id": "E0"
       },
       {
@@ -23940,6 +23963,12 @@
        "evidence_id": "E0"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
+       "evidence_id": "E0"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "classes that are hosted at restaurants and hotels",
@@ -23977,6 +24006,12 @@
        "voter": "mistralai/mistral-small-2603",
        "answer": "no",
        "quote": "Book your spot in a hands-on cooking class and your +1 gets 50% off",
+       "evidence_id": "E4"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "@cocusocial is offering a really fun and affordable pasta making class for just $59 per person!",
        "evidence_id": "E4"
       },
       {
@@ -24020,6 +24055,12 @@
        "evidence_id": "E7"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "yes",
+       "quote": "Customer Profile\n\nMarketplace Commission",
+       "evidence_id": "E7"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "unknown",
        "quote": "",
@@ -24033,7 +24074,7 @@
       }
      ],
      "answer": "unknown",
-     "agreement": 0.6,
+     "agreement": 0.5,
      "decided_by": "unresolved",
      "passport_id": "gate.recurring.commission"
     },
@@ -24057,6 +24098,12 @@
        "voter": "mistralai/mistral-small-2603",
        "answer": "no",
        "quote": "Marketplace for culinary experience including cooking",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
        "evidence_id": "E0"
       },
       {
@@ -24100,6 +24147,12 @@
        "evidence_id": "E0"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
+       "evidence_id": "E0"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "a marketplace for culinary experience including cooking, baking and tasting classes",
@@ -24140,6 +24193,12 @@
        "evidence_id": "E0"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
+       "evidence_id": "E0"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "a marketplace for culinary experience including cooking, baking and tasting classes",
@@ -24153,8 +24212,8 @@
       }
      ],
      "answer": "no",
-     "agreement": 0.8,
-     "decided_by": "arbiter",
+     "agreement": 0.8333333333333334,
+     "decided_by": "vote",
      "passport_id": "gate.no_balance_sheet_risk.custody"
     },
     {
@@ -24177,6 +24236,12 @@
        "voter": "mistralai/mistral-small-2603",
        "answer": "no",
        "quote": "Marketplace for culinary experience including cooking",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
        "evidence_id": "E0"
       },
       {
@@ -24220,6 +24285,12 @@
        "evidence_id": "E0"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
+       "evidence_id": "E0"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "a marketplace for culinary experience including cooking, baking and tasting classes",
@@ -24260,6 +24331,12 @@
        "evidence_id": "E5"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "yes",
+       "quote": "Cozymeal is an award-winning provider of cooking classes, private chef services, food tours and team building activities with local chefs and food tour guides in Colorado.",
+       "evidence_id": "E10"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "",
@@ -24273,8 +24350,8 @@
       }
      ],
      "answer": "yes",
-     "agreement": 0.8,
-     "decided_by": "arbiter",
+     "agreement": 0.8333333333333334,
+     "decided_by": "vote",
      "passport_id": "gate.proven_at_scale.named"
     },
     {
@@ -24300,6 +24377,12 @@
        "evidence_id": ""
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
+       "evidence_id": "E6"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "unknown",
        "quote": "",
@@ -24312,9 +24395,9 @@
        "evidence_id": ""
       }
      ],
-     "answer": "unknown",
-     "agreement": 0.4,
-     "decided_by": "unresolved",
+     "answer": "no",
+     "agreement": 0.3333333333333333,
+     "decided_by": "arbiter",
      "passport_id": "gate.proven_at_scale.size"
     }
    ],
@@ -24496,7 +24579,7 @@
      "method": "primary_source",
      "confidence": "medium",
      "source_url": "https://www.instagram.com/cocusocial?hl=en",
-     "quote": "Book your spot in a hands-on cooking class and your +1 gets 50% off their ticket.",
+     "quote": "Book your spot in a hands-on cooking class",
      "source_date": null,
      "accessed": "2026-11-26",
      "note": ""
@@ -24531,17 +24614,17 @@
      "origin": "gate",
      "method": "primary_source",
      "confidence": "medium",
-     "source_url": "https://www.caplight.com/company/cocusocial",
-     "quote": "CocuSocial is a consumer web company that operates an online marketplace for culinary experiences",
+     "source_url": "https://tavily.com/knowledge/company/GoMyv6s7pHk9",
+     "quote": "CocuSocial is one of the largest marketplace for culinary experiences",
      "source_date": null,
      "accessed": "2026-11-26",
      "note": ""
     },
     {
      "id": "gate.proven_at_scale.size",
-     "claim": "Её размер порядка $300 млн: не удалось проверить",
+     "claim": "Её размер порядка $300 млн: нет",
      "origin": "gate",
-     "method": "needs_human",
+     "method": "model_judgment",
      "confidence": "low",
      "source_url": null,
      "quote": null,
@@ -29999,9 +30082,9 @@
    "model": "claude-opus-5-5",
    "calls": 18,
    "cached": 17,
-   "input_tokens": 137009,
-   "output_tokens": 12691,
-   "usd": 0.8019
+   "input_tokens": 136876,
+   "output_tokens": 12134,
+   "usd": 0.7902
   },
   {
    "provider": "anthropic",
@@ -30067,11 +30150,11 @@
    "provider": "openrouter",
    "role": "voter",
    "model": "deepseek/deepseek-v4.1-flash",
-   "calls": 26,
-   "cached": 25,
-   "input_tokens": 134223,
-   "output_tokens": 140427,
-   "usd": 0.1379
+   "calls": 27,
+   "cached": 26,
+   "input_tokens": 138309,
+   "output_tokens": 147602,
+   "usd": 0.1437
   },
   {
    "provider": "openrouter",
@@ -30114,11 +30197,15 @@
    "usd": 0.0377
   }
  ],
+ "spent": {
+  "openrouter": 0.0058,
+  "anthropic": 0.0409
+ },
  "validators": {
   "schema_retries": 2,
   "schema_failures": 0,
-  "quotes_checked": 1412,
-  "quotes_dropped": 168,
+  "quotes_checked": 1422,
+  "quotes_dropped": 169,
   "advice_numbers_flagged": 0,
   "cards_rejected": 0
  },
@@ -30523,7 +30610,7 @@
   "failed_route": "anthropic:claude-haiku-5-5",
   "error": "simulated outage",
   "served_by": "openrouter:anthropic/claude-haiku-5.5",
-  "seconds": 4.5
+  "seconds": 4.0
  },
  "golden": null
 }
