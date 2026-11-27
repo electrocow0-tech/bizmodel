@@ -5,6 +5,8 @@ import random
 from collections import Counter
 from pathlib import Path
 
+import yaml
+
 from bizmodel.schemas import (
     Advice,
     AgentCall,
@@ -34,6 +36,7 @@ from bizmodel.schemas import (
     Vote,
 )
 
+ROOT = Path(__file__).resolve().parents[2]
 rng = random.Random(7)
 TODAY = "2026-11-26"
 FOREST_VERSION = "3f9c2a71"
@@ -747,6 +750,14 @@ def build() -> Run:
         profile="fixture",
         voters=VOTERS,
         quorum=QUORUM,
+        config={
+            path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
+            for path in sorted((ROOT / "config").glob("*.yaml"))
+        },
+        prompts={
+            path.stem: path.read_text(encoding="utf-8")
+            for path in sorted((ROOT / "prompts").glob("*.md"))
+        },
         funnel=Funnel(
             sourced=len(companies),
             prescreen_rejected=117,

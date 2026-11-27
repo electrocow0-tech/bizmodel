@@ -71,7 +71,14 @@
 {% set _ = steps.append({"title": "Сравнение рядом", "text": text, "tab": "compare", "hash": "compare/" ~ slugs|join(","), "open": [], "pick": slugs, "target": "cmp"}) %}
 {% endif %}
 
-{% set text %}Здесь записано, почему конвейер устроен именно так, и честный список того, что работает криво. Дальше можно смотреть самостоятельно.{% endset %}
-{% set _ = steps.append({"title": "Решения и честный список", "text": text, "tab": "documents", "hash": "documents", "open": [], "pick": [], "target": "h-documents", "final": true}) %}
+{% set criteria = settings.trees|length %}
+{% set scales = (settings.scoring.get("rubrics") or [])|length %}
+{% set roles = settings.roles|length %}
+{% set budget = ((settings.pipeline.get("assumptions") or {}).get("test_budget_usd") or 0)|thousands %}
+{% set text %}Здесь всё, что можно поменять: {{ criteria }} {{ criteria|plural("критерий", "критерия", "критериев") }}, {{ scales }} {{ scales|plural("шкала", "шкалы", "шкал") }} с весами, модели для {{ roles }} {{ roles|plural("роли", "ролей", "ролей") }} и бюджет теста ${{ budget }}. Сейчас это файлы настроек, в полной версии правка будет прямо здесь.{% endset %}
+{% set _ = steps.append({"title": "Настройки прогона", "text": text, "tab": "settings", "hash": "settings", "open": [], "pick": [], "target": "h-settings"}) %}
+
+{% set text %}Честный список того, что пока не готово, и что изменится в полной версии. Почему конвейер устроен именно так, записано на вкладке «Решения».{% endset %}
+{% set _ = steps.append({"title": "Что улучшить", "text": text, "tab": "improve", "hash": "improve", "open": [], "pick": [], "target": "h-improve", "final": true}) %}
 <script type="application/json" id="tour-steps">{{ steps|tojson }}</script>
 {% endautoescape %}

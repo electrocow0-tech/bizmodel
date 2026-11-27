@@ -64,6 +64,38 @@ labels:
     verifier: проверяющий
     card: сборщик карточки
     advisor: советник
+    voters: голосующие
+    critic_plan: критик, поисковые запросы
+    portfolio: записка по портфелю
+  provider:
+    anthropic: Anthropic напрямую
+    openrouter: через OpenRouter
+    local: свой сервер
+  profile:
+    showcase: основной
+    dev: дешёвый, для разработки
+    local: всё на своём сервере
+  effort:
+    low: короткие рассуждения
+    medium: средние рассуждения
+    high: глубокие рассуждения
+  branch:
+    "yes": да
+    "no": нет
+    unknown: не знают
+  region:
+    Russia: Россия
+    Belarus: Беларусь
+    Ukraine: Украина
+    Kazakhstan: Казахстан
+    Kyrgyzstan: Киргизия
+    Georgia: Грузия
+    Armenia: Армения
+    Azerbaijan: Азербайджан
+    Moldova: Молдова
+    Tajikistan: Таджикистан
+    Turkmenistan: Туркмения
+    Uzbekistan: Узбекистан
   stage:
     prescreen: дешёвый слой
     evidence: сбор источников

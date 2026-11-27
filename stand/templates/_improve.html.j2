@@ -1,0 +1,21 @@
+<section class="panel" id="panel-improve" data-panel="improve" aria-labelledby="h-improve">
+  <header class="hero">
+    <h1 id="h-improve">Что не готово и что будет дальше</h1>
+    <p>Сначала честный список слабых мест этой версии, потом что изменится в полной.</p>
+  </header>
+  <div class="papers">
+    {% for key, title, empty in [
+      ("limitations", "Что не готово", "Список появится здесь после финального прогона."),
+      ("full_version", "Полная версия", "План полной версии появится здесь после финального прогона."),
+    ] %}
+    <article class="prose">
+      <h2 class="prose__part">{{ title }}</h2>
+      {% if documents.get(key) %}
+      {{ documents[key]|md }}
+      {% else %}
+      <p class="quiet">{{ empty }}</p>
+      {% endif %}
+    </article>
+    {% endfor %}
+  </div>
+</section>

@@ -17,6 +17,12 @@ STAND = Path(__file__).resolve().parents[2] / "stand"
 NO_DATE = '<span class="quiet">нет</span>'
 VOTE_EXAMPLE_ORDER = {"arbiter": 0, "human": 1, "unresolved": 1}
 VERDICT_EXAMPLE_ORDER = {"supported": 0, "contradicts": 1, "not_supported": 2}
+ROLE_ORDER = ["prescreen", "planner", "voters", "arbiter", "critic", "verifier", "card", "advisor"]
+BRANCH_ORDER = ("yes", "no", "unknown")
+PROMPT_ORDER = [
+    "prescreen", "planner", "voter", "arbiter", "critic_plan", "critic", "verifier", "card",
+    "advisor", "portfolio",
+]  # fmt: skip
 VERDICT_ORDER = [
     "supported", "contradicts", "not_supported", "source_unavailable", "no_source", "failed", "unchecked",
 ]  # fmt: skip
@@ -43,6 +49,7 @@ def build(run: Run, out: Path, documents: dict[str, str]) -> None:
             cheap_layer=_cheap_layer(run),
             spend=_spend(run),
             tour=_tour(run),
+            settings=_settings(run),
             documents=documents,
             assets=_publish_assets(out),
         )
@@ -99,8 +106,14 @@ def _plural(number: int, one: str, few: str, many: str) -> str:
 
 
 def _markdown(text: str) -> Markup:
-    """Только для документов из репозитория: их разметка считается доверенной."""
-    return Markup(markdown.markdown(text, extensions=["tables"]))
+    """Только для документов из репозитория: их разметка считается доверенной.
+
+    Заголовок первого уровня снимается: его место занимает заголовок вкладки.
+    """
+    lines = text.strip().splitlines()
+    if lines and lines[0].startswith("# "):
+        lines = lines[1:]
+    return Markup(markdown.markdown("\n".join(lines), extensions=["tables"]))
 
 
 def _paragraphs(text: str) -> Markup:
@@ -281,3 +294,115 @@ def _isolation_example(checks: list[Isolation], card: Card | None) -> Isolation 
     usable = [check for check in checks if check.verifier]
     own = [check for check in usable if card and check.slug == card.slug]
     return (own or usable or [None])[0]
+
+
+def _settings(run: Run) -> dict:
+    """Конфиг прогона в том виде, в каком его читает человек: без имён полей и ключей доступа."""
+    config = run.config
+    pipeline = config.get("pipeline", {})
+    profiles = config.get("models", {}).get("profiles", {})
+    profile = run.profile if run.profile in profiles else pipeline.get("profile", "")
+    overrides = config.get("overrides") or {}
+    return {
+        "trees": [_tree_map(tree) for tree in config.get("criteria", {}).get("trees", [])],
+        "scoring": config.get("scoring", {}),
+        "pipeline": pipeline,
+        "profile": profile,
+        "roles": _roles(profiles.get(profile, {})),
+        "other_profiles": {
+            name: _roles(spec) for name, spec in profiles.items() if name != profile
+        },
+        "budgets": {
+            name: provider.get("budget_usd")
+            for name, provider in config.get("models", {}).get("providers", {}).items()
+        },
+        "prices": config.get("models", {}).get("prices", {}),
+        "overrides": sum(len(answers) for answers in overrides.values()),
+        "open_questions": _open_questions(run),
+        "holding": (config.get("holding") or {}).get("companies") or [],
+        "prompts": dict(
+            sorted(run.prompts.items(), key=lambda item: _position(PROMPT_ORDER, item[0]))
+        ),
+    }
+
+
+def _open_questions(run: Run) -> list[dict]:
+    """Вопросы, от которых зависит исход компании со статусом «не удалось проверить»."""
+    questions = []
+    for gate in run.gates:
+        if gate.outcome != "unknown" or gate.slug in run.control.slugs:
+            continue
+        decisions = {decision.question_id: decision for decision in gate.decisions}
+        for tree in gate.trees:
+            if tree.outcome == "unknown":
+                questions.append(
+                    {
+                        "slug": gate.slug,
+                        "company": run.companies[gate.slug].name,
+                        "question": decisions[tree.path[-1]].question,
+                    }
+                )
+    return questions
+
+
+def _tree_map(tree: dict) -> dict:
+    """Дерево критерия как список вопросов по порядку обхода, у каждого ответа куда он ведёт."""
+    nodes = tree["nodes"]
+    order: list[str] = []
+
+    def visit(node_id: str) -> None:
+        if node_id in order or node_id not in nodes:
+            return
+        order.append(node_id)
+        for answer in BRANCH_ORDER:
+            if isinstance(nodes[node_id].get(answer), str):
+                visit(nodes[node_id][answer])
+
+    visit(tree["root"])
+    number = {node_id: position for position, node_id in enumerate(order, start=1)}
+    questions = []
+    for node_id in order:
+        branches = []
+        for answer in BRANCH_ORDER:
+            target = nodes[node_id].get(answer)
+            if isinstance(target, str):
+                branches.append(
+                    {"answer": answer, "next": number[target], "text": nodes[target]["label"]}
+                )
+            elif isinstance(target, dict):
+                [(outcome, reason)] = target.items()
+                branches.append({"answer": answer, "outcome": outcome, "text": reason})
+        questions.append(
+            {"number": number[node_id], "label": nodes[node_id]["label"], "branches": branches}
+        )
+    return {"title": tree["title"], "questions": questions}
+
+
+def _roles(profile: dict) -> list[dict]:
+    """Строка на каждое место: у голосующих их несколько, подпись роли стоит только у первого."""
+    rows = []
+    for role in ROLE_ORDER:
+        spec = profile.get(role)
+        if not spec:
+            continue
+        seats = spec if role == "voters" else [spec]
+        for position, seat in enumerate(seats):
+            routes = [_route(route) for route in seat.get("routes", [])]
+            rows.append(
+                {
+                    "role": role if position == 0 else None,
+                    "main": routes[0],
+                    "fallbacks": routes[1:],
+                    "effort": seat.get("effort"),
+                }
+            )
+    return rows
+
+
+def _position(order: list[str], key: str) -> int:
+    return order.index(key) if key in order else len(order)
+
+
+def _route(route: str) -> dict:
+    provider, _, model = route.partition(":")
+    return {"provider": provider, "model": model}

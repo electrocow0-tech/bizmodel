@@ -30,7 +30,15 @@ def run() -> Run:
 @pytest.fixture(scope="module")
 def site(run: Run, tmp_path_factory: pytest.TempPathFactory) -> Path:
     out = tmp_path_factory.mktemp("stand")
-    build(run, out, {"decisions": "# Почему так\n\nВеса лежат в конфиге.", "limitations": ""})
+    build(
+        run,
+        out,
+        {
+            "decisions": "# Почему так\n\nВеса лежат в конфиге.",
+            "limitations": "",
+            "full_version": "",
+        },
+    )
     return out
 
 
@@ -82,8 +90,13 @@ def test_every_checked_company_has_its_path(run: Run, page: str):
 
 
 def test_documents_are_rendered_or_announced(page: str):
-    assert "<h1>Почему так</h1>" in page
-    assert "Список появится здесь после финального прогона." in page
+    decisions = page[page.index('id="panel-decisions"') : page.index('id="panel-improve"')]
+    improve = page[page.index('id="panel-improve"') :]
+
+    assert "Веса лежат в конфиге." in decisions
+    assert "<h1>Почему так</h1>" not in decisions
+    assert "Список появится здесь после финального прогона." in improve
+    assert "Полная версия" in improve
 
 
 def test_page_loads_nothing_from_outside(site: Path, page: str):
@@ -134,7 +147,7 @@ def test_tour_targets_exist_in_the_page(page: str):
     steps = tour_steps(page)
 
     assert steps[-1]["final"] is True
-    assert sum(not step.get("final") for step in steps) == 11
+    assert sum(not step.get("final") for step in steps) == 12
     for step in steps:
         for element in [step["target"], *step["open"]]:
             assert f'id="{element}"' in page, (step["title"], element)
@@ -160,3 +173,20 @@ def test_tour_skips_examples_the_run_does_not_have(tmp_path):
     assert "решал арбитр" not in next(s for s in steps if s["title"] == "Голоса моделей")["text"]
     for step in steps:
         assert f'id="{step["target"]}"' in page
+
+
+def test_settings_speak_plainly(run: Run, page: str):
+    settings = page[page.index('id="panel-settings"') : page.index('id="panel-decisions"')]
+    unresolved = sum(
+        tree.outcome == "unknown"
+        for g in run.gates
+        if g.outcome == "unknown" and g.slug not in run.control.slugs
+        for tree in g.trees
+    )
+
+    assert settings.count('class="box__title"') == len(run.config["criteria"]["trees"])
+    assert f"Открытые вопросы этого прогона: {unresolved}" in settings
+    assert "API_KEY" not in page
+    assert "key_env" not in page
+    for role in run.prompts:
+        assert '<pre class="prompt">' in settings, role

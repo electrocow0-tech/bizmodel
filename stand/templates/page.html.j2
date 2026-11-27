@@ -7,7 +7,7 @@
 <script>
 (function () {
   var tab = location.hash.slice(1).split('/')[0];
-  if (['rating', 'compare', 'forest', 'agents', 'documents'].indexOf(tab) > -1) {
+  if (['rating', 'compare', 'forest', 'agents', 'settings', 'decisions', 'improve'].indexOf(tab) > -1) {
     document.documentElement.dataset.tab = tab;
   }
   if (!/Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent)) {
@@ -35,9 +35,11 @@
     <nav class="tabs" aria-label="Разделы">
       <a class="tab" href="#rating" data-tab="rating">Рейтинг</a>
       <a class="tab" href="#compare" data-tab="compare">Сравнение</a>
-      <a class="tab" href="#forest" data-tab="forest">Воронка и лес</a>
-      <a class="tab" href="#agents" data-tab="agents">Агенты и изоляция</a>
-      <a class="tab" href="#documents" data-tab="documents">Решения и честный список</a>
+      <a class="tab" href="#forest" data-tab="forest">Воронка и проверка</a>
+      <a class="tab" href="#agents" data-tab="agents">Агенты</a>
+      <a class="tab" href="#settings" data-tab="settings">Настройки</a>
+      <a class="tab" href="#decisions" data-tab="decisions">Решения</a>
+      <a class="tab" href="#improve" data-tab="improve">Что улучшить</a>
     </nav>
   </div>
 </header>
@@ -46,7 +48,9 @@
 {% include "_compare.html.j2" %}
 {% include "_forest.html.j2" %}
 {% include "_agents.html.j2" %}
-{% include "_documents.html.j2" %}
+{% include "_settings.html.j2" %}
+{% include "_decisions.html.j2" %}
+{% include "_improve.html.j2" %}
 </main>
 <div class="spot" id="spot" aria-hidden="true"></div>
 <div class="coach" id="coach" role="status" aria-live="polite">
