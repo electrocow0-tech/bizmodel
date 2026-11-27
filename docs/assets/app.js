@@ -1,6 +1,6 @@
 (() => {
   const root = document.documentElement;
-  const TABS = ['rating', 'compare', 'forest', 'agents', 'documents'];
+  const TABS = ['rating', 'compare', 'forest', 'agents', 'settings', 'decisions', 'improve'];
   const ANCHORS = { rating: 'card', forest: 'gate', agents: 'iso' };
   const PICK_LIMIT = 3;
   const still = matchMedia('(prefers-reduced-motion: reduce)').matches;

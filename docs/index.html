@@ -7,7 +7,7 @@
 <script>
 (function () {
   var tab = location.hash.slice(1).split('/')[0];
-  if (['rating', 'compare', 'forest', 'agents', 'documents'].indexOf(tab) > -1) {
+  if (['rating', 'compare', 'forest', 'agents', 'settings', 'decisions', 'improve'].indexOf(tab) > -1) {
     document.documentElement.dataset.tab = tab;
   }
   if (!/Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent)) {
@@ -23,7 +23,7 @@
   }
 })();
 </script>
-<link rel="stylesheet" href="assets/style.css?v=5b228fb76b">
+<link rel="stylesheet" href="assets/style.css?v=d52b179931">
 </head>
 <body>
 <div class="glow" aria-hidden="true"><div class="glow__dim"><div class="glow__drift">
@@ -35,9 +35,11 @@
     <nav class="tabs" aria-label="Разделы">
       <a class="tab" href="#rating" data-tab="rating">Рейтинг</a>
       <a class="tab" href="#compare" data-tab="compare">Сравнение</a>
-      <a class="tab" href="#forest" data-tab="forest">Воронка и лес</a>
-      <a class="tab" href="#agents" data-tab="agents">Агенты и изоляция</a>
-      <a class="tab" href="#documents" data-tab="documents">Решения и честный список</a>
+      <a class="tab" href="#forest" data-tab="forest">Воронка и проверка</a>
+      <a class="tab" href="#agents" data-tab="agents">Агенты</a>
+      <a class="tab" href="#settings" data-tab="settings">Настройки</a>
+      <a class="tab" href="#decisions" data-tab="decisions">Решения</a>
+      <a class="tab" href="#improve" data-tab="improve">Что улучшить</a>
     </nav>
   </div>
 </header>
@@ -271,7 +273,7 @@
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -279,7 +281,7 @@
               <span role="cell" class="passport__claim">Продаётся и оказывается полностью онлайн: да<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -287,7 +289,7 @@
               <span role="cell" class="passport__claim">Своя лицензия до первого клиента: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--plain">средняя</span></span>
             </div>
@@ -295,7 +297,7 @@
               <span role="cell" class="passport__claim">Подписка или регулярная плата: да<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--plain">средняя</span></span>
             </div>
@@ -303,7 +305,7 @@
               <span role="cell" class="passport__claim">Выдаёт кредиты за свой счёт: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -311,7 +313,7 @@
               <span role="cell" class="passport__claim">Сама страхует риски: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -319,7 +321,7 @@
               <span role="cell" class="passport__claim">Хранит чужие деньги: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -327,7 +329,7 @@
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -335,7 +337,7 @@
               <span role="cell" class="passport__claim">Государственный сервис: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -624,7 +626,7 @@
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">ycombinator.com</a><q>You Got Listings is an all-in-one apartment Marketing Platform</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -656,7 +658,7 @@
               <span role="cell" class="passport__claim">Выдаёт кредиты за свой счёт: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">ycombinator.com</a><q>All-in-one apartment Marketing Platform for brokerages and landlords.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -664,7 +666,7 @@
               <span role="cell" class="passport__claim">Сама страхует риски: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">ycombinator.com</a><q>All-in-one apartment Marketing Platform for brokerages and landlords.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -672,7 +674,7 @@
               <span role="cell" class="passport__claim">Хранит чужие деньги: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">ycombinator.com</a><q>All-in-one apartment Marketing Platform for brokerages and landlords.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -680,7 +682,7 @@
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">ycombinator.com</a><q>You Got Listings is an all-in-one apartment Marketing Platform</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -688,7 +690,7 @@
               <span role="cell" class="passport__claim">Государственный сервис: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">ycombinator.com</a><q>You Got Listings is an all-in-one apartment Marketing Platform</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -1327,7 +1329,7 @@
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/cleverdeck" rel="noopener" target="_blank">ycombinator.com</a><q>CleverDeck is a customizable-spaced repetition flashcard application for learning foreign language vocabulary.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -1383,7 +1385,7 @@
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/cleverdeck" rel="noopener" target="_blank">ycombinator.com</a><q>CleverDeck is a customizable-spaced repetition flashcard application for learning foreign language vocabulary.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -1689,7 +1691,7 @@
               <span role="cell" class="passport__claim">Продаётся и оказывается полностью онлайн: да<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/ciro" rel="noopener" target="_blank">ycombinator.com</a><q>Ciro is an AI agent that finds prospects, researches their buying signals, and drafts personalized outreach, all from Slack.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2035,7 +2037,7 @@
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>AI-driven exam prep</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2051,7 +2053,7 @@
               <span role="cell" class="passport__claim">Своя лицензия до первого клиента: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>AI-driven exam prep</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--plain">средняя</span></span>
             </div>
@@ -2067,7 +2069,7 @@
               <span role="cell" class="passport__claim">Выдаёт кредиты за свой счёт: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>AI-driven exam prep</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2075,7 +2077,7 @@
               <span role="cell" class="passport__claim">Сама страхует риски: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>AI-driven exam prep</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2083,7 +2085,7 @@
               <span role="cell" class="passport__claim">Хранит чужие деньги: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>AI-driven exam prep</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2091,7 +2093,7 @@
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>AI-driven exam prep</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2099,7 +2101,7 @@
               <span role="cell" class="passport__claim">Государственный сервис: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">ycombinator.com</a><q>more than 10k college students have already used Alice</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2389,7 +2391,7 @@
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2405,7 +2407,7 @@
               <span role="cell" class="passport__claim">Своя лицензия до первого клиента: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--plain">средняя</span></span>
             </div>
@@ -2421,7 +2423,7 @@
               <span role="cell" class="passport__claim">Выдаёт кредиты за свой счёт: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2429,7 +2431,7 @@
               <span role="cell" class="passport__claim">Сама страхует риски: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2437,7 +2439,7 @@
               <span role="cell" class="passport__claim">Хранит чужие деньги: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2445,7 +2447,7 @@
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2453,7 +2455,7 @@
               <span role="cell" class="passport__claim">Государственный сервис: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">ycombinator.com</a><q>Fluently is an AI language tutor for speaking practice</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2743,7 +2745,7 @@
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook where every character has their own voice.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2761,7 +2763,7 @@ Or upload an epub, pdf, docx, or txt.</q></span>
               <span role="cell" class="passport__claim">Своя лицензия до первого клиента: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2779,7 +2781,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Выдаёт кредиты за свой счёт: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2787,7 +2789,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Сама страхует риски: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2795,7 +2797,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Хранит чужие деньги: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2803,7 +2805,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -2811,7 +2813,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Государственный сервис: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">ycombinator.com</a><q>Audora turns your book or story into an audiobook</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -3101,7 +3103,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Признаки незаконной деятельности: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -3133,7 +3135,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Выдаёт кредиты за свой счёт: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -3141,7 +3143,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Сама страхует риски: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -3149,7 +3151,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Хранит чужие деньги: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -3157,7 +3159,7 @@ Then €9.29/month after 3 days (25% off forever)</q></span>
               <span role="cell" class="passport__claim">Трейдинг или инвестиции: нет<small>фильтр</small></span>
               <span role="cell" data-cap="Источник"><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">ycombinator.com</a><q>Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.</q></span>
               <span role="cell" data-cap="Дата источника"><span class="quiet">нет</span></span>
-              <span role="cell" data-cap="Обращение">26 ноября 2026</span>
+              <span role="cell" data-cap="Обращение">27 ноября 2026</span>
               <span role="cell" data-cap="Метод"><span class="tag tag--pos">первоисточник</span></span>
               <span role="cell" data-cap="Уверенность"><span class="tag tag--pos">высокая</span></span>
             </div>
@@ -4242,7 +4244,7 @@ CocuSocial.
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/cleverdeck" rel="noopener" target="_blank">CleverDeck in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>eb6e4a1184fa</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/cleverdeck" rel="noopener" target="_blank">CleverDeck in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>eb6e4a1184fa</code></li>
                   <li><span>E1</span><a href="http://cleverdeck.com" rel="noopener" target="_blank">CleverDeck - Spaced Repetition Flashcards for iPhone</a><span>cleverdeck.com, дата источника не указана, открыт 26 ноября 2026</span><code>e02e80e90d51</code></li>
                   <li><span>E2</span><a href="https://www.cnbc.com/2021/07/28/language-learning-app-duolingo-pops-35percent-in-public-debut-on-the-nasdaq.html" rel="noopener" target="_blank">Duolingo closes up 36% in Nasdaq debut, valued at close to $5 billion</a><span>cnbc.com, дата источника не указана, открыт 26 ноября 2026</span><code>6c508719e4bd</code></li>
                   <li><span>E3</span><a href="https://africa.businessinsider.com/markets/language-app-duolingo-jumps-42-in-its-public-market-debut/c2jp75j" rel="noopener" target="_blank">Language app Duolingo jumps 42% in its public-market debut | Business Insider Africa</a><span>africa.businessinsider.com, дата источника не указана, открыт 26 ноября 2026</span><code>202a37db6454</code></li>
@@ -4468,7 +4470,7 @@ CocuSocial.
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/parrot" rel="noopener" target="_blank">Parrot in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>7bab38a35dfc</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/parrot" rel="noopener" target="_blank">Parrot in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>7bab38a35dfc</code></li>
                   <li><span>E1</span><a href="https://parrotapp.com/" rel="noopener" target="_blank">Best App to Learn Spanish: Parrot, the TikTok for Language Learning</a><span>parrotapp.com, дата источника не указана, открыт 26 ноября 2026</span><code>caa8f3070fcb</code></li>
                   <li><span>E2</span><a href="https://www.cnbc.com/2021/07/28/language-learning-app-duolingo-pops-35percent-in-public-debut-on-the-nasdaq.html" rel="noopener" target="_blank">Duolingo closes up 36% in Nasdaq debut, valued at close to $5 billion</a><span>cnbc.com, дата источника не указана, открыт 26 ноября 2026</span><code>6c508719e4bd</code></li>
                   <li><span>E3</span><a href="https://africa.businessinsider.com/markets/language-app-duolingo-jumps-42-in-its-public-market-debut/c2jp75j" rel="noopener" target="_blank">Language app Duolingo jumps 42% in its public-market debut | Business Insider Africa</a><span>africa.businessinsider.com, дата источника не указана, открыт 26 ноября 2026</span><code>202a37db6454</code></li>
@@ -4694,7 +4696,7 @@ CocuSocial.
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">Alice.tech in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>5e8a73bea523</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/alice-tech" rel="noopener" target="_blank">Alice.tech in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>5e8a73bea523</code></li>
                   <li><span>E1</span><a href="https://www.alice.tech/" rel="noopener" target="_blank">Alice: turn your course into a podcast, quiz and flashcards</a><span>alice.tech, дата источника не указана, открыт 26 ноября 2026</span><code>d67b0545c350</code></li>
                   <li><span>E2</span><a href="https://multiples.vc/private-comps/quizlet" rel="noopener" target="_blank">Quizlet Valuation, Funding &amp; Investors | Multiples</a><span>multiples.vc, дата источника не указана, открыт 26 ноября 2026</span><code>1015a4f88443</code></li>
                   <li><span>E3</span><a href="https://pulse2.com/quizlet-30-million-funding-and-1-billion-valuation" rel="noopener" target="_blank">Quizlet: $30 Million Funding And $1 Billion Valuation</a><span>pulse2.com, дата источника не указана, открыт 26 ноября 2026</span><code>b0b264ac7b8c</code></li>
@@ -4920,7 +4922,7 @@ CocuSocial.
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">Miyagi Labs in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>4f6ce91d4774</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/miyagi-labs" rel="noopener" target="_blank">Miyagi Labs in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>4f6ce91d4774</code></li>
                   <li><span>E1</span><a href="https://miyagilabs.ai" rel="noopener" target="_blank">Miyagi Labs</a><span>miyagilabs.ai, дата источника не указана, открыт 26 ноября 2026</span><code>f87a2eef18ac</code></li>
                   <li><span>E2</span><a href="https://www.tradingview.com/news/zacks:b3d37259a094b:0-chgg-vs-duol-which-edtech-stock-is-the-better-buy-right-now" rel="noopener" target="_blank">CHGG vs. DUOL: Which EdTech Stock Is the Better Buy Right Now? — TradingView News</a><span>tradingview.com, дата источника не указана, открыт 26 ноября 2026</span><code>a6f8317a6bad</code></li>
                   <li><span>E3</span><a href="https://finance.yahoo.com/news/chegg-vs-duolingo-edtech-stock-141900899.html" rel="noopener" target="_blank">Chegg vs. Duolingo: Which EdTech Stock Offers Better Upside Now?</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>1f19f86cc8c5</code></li>
@@ -5143,7 +5145,7 @@ month»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Virtual
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/postal" rel="noopener" target="_blank">Postal in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>07ad86e9d141</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/postal" rel="noopener" target="_blank">Postal in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>07ad86e9d141</code></li>
                   <li><span>E1</span><a href="https://usepostal.com" rel="noopener" target="_blank">Postal | The Smarter Virtual Mailbox &amp; Business Address</a><span>usepostal.com, дата источника не указана, открыт 26 ноября 2026</span><code>e613b5c8ed67</code></li>
                   <li><span>E2</span><a href="https://pitchbook.com/profiles/company/52624-27" rel="noopener" target="_blank">Earth Class Mail 2026 Company Profile: Valuation, Investors, Acquisition | PitchBook</a><span>pitchbook.com, дата источника не указана, открыт 26 ноября 2026</span><code>84a593338e19</code></li>
                   <li><span>E3</span><a href="https://tracxn.com/d/companies/earth-class-mail/__txbRVBySsjSlY87Uz3ZjRqWDjYpQx86s0_HG9DJb7-w" rel="noopener" target="_blank">Earth Class Mail - 2026 Company Profile, Team, Funding &amp; Competitors - Tracxn</a><span>tracxn.com, дата источника не указана, открыт 26 ноября 2026</span><code>54803ff3b360</code></li>
@@ -5370,7 +5372,7 @@ month»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Virtual
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/ciro" rel="noopener" target="_blank">Ciro in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>5ea9fffea020</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/ciro" rel="noopener" target="_blank">Ciro in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>5ea9fffea020</code></li>
                   <li><span>E1</span><a href="https://www.ciro.io/" rel="noopener" target="_blank">Ciro — More pipeline. Less work.</a><span>ciro.io, дата источника не указана, открыт 26 ноября 2026</span><code>95a1e04de5e4</code></li>
                   <li><span>E2</span><a href="https://www.apollo.io/magazine/our-100-million-series-d-the-future-of-gtm-with-apolloio" rel="noopener" target="_blank">Apollo.io Secures $100M Series D Funding at $1.6B Valuation | Investor News</a><span>apollo.io, дата источника не указана, открыт 26 ноября 2026</span><code>51a0ee9bc6ff</code></li>
                   <li><span>E3</span><a href="https://finance.yahoo.com/news/y-combinator-backed-apollo-io-051945118.html" rel="noopener" target="_blank">Y Combinator-Backed Apollo.io Secures $100 Million In Series D Funding, Valuing Startup At $1.6 Billion</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>e477c3868619</code></li>
@@ -5596,7 +5598,7 @@ month»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Virtual
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">Fluently in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>1cb00ac1238c</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/fluently" rel="noopener" target="_blank">Fluently in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>1cb00ac1238c</code></li>
                   <li><span>E1</span><a href="https://getfluently.app/" rel="noopener" target="_blank">Fluently — Speak English with Confidence Using AI</a><span>getfluently.app, дата источника не указана, открыт 26 ноября 2026</span><code>a251ccc1ee10</code></li>
                   <li><span>E2</span><a href="https://www.cbinsights.com/research/duolingo-rosetta-stone-valuation" rel="noopener" target="_blank">Duolingo Now Worth 2.5x More Than Rosetta Stone</a><span>cbinsights.com, дата источника не указана, открыт 26 ноября 2026</span><code>47038c31673f</code></li>
                   <li><span>E3</span><a href="https://stockanalysis.com/stocks/duol/market-cap" rel="noopener" target="_blank">Duolingo (DUOL) Market Cap &amp; Net Worth</a><span>stockanalysis.com, дата источника не указана, открыт 26 ноября 2026</span><code>9b3e304cf9b0</code></li>
@@ -5831,7 +5833,7 @@ Then €9.29/month after 3 days (25% off forever)</q></p>
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">Audora in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>20026665f406</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/audora" rel="noopener" target="_blank">Audora in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>20026665f406</code></li>
                   <li><span>E1</span><a href="https://audora.art" rel="noopener" target="_blank">Audora — every story, performed</a><span>audora.art, дата источника не указана, открыт 26 ноября 2026</span><code>bcbc42d321ee</code></li>
                   <li><span>E2</span><a href="https://www.sec.gov/Archives/edgar/data/1018724/000119312508017138/dex991.htm" rel="noopener" target="_blank">Press Release</a><span>sec.gov, дата источника не указана, открыт 26 ноября 2026</span><code>1d9f2293f4ba</code></li>
                   <li><span>E3</span><a href="https://www.cbinsights.com/company/audible/financials" rel="noopener" target="_blank">Audible Stock Price, Funding, Valuation, Revenue &amp; Financial Statements</a><span>cbinsights.com, дата источника не указана, открыт 26 ноября 2026</span><code>ae05a8017827</code></li>
@@ -6058,7 +6060,7 @@ Then €9.29/month after 3 days (25% off forever)</q></p>
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/maxi" rel="noopener" target="_blank">Maxi in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>1ba3d6270146</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/maxi" rel="noopener" target="_blank">Maxi in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>1ba3d6270146</code></li>
                   <li><span>E1</span><a href="https://www.usemaxi.app" rel="noopener" target="_blank">Maxi | Your money finally texts back</a><span>usemaxi.app, дата источника не указана, открыт 26 ноября 2026</span><code>c4ea043cf0bf</code></li>
                   <li><span>E2</span><a href="https://multiples.vc/private-comps/rocket-money" rel="noopener" target="_blank">Rocket Money Acquisition, Valuation, Funding &amp; Investors | Multiples</a><span>multiples.vc, дата источника не указана, открыт 26 ноября 2026</span><code>9c62da30a3ff</code></li>
                   <li><span>E3</span><a href="https://seedtable.com/exits/rocket-money" rel="noopener" target="_blank">Rocket Money acquired by Rocket Companies — 1.3B USD (Dec 2021) | Seedtable</a><span>seedtable.com, дата источника не указана, открыт 26 ноября 2026</span><code>88cf88c3c57a</code></li>
@@ -6286,7 +6288,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/stellar-sleep" rel="noopener" target="_blank">Stellar Sleep in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>b20fd2989e20</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/stellar-sleep" rel="noopener" target="_blank">Stellar Sleep in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>b20fd2989e20</code></li>
                   <li><span>E1</span><a href="https://stellarsleep.com/" rel="noopener" target="_blank">Stellar Sleep | The largest insomnia care organization in the US</a><span>stellarsleep.com, дата источника не указана, открыт 26 ноября 2026</span><code>04a9fc81246e</code></li>
                   <li><span>E2</span><a href="https://news.crunchbase.com/news/big-health-hones-digital-mental-health-therapy-with-39m-series-b" rel="noopener" target="_blank">Big Health Hones Digital Mental Health Therapy With $39M Series B</a><span>news.crunchbase.com, дата источника не указана, открыт 26 ноября 2026</span><code>97464318649d</code></li>
                   <li><span>E3</span><a href="https://techcrunch.com/2016/07/27/big-healthy-round" rel="noopener" target="_blank">Big Health, the startup behind Sleepio, raises $12M to scale delivery of non-drug mental health solutions | TechCrunch</a><span>techcrunch.com, дата источника не указана, открыт 26 ноября 2026</span><code>38e3ae94be47</code></li>
@@ -6511,7 +6513,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/centauri-ai" rel="noopener" target="_blank">Centauri AI in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>78f73dec4c71</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/centauri-ai" rel="noopener" target="_blank">Centauri AI in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>78f73dec4c71</code></li>
                   <li><span>E1</span><a href="https://centauri-ai.tech" rel="noopener" target="_blank">Centauri AI — Intelligence for Work That Matters</a><span>centauri-ai.tech, дата источника не указана, открыт 26 ноября 2026</span><code>0edbc94dceeb</code></li>
                   <li><span>E2</span><a href="https://au.finance.yahoo.com/news/cursor-reportedly-raising-funds-9-062734292.html" rel="noopener" target="_blank">Anysphere, which makes Cursor, has reportedly raised $900M at $9B valuation</a><span>au.finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>78b2655ccbd0</code></li>
                   <li><span>E3</span><a href="https://finance.yahoo.com/news/cursor-reportedly-raising-funds-9-062734837.html?fr=sycsrp_catchall" rel="noopener" target="_blank">Anysphere, which makes Cursor, has reportedly raised $900M at $9B valuation</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>c8fbe4acda1a</code></li>
@@ -6539,7 +6541,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <span class="row__name">Accountable</span>
               <span class="row__line">Законно и полностью онлайн, без своей лицензии до первого клиента: Не удалось проверить: своя лицензия до первого клиента</span>
             </span>
-            <span class="row__dots" role="img" aria-label="Критерии: не удалось проверить, прошла, не удалось проверить, прошла, не удалось проверить"><i class="dot dot--unknown" title="Законно и полностью онлайн, без своей лицензии до первого клиента: не удалось проверить"></i><i class="dot dot--pass" title="Деньги повторяются: подписка или комиссия с регулярных операций: прошла"></i><i class="dot dot--unknown" title="Мы не берём на себя кредит, страховку или хранение чужих денег: не удалось проверить"></i><i class="dot dot--pass" title="Не трейдинг и не государственный сервис: прошла"></i><i class="dot dot--unknown" title="Есть компания с такой моделью размером порядка $300 млн и больше: не удалось проверить"></i></span>
+            <span class="row__dots" role="img" aria-label="Критерии: не удалось проверить, прошла, не удалось проверить, прошла, прошла"><i class="dot dot--unknown" title="Законно и полностью онлайн, без своей лицензии до первого клиента: не удалось проверить"></i><i class="dot dot--pass" title="Деньги повторяются: подписка или комиссия с регулярных операций: прошла"></i><i class="dot dot--unknown" title="Мы не берём на себя кредит, страховку или хранение чужих денег: не удалось проверить"></i><i class="dot dot--pass" title="Не трейдинг и не государственный сервис: прошла"></i><i class="dot dot--pass" title="Есть компания с такой моделью размером порядка $300 млн и больше: прошла"></i></span>
             <span class="row__state"><span class="tag tag--warn">не удалось проверить</span></span>
             <span class="chev" aria-hidden="true"></span>
           </span>
@@ -6557,8 +6559,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Признаки незаконной деятельности</p>
                         <p class="path__ruling"><b>нет</b>
-<span>голосование, согласны 5 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «AI-powered finance for vacation rental managers.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «AI-powered finance for vacation rental managers.»"></i></span></p>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="deepseek/deepseek-v4.1-flash: нет"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «AI-powered finance for vacation rental managers.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «AI-powered finance for vacation rental managers.»"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--pos">первоисточник</span>
   <span class="tag tag--pos">уверенность высокая</span>
@@ -6571,8 +6573,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Продаётся и оказывается полностью онлайн</p>
                         <p class="path__ruling"><b>да</b>
-<span>голосование, согласны 5 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: да, да, да, да, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да. «Accountable handles payments, cards, approvals and expense tracking in one place, and syncs everything to the tools property managers already use»"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да. «Expenses, bill pay, owner payments, work orders and inventory in one platform.»"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да"></i><i class="vote vote--yes" title="openai/gpt-6-luna: да. «Your office team works in the Accountable web app.»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «About 15 minutes to connect your cards, PMS and accounting system.»"></i></span></p>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: да, да, да, да, да, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да. «Accountable handles payments, cards, approvals and expense tracking in one place, and syncs everything to the tools property managers already use»"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да. «Expenses, bill pay, owner payments, work orders and inventory in one platform.»"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да"></i><i class="vote vote--yes" title="deepseek/deepseek-v4.1-flash: да. «About 15 minutes to connect your cards, PMS and accounting system.»"></i><i class="vote vote--yes" title="openai/gpt-6-luna: да. «Your office team works in the Accountable web app.»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «About 15 minutes to connect your cards, PMS and accounting system.»"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--pos">первоисточник</span>
   <span class="tag tag--pos">уверенность высокая</span>
@@ -6585,8 +6587,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Своя лицензия до первого клиента</p>
                         <p class="path__ruling"><b>неизвестно</b>
-<span>голосование, согласны 5 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: неизвестно, неизвестно, неизвестно, неизвестно, неизвестно"><i class="vote vote--unknown" title="google/gemma-4-26b-a4b-it: неизвестно"></i><i class="vote vote--unknown" title="meta-llama/llama-4-maverick: неизвестно"></i><i class="vote vote--unknown" title="mistralai/mistral-small-2603: неизвестно"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--unknown" title="claude-sonnet-5-5: неизвестно"></i></span></p>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: неизвестно, неизвестно, неизвестно, неизвестно, неизвестно, неизвестно"><i class="vote vote--unknown" title="google/gemma-4-26b-a4b-it: неизвестно"></i><i class="vote vote--unknown" title="meta-llama/llama-4-maverick: неизвестно"></i><i class="vote vote--unknown" title="mistralai/mistral-small-2603: неизвестно"></i><i class="vote vote--unknown" title="deepseek/deepseek-v4.1-flash: неизвестно"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--unknown" title="claude-sonnet-5-5: неизвестно"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--warn">нужен человек</span>
   <span class="tag tag--warn">уверенность низкая</span>
@@ -6605,12 +6607,12 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Подписка или регулярная плата</p>
                         <p class="path__ruling"><b>да</b>
-<span>арбитр, согласны 4 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: да, да, да, неизвестно, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Per property pricing with unlimited users and cardholders.»"></i></span></p>
+<span>голосование, согласны 5 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: да, да, да, да, неизвестно, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="deepseek/deepseek-v4.1-flash: да. «Per property pricing with unlimited users and cardholders. Bill pay methods are priced separately.»"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Per property pricing with unlimited users and cardholders.»"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--pos">первоисточник</span>
   <span class="tag tag--plain">уверенность средняя</span>
-<a href="https://www.accountablevr.com" rel="noopener" target="_blank">accountablevr.com</a><q>Per property pricing with unlimited users and cardholders. Bill pay methods are priced separately. Your first month comes with a money-back guarantee.</q></p>
+<a href="https://www.accountablevr.com" rel="noopener" target="_blank">accountablevr.com</a><q>Per property pricing with unlimited users and cardholders.</q></p>
 
                       </div>
                     </li>
@@ -6620,13 +6622,41 @@ We worked with sleep experts, converting our shared experiences into a digital s
                 <section class="tree" id="tree-accountable-no_balance_sheet_risk">
                   <h3>Мы не берём на себя кредит, страховку или хранение чужих денег</h3>
                   <ol class="path">
-                    <li class="path__step is-part" id="q-accountable-no_balance_sheet_risk.lending">
+                    <li class="path__step is-ok" id="q-accountable-no_balance_sheet_risk.lending">
                       <span class="path__node">1</span>
                       <div class="path__body">
                         <p class="path__question">Выдаёт кредиты за свой счёт</p>
+                        <p class="path__ruling"><b>нет</b>
+<span>голосование, согласны 5 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет, неизвестно"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Your tech pays with a Ramp or connected card.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «Accountable handles payments, cards, approvals and expense tracking in one place»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="deepseek/deepseek-v4.1-flash: нет"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «It&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i><i class="vote vote--unknown" title="claude-sonnet-5-5: неизвестно"></i></span></p>
+                        <p class="path__proof">
+  <span class="tag tag--pos">первоисточник</span>
+  <span class="tag tag--plain">уверенность средняя</span>
+<a href="https://accountablevr.com" rel="noopener" target="_blank">accountablevr.com</a><q>Your tech pays with a Ramp or connected card.</q></p>
+
+                      </div>
+                    </li>
+                    <li class="path__step is-ok" id="q-accountable-no_balance_sheet_risk.insurance">
+                      <span class="path__node">2</span>
+                      <div class="path__body">
+                        <p class="path__question">Сама страхует риски</p>
+                        <p class="path__ruling"><b>нет</b>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="deepseek/deepseek-v4.1-flash: нет"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «Expenses, bill pay, owner payments, work orders and inventory in one platform.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «Expenses, bill pay, owner payments, work orders and inventory in one platform.»"></i></span></p>
+                        <p class="path__proof">
+  <span class="tag tag--pos">первоисточник</span>
+  <span class="tag tag--pos">уверенность высокая</span>
+<a href="https://www.ycombinator.com/companies/accountable" rel="noopener" target="_blank">ycombinator.com</a><q>Accountable is AI-powered accounting automation for vacation rental property managers.</q></p>
+
+                      </div>
+                    </li>
+                    <li class="path__step is-part" id="q-accountable-no_balance_sheet_risk.custody">
+                      <span class="path__node">3</span>
+                      <div class="path__body">
+                        <p class="path__question">Хранит чужие деньги</p>
                         <p class="path__ruling"><b>неизвестно</b>
-<span>не решено, согласны 1 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, неизвестно"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Your tech pays with a Ramp or connected card.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «Accountable handles payments, cards, approvals and expense tracking in one place»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «It&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i><i class="vote vote--unknown" title="claude-sonnet-5-5: неизвестно"></i></span></p>
+<span>не решено, согласны 2 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, неизвестно, неизвестно"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «It&#39;s not a full accounting system; it&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «Accountable handles payments, cards, approvals and expense tracking in one place»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="deepseek/deepseek-v4.1-flash: нет"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--unknown" title="claude-sonnet-5-5: неизвестно"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--warn">нужен человек</span>
   <span class="tag tag--warn">уверенность низкая</span>
@@ -6635,7 +6665,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       </div>
                     </li>
                   </ol>
-                  <p class="tree__reason"><span class="tag tag--warn">не удалось проверить</span> Не удалось проверить: выдаёт кредиты за свой счёт</p>
+                  <p class="tree__reason"><span class="tag tag--warn">не удалось проверить</span> Не удалось проверить: хранит чужие деньги</p>
                 </section>
                 <section class="tree" id="tree-accountable-not_trading_or_government">
                   <h3>Не трейдинг и не государственный сервис</h3>
@@ -6645,8 +6675,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Трейдинг или инвестиции</p>
                         <p class="path__ruling"><b>нет</b>
-<span>голосование, согласны 5 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «It&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «it&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i></span></p>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="deepseek/deepseek-v4.1-flash: нет"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «It&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «it&#39;s a spend management and expense capture layer that sits on top of your existing tools.»"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--pos">первоисточник</span>
   <span class="tag tag--pos">уверенность высокая</span>
@@ -6659,8 +6689,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Государственный сервис</p>
                         <p class="path__ruling"><b>нет</b>
-<span>голосование, согласны 5 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «Trusted by professional property managers»"></i></span></p>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: нет, нет, нет, нет, нет, нет"><i class="vote vote--no" title="google/gemma-4-26b-a4b-it: нет. «Accountable is AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="meta-llama/llama-4-maverick: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="mistralai/mistral-small-2603: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="deepseek/deepseek-v4.1-flash: нет"></i><i class="vote vote--no" title="openai/gpt-6-luna: нет. «AI-powered accounting automation for vacation rental property managers.»"></i><i class="vote vote--no" title="claude-sonnet-5-5: нет. «Trusted by professional property managers»"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--pos">первоисточник</span>
   <span class="tag tag--pos">уверенность высокая</span>
@@ -6679,8 +6709,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
                       <div class="path__body">
                         <p class="path__question">Названа компания с такой же моделью</p>
                         <p class="path__ruling"><b>да</b>
-<span>голосование, согласны 5 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: да, да, да, да, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да. «Ramp, Amex, Chase and more»"></i><i class="vote vote--yes" title="openai/gpt-6-luna: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Spend-management / corporate-card platform (the same archetype as Ramp).»"></i></span></p>
+<span>голосование, согласны 6 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: да, да, да, да, да, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да. «Ramp, Amex, Chase and more»"></i><i class="vote vote--yes" title="deepseek/deepseek-v4.1-flash: да"></i><i class="vote vote--yes" title="openai/gpt-6-luna: да. «Per property pricing with unlimited users and cardholders.»"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Spend-management / corporate-card platform (the same archetype as Ramp).»"></i></span></p>
                         <p class="path__proof">
   <span class="tag tag--pos">первоисточник</span>
   <span class="tag tag--pos">уверенность высокая</span>
@@ -6688,28 +6718,28 @@ We worked with sleep experts, converting our shared experiences into a digital s
 
                       </div>
                     </li>
-                    <li class="path__step is-part" id="q-accountable-proven_at_scale.size">
+                    <li class="path__step is-ok" id="q-accountable-proven_at_scale.size">
                       <span class="path__node">2</span>
                       <div class="path__body">
                         <p class="path__question">Её размер порядка $300 млн</p>
-                        <p class="path__ruling"><b>неизвестно</b>
-<span>не решено, согласны 1 из 5</span>
-<span class="votes" role="img" aria-label="Голоса: да, да, да, неизвестно, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да. «The New York-based company closed $300 million in funding, boosting its valuation to $32 billion»"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да. «valuation of more than $70 billion»"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да. «Ramp valued at $32 billion after $300 million financing round»"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Ramp raised $300 million at a $32 billion valuation, bringing its total funding raised to $2.3 billion.»"></i></span></p>
+                        <p class="path__ruling"><b>да</b>
+<span>голосование, согласны 5 из 6</span>
+<span class="votes" role="img" aria-label="Голоса: да, да, да, да, неизвестно, да"><i class="vote vote--yes" title="google/gemma-4-26b-a4b-it: да. «The New York-based company closed $300 million in funding, boosting its valuation to $32 billion»"></i><i class="vote vote--yes" title="meta-llama/llama-4-maverick: да. «valuation of more than $70 billion»"></i><i class="vote vote--yes" title="mistralai/mistral-small-2603: да. «Ramp valued at $32 billion after $300 million financing round»"></i><i class="vote vote--yes" title="deepseek/deepseek-v4.1-flash: да. «boosting its valuation to $32 billion»"></i><i class="vote vote--unknown" title="openai/gpt-6-luna: неизвестно"></i><i class="vote vote--yes" title="claude-sonnet-5-5: да. «Ramp raised $300 million at a $32 billion valuation, bringing its total funding raised to $2.3 billion.»"></i></span></p>
                         <p class="path__proof">
-  <span class="tag tag--warn">нужен человек</span>
-  <span class="tag tag--warn">уверенность низкая</span>
-</p>
+  <span class="tag tag--pos">первоисточник</span>
+  <span class="tag tag--plain">уверенность средняя</span>
+<a href="https://finovate.com/ramp-valued-at-32-billion-after-300-million-financing-round" rel="noopener" target="_blank">finovate.com</a><q>The New York-based company closed $300 million in funding, boosting its valuation to $32 billion</q></p>
 
                       </div>
                     </li>
                   </ol>
-                  <p class="tree__reason"><span class="tag tag--warn">не удалось проверить</span> Не удалось проверить: её размер порядка $300 млн</p>
+                  <p class="tree__reason"><span class="tag tag--pos">прошла</span> Размер компании с такой моделью подтверждён источником</p>
                 </section>
               </div>
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/accountable" rel="noopener" target="_blank">Accountable in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>e1b01f087a7c</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/accountable" rel="noopener" target="_blank">Accountable in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>e1b01f087a7c</code></li>
                   <li><span>E1</span><a href="https://accountablevr.com" rel="noopener" target="_blank">Accountable | AI-Powered Finance for Vacation Rental Managers</a><span>accountablevr.com, дата источника не указана, открыт 26 ноября 2026</span><code>2b2ae0016e35</code></li>
                   <li><span>E2</span><a href="https://finovate.com/ramp-valued-at-32-billion-after-300-million-financing-round" rel="noopener" target="_blank">Ramp Valued at $32 Billion After $300 Million Financing Round  - Finovate</a><span>finovate.com, дата источника не указана, открыт 26 ноября 2026</span><code>e5ef39aeaa50</code></li>
                   <li><span>E3</span><a href="https://www.wsj.com/finance/corporate-card-startup-ramp-raising-funds-at-70-billion-valuation-631b071a" rel="noopener" target="_blank">Exclusive | Corporate-Card Startup Ramp Raising Funds at $70 Billion Valuation - WSJ</a><span>wsj.com, дата источника не указана, открыт 26 ноября 2026</span><code>e1277dc21811</code></li>
@@ -6936,7 +6966,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">You Got Listings in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>82add1d3bdf1</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/you-got-listings-inc" rel="noopener" target="_blank">You Got Listings in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>82add1d3bdf1</code></li>
                   <li><span>E1</span><a href="http://www.yougotlistings.com" rel="noopener" target="_blank">Rental Listing Software for Real Estate Professionals | You Got Listings</a><span>yougotlistings.com, дата источника не указана, открыт 26 ноября 2026</span><code>83d5a9a2b4f9</code></li>
                   <li><span>E2</span><a href="https://robinhood.com/us/en/stocks/APPF" rel="noopener" target="_blank">AppFolio: APPF Stock Price Quote &amp; News | Robinhood</a><span>robinhood.com, дата источника не указана, открыт 26 ноября 2026</span><code>8dc33abd9143</code></li>
                   <li><span>E3</span><a href="https://companiesmarketcap.com/appfolio/marketcap" rel="noopener" target="_blank">AppFolio (APPF) - Market capitalization</a><span>companiesmarketcap.com, дата источника не указана, открыт 26 ноября 2026</span><code>cde52bea7347</code></li>
@@ -7161,7 +7191,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">Emi Labs in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>c1b69c67158e</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/emi-labs" rel="noopener" target="_blank">Emi Labs in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>c1b69c67158e</code></li>
                   <li><span>E1</span><a href="https://www.emilabs.ai" rel="noopener" target="_blank">Emi | Agentes IA para contratar y retener talento operativo</a><span>emilabs.ai, дата источника не указана, открыт 26 ноября 2026</span><code>bcdc813e5540</code></li>
                   <li><span>E2</span><a href="https://www.orrick.com/en/News/2025/08/AI-Powered-Talent-Acquisition-Workday-to-Acquire-Paradox" rel="noopener" target="_blank">AI-Powered Talent Acquisition: Workday to Acquire Paradox</a><span>orrick.com, дата источника не указана, открыт 26 ноября 2026</span><code>b046ff1381a1</code></li>
                   <li><span>E3</span><a href="https://www.prnewswire.com/news-releases/workday-signs-definitive-agreement-to-acquire-paradox-the-ai-company-redefining-the-frontline-candidate-experience-302536210.html" rel="noopener" target="_blank">Workday Signs Definitive Agreement to Acquire Paradox, the AI Company Redefining the Frontline Candidate Experience</a><span>prnewswire.com, дата источника не указана, открыт 26 ноября 2026</span><code>8a76ed02a88e</code></li>
@@ -7387,7 +7417,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/poko" rel="noopener" target="_blank">Poko in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>c76e1a5f9726</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/poko" rel="noopener" target="_blank">Poko in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>c76e1a5f9726</code></li>
                   <li><span>E1</span><a href="https://en.wikipedia.org/wiki/MoonPay" rel="noopener" target="_blank">MoonPay - Wikipedia</a><span>en.wikipedia.org, дата источника не указана, открыт 26 ноября 2026</span><code>178435506f28</code></li>
                   <li><span>E2</span><a href="https://research.contrary.com/company/moonpay" rel="noopener" target="_blank">Report: MoonPay Business Breakdown &amp; Founding Story | Contrary Research</a><span>research.contrary.com, дата источника не указана, открыт 26 ноября 2026</span><code>ad51ba46c8bf</code></li>
                   <li><span>E3</span><a href="https://www.cnbc.com/amp/2021/11/22/crypto-startup-moonpay-hits-3-4-billion-valuation-in-new-funding-round.html" rel="noopener" target="_blank">Crypto startup MoonPay hits $3.4 billion valuation in new funding round</a><span>cnbc.com, дата источника не указана, открыт 26 ноября 2026</span><code>2a22fcf0274e</code></li>
@@ -7598,7 +7628,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/zenysis" rel="noopener" target="_blank">Zenysis in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>5ac9d0a23a30</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/zenysis" rel="noopener" target="_blank">Zenysis in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>5ac9d0a23a30</code></li>
                   <li><span>E1</span><a href="https://www.investing.com/news/company-news/palantir-secures-368m-ussocom-software-integration-deal-93CH-3761040" rel="noopener" target="_blank">Palantir secures $36.8M USSOCOM software integration deal By Investing.com</a><span>investing.com, дата источника не указана, открыт 26 ноября 2026</span><code>1511ddd1c7e1</code></li>
                   <li><span>E2</span><a href="https://multiples.vc/public-comps/palantir-valuation-multiples" rel="noopener" target="_blank">Palantir - Multiples.vc - Public Comps and Valuation Multiples</a><span>multiples.vc, дата источника не указана, открыт 26 ноября 2026</span><code>5c991e9edb8f</code></li>
                   <li><span>E3</span><a href="https://www.investing.com/analysis/palantir-soars-on-government-deals-as-valuation-debate-lingers-200661677" rel="noopener" target="_blank">Palantir Soars on Government Deals as Valuation Debate Lingers | Investing.com</a><span>investing.com, дата источника не указана, открыт 26 ноября 2026</span><code>48247c7b61c4</code></li>
@@ -7838,7 +7868,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/token-transit" rel="noopener" target="_blank">Token Transit in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>2881eaae76c2</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/token-transit" rel="noopener" target="_blank">Token Transit in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>2881eaae76c2</code></li>
                   <li><span>E1</span><a href="https://tokentransit.com" rel="noopener" target="_blank">Token Transit</a><span>tokentransit.com, дата источника не указана, открыт 26 ноября 2026</span><code>44d1430798a3</code></li>
                   <li><span>E2</span><a href="https://sodali.com/mergers-and-acquisitions/cubic-corporation-acquired-by-veritas-capital" rel="noopener" target="_blank">Veritas Capital Acquires Cubic Corporation | Recent M&amp;A Deals</a><span>sodali.com, дата источника не указана, открыт 26 ноября 2026</span><code>8f184aeb9777</code></li>
                   <li><span>E3</span><a href="https://www.faegredrinker.com/en/services/experience/2021/5/cubic-corporation-completes-$3b-sale-to-veritas-capital-and-evergreen-coast-capital-corporation" rel="noopener" target="_blank">Cubic Corporation Completes $3B Sale to Veritas Capital and Evergreen Coast Capital Corporation | Experience | Faegre Drinker Biddle &amp; Reath LLP</a><span>faegredrinker.com, дата источника не указана, открыт 26 ноября 2026</span><code>94abdd4a9679</code></li>
@@ -8063,7 +8093,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/axal" rel="noopener" target="_blank">Axal in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>2a72727c8ea6</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/axal" rel="noopener" target="_blank">Axal in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>2a72727c8ea6</code></li>
                   <li><span>E1</span><a href="https://www.axal.ai/" rel="noopener" target="_blank">Axal: Quick-Turn PCB Assembly in San Francisco</a><span>axal.ai, дата источника не указана, открыт 26 ноября 2026</span><code>7609025acaf7</code></li>
                   <li><span>E2</span><a href="https://tavily.com/knowledge/company/Ts1F8ls6WLOy" rel="noopener" target="_blank">JLCPCB</a><span>tavily.com, дата источника не указана, открыт 26 ноября 2026</span><code>4c853105805a</code></li>
                   <li><span>E3</span><a href="https://lead-pcb.com/blog/jlcpcb-vs-pcbway" rel="noopener" target="_blank">JLCPCB vs PCBWay: Complete Comparison (2026)</a><span>lead-pcb.com, дата источника не указана, открыт 26 ноября 2026</span><code>b3cf73e8c25c</code></li>
@@ -8288,7 +8318,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/novig" rel="noopener" target="_blank">Novig in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>5ba9398de99b</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/novig" rel="noopener" target="_blank">Novig in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>5ba9398de99b</code></li>
                   <li><span>E1</span><a href="https://www.cnbc.com/2026/10/29/kalshi-40-billion-valuation-funding-round.html" rel="noopener" target="_blank">Kalshi valuation jumps to $40 billion in latest funding round</a><span>cnbc.com, дата источника не указана, открыт 26 ноября 2026</span><code>6a5292433343</code></li>
                   <li><span>E2</span><a href="https://finance.yahoo.com/news/kalshi-doubles-valuation-11-billion-103327830.html?fr=sycsrp_catchall" rel="noopener" target="_blank">Kalshi Doubles Valuation to $11 Billion With $1 Billion Funding Round</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>d333f0053583</code></li>
                   <li><span>E3</span><a href="https://finance.yahoo.com/markets/options/articles/kalshi-raising-1b-22b-valuation-181024860.html" rel="noopener" target="_blank">Kalshi Raises $1B at $22B Valuation in New Funding Round: WSJ</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>3bc37037e750</code></li>
@@ -8514,7 +8544,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/waypoint-transit" rel="noopener" target="_blank">Waypoint Transit in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>fb7494ef0cd8</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/waypoint-transit" rel="noopener" target="_blank">Waypoint Transit in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>fb7494ef0cd8</code></li>
                   <li><span>E1</span><a href="https://waypointtransit.com" rel="noopener" target="_blank">Waypoint | City Planning, Accelerated</a><span>waypointtransit.com, дата источника не указана, открыт 26 ноября 2026</span><code>e87d62e79547</code></li>
                   <li><span>E2</span><a href="https://finance.yahoo.com/news/tyler-technologies-stock-outperforming-dow-164804630.html" rel="noopener" target="_blank">Is Tyler Technologies Stock Outperforming the Dow?</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>771098e38bb5</code></li>
                   <li><span>E3</span><a href="https://tavily.com/knowledge/company/LBeuFiOg0tgZ" rel="noopener" target="_blank">Tyler Technologies</a><span>tavily.com, дата источника не указана, открыт 26 ноября 2026</span><code>e62ff61b371e</code></li>
@@ -8738,7 +8768,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/synapse-semiconductor" rel="noopener" target="_blank">Synapse Semiconductor in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>bae0561578b8</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/synapse-semiconductor" rel="noopener" target="_blank">Synapse Semiconductor in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>bae0561578b8</code></li>
                   <li><span>E1</span><a href="https://synapsesemi.org" rel="noopener" target="_blank">Synapse Semiconductor</a><span>synapsesemi.org, дата источника не указана, открыт 26 ноября 2026</span><code>82a10479f9bb</code></li>
                   <li><span>E2</span><a href="https://finance.yahoo.com/news/assessing-ambarella-amba-valuation-ces-150711087.html" rel="noopener" target="_blank">Assessing Ambarella (AMBA) Valuation After CES 2026 CV7 Edge AI Vision SoC Reveal</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>0f264f78860c</code></li>
                   <li><span>E3</span><a href="https://www.stocktitan.net/overview/AMBA" rel="noopener" target="_blank">AMBA Stock Price, News &amp; Analysis | Ambarella</a><span>stocktitan.net, дата источника не указана, открыт 26 ноября 2026</span><code>589e27cd56ac</code></li>
@@ -8962,7 +8992,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/cocusocial" rel="noopener" target="_blank">CocuSocial in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>38003c52ade5</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/cocusocial" rel="noopener" target="_blank">CocuSocial in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>38003c52ade5</code></li>
                   <li><span>E1</span><a href="https://markets.businessinsider.com/news/stocks/airbnb-valuation-history-chart-ipo-market-analysis-frenzy-public-debut-2020-12-1029885847?op=1" rel="noopener" target="_blank">Airbnb Valuation History Chart: Stunning Surge As IPO Market Roars - Markets Insider</a><span>markets.businessinsider.com, дата источника не указана, открыт 26 ноября 2026</span><code>d9d3591cf22a</code></li>
                   <li><span>E2</span><a href="https://markets.businessinsider.com/news/stocks/airbnb-valuation-history-chart-ipo-market-analysis-frenzy-public-debut-2020-12-1029885847" rel="noopener" target="_blank">Airbnb Valuation History Chart: Stunning Surge As IPO Market Roars - Markets Insider</a><span>markets.businessinsider.com, дата источника не указана, открыт 26 ноября 2026</span><code>d9d3591cf22a</code></li>
                   <li><span>E3</span><a href="http://www.cnbc.com/2017/03/09/airbnb-closes-1-billion-round-31-billion-valuation-profitable.html" rel="noopener" target="_blank">Airbnb closes $1 billion round at $31 billion valuation, profitable</a><span>cnbc.com, дата источника не указана, открыт 26 ноября 2026</span><code>b58f39ec92e2</code></li>
@@ -9173,7 +9203,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/ravn" rel="noopener" target="_blank">Ravn in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>7437514af3f4</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/ravn" rel="noopener" target="_blank">Ravn in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>7437514af3f4</code></li>
                   <li><span>E1</span><a href="https://ravn.com/" rel="noopener" target="_blank">Ravn | Custom Software Development &amp; AI Engineering Company</a><span>ravn.com, дата источника не указана, открыт 26 ноября 2026</span><code>4186d55c94fd</code></li>
                   <li><span>E2</span><a href="https://finance.yahoo.com/news/anduril-industries-raises-2-5bn-084718100.html" rel="noopener" target="_blank">Anduril Industries raises $2.5bn funding, valuation hits $30.5bn</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>418fd23ea300</code></li>
                   <li><span>E3</span><a href="https://finance.yahoo.com/news/anduril-set-double-valuation-4-192755828.html" rel="noopener" target="_blank">Anduril set to double its valuation with $4 billion funding round, source says</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>de6f3be5dd25</code></li>
@@ -9386,7 +9416,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/spruceid" rel="noopener" target="_blank">SpruceID in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>9ac9f4d72297</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/spruceid" rel="noopener" target="_blank">SpruceID in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>9ac9f4d72297</code></li>
                   <li><span>E1</span><a href="https://www.spruceid.com" rel="noopener" target="_blank">Digital Trust Infrastructure for Government | SpruceID</a><span>spruceid.com, дата источника не указана, открыт 26 ноября 2026</span><code>edd925ec0e7a</code></li>
                   <li><span>E2</span><a href="https://ca.finance.yahoo.com/quote/OKTA/key-statistics" rel="noopener" target="_blank">Okta, Inc. (OKTA) Valuation Measures &amp; Financial Statistics</a><span>ca.finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>a04b95be9b7b</code></li>
                   <li><span>E3</span><a href="https://finance.yahoo.com/quote/OKTA/key-statistics" rel="noopener" target="_blank">Okta, Inc. (OKTA) Valuation Measures &amp; Financial Statistics</a><span>finance.yahoo.com, дата источника не указана, открыт 26 ноября 2026</span><code>330bef70e3c9</code></li>
@@ -9612,7 +9642,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
               <section class="aside">
                 <h3>Открытые источники</h3>
                 <ul class="sources">
-                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/redcliffe-lifetech" rel="noopener" target="_blank">Redcliffe Lifetech in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 26 ноября 2026</span><code>6a1e6ee00a81</code></li>
+                  <li><span>E0</span><a href="https://www.ycombinator.com/companies/redcliffe-lifetech" rel="noopener" target="_blank">Redcliffe Lifetech in the YC directory</a><span>ycombinator.com, дата источника не указана, открыт 27 ноября 2026</span><code>6a1e6ee00a81</code></li>
                   <li><span>E1</span><a href="https://unlistedzone.com/pharmeasy-thyrocare-stake-sale-explained" rel="noopener" target="_blank">Why PharmEasy Keeps Selling Thyrocare Shares?</a><span>unlistedzone.com, дата источника не указана, открыт 26 ноября 2026</span><code>f9b89fc2ba48</code></li>
                   <li><span>E2</span><a href="https://www.linkedin.com/posts/cashubhamgarg_pharmeasy-took-2280-crore-of-18-debt-to-activity-7401487800556318720-ozad" rel="noopener" target="_blank">PharmEasy&#39;s ₹2,280 crore debt burden collapses Thyrocare valuation | Shubham Garg posted on the topic | LinkedIn</a><span>linkedin.com, дата источника не указана, открыт 26 ноября 2026</span><code>aeb3a82cfb5e</code></li>
                   <li><span>E3</span><a href="https://www.armssecurities.com/company/API-Holdings-Limited-PharmEasy" rel="noopener" target="_blank">Buy sell API Holdings Limited (PharmEasy) – Unlisted Share</a><span>armssecurities.com, дата источника не указана, открыт 26 ноября 2026</span><code>37db8c19c7be</code></li>
@@ -9725,8 +9755,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
   <dl class="facts">
     <div><dt>проверок изоляции</dt><dd>9</dd></div>
     <div><dt>утечек</dt><dd>0</dd></div>
-    <div><dt>цитат сверено с источником</dt><dd>1409</dd></div>
-    <div><dt>расход на прогон, $</dt><dd>2,87</dd></div>
+    <div><dt>цитат сверено с источником</dt><dd>1412</dd></div>
+    <div><dt>расход на прогон, $</dt><dd>2,86</dd></div>
   </dl>
 
   <section class="block">
@@ -10092,7 +10122,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
 
   <section class="block">
     <h2>Учебный сбой провайдера</h2>
-    <p class="lead">В этом прогоне учебный сбой не проводился.</p>
+    <p class="lead">Для роли «дешёвый слой» намеренно отключён маршрут <code>anthropic:claude-haiku-5-5</code>. Запрос обслужил запасной маршрут <code>openrouter:anthropic/claude-haiku-5.5</code>, переключение заняло 4,5 с.</p>
+    <p class="quiet">Ошибка основного маршрута: simulated outage</p>
   </section>
 
   <section class="block">
@@ -10101,8 +10132,8 @@ We worked with sleep experts, converting our shared experiences into a digital s
     <dl class="ledger">
       <div><dt>Повторы из-за ответа не по схеме</dt><dd>2</dd></div>
       <div><dt>Шаги, сорванные ответом не по схеме</dt><dd>0</dd></div>
-      <div><dt>Цитат сверено с текстом источника</dt><dd>1409</dd></div>
-      <div><dt>Цитат снято, в источнике их нет</dt><dd>167</dd></div>
+      <div><dt>Цитат сверено с текстом источника</dt><dd>1412</dd></div>
+      <div><dt>Цитат снято, в источнике их нет</dt><dd>168</dd></div>
       <div><dt>Чисел советника без опоры в карточке</dt><dd>0</dd></div>
       <div><dt>Карточек отклонено проверкой</dt><dd>0</dd></div>
     </dl>
@@ -10123,7 +10154,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
         <span role="cell" class="spend__role">советник</span>
         <span role="cell" data-cap="Модель">claude-sonnet-5-5<small>anthropic</small></span>
         <span role="cell" data-cap="Вызовы">12</span>
-        <span role="cell" data-cap="Из кеша">0</span>
+        <span role="cell" data-cap="Из кеша">12</span>
         <span role="cell" data-cap="Токены, вход">39 808</span>
         <span role="cell" data-cap="Токены, выход">2 728</span>
         <span role="cell" data-cap="$">0,11</span>
@@ -10133,15 +10164,15 @@ We worked with sleep experts, converting our shared experiences into a digital s
         <span role="cell" data-cap="Модель">claude-opus-5-5<small>anthropic</small></span>
         <span role="cell" data-cap="Вызовы">18</span>
         <span role="cell" data-cap="Из кеша">17</span>
-        <span role="cell" data-cap="Токены, вход">137 175</span>
-        <span role="cell" data-cap="Токены, выход">13 555</span>
-        <span role="cell" data-cap="$">0,82</span>
+        <span role="cell" data-cap="Токены, вход">137 009</span>
+        <span role="cell" data-cap="Токены, выход">12 691</span>
+        <span role="cell" data-cap="$">0,80</span>
       </div>
       <div class="spend__row" role="row">
         <span role="cell" class="spend__role">сборщик карточки</span>
         <span role="cell" data-cap="Модель">claude-sonnet-5-5<small>anthropic</small></span>
         <span role="cell" data-cap="Вызовы">9</span>
-        <span role="cell" data-cap="Из кеша">0</span>
+        <span role="cell" data-cap="Из кеша">9</span>
         <span role="cell" data-cap="Токены, вход">33 316</span>
         <span role="cell" data-cap="Токены, выход">7 184</span>
         <span role="cell" data-cap="$">0,14</span>
@@ -10150,7 +10181,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
         <span role="cell" class="spend__role">критик</span>
         <span role="cell" data-cap="Модель">claude-opus-5-5<small>anthropic</small></span>
         <span role="cell" data-cap="Вызовы">18</span>
-        <span role="cell" data-cap="Из кеша">9</span>
+        <span role="cell" data-cap="Из кеша">18</span>
         <span role="cell" data-cap="Токены, вход">70 461</span>
         <span role="cell" data-cap="Токены, выход">15 234</span>
         <span role="cell" data-cap="$">0,59</span>
@@ -10186,7 +10217,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
         <span role="cell" class="spend__role">проверяющий</span>
         <span role="cell" data-cap="Модель">openai/gpt-6.2-sol<small>openrouter</small></span>
         <span role="cell" data-cap="Вызовы">24</span>
-        <span role="cell" data-cap="Из кеша">0</span>
+        <span role="cell" data-cap="Из кеша">24</span>
         <span role="cell" data-cap="Токены, вход">63 233</span>
         <span role="cell" data-cap="Токены, выход">2 413</span>
         <span role="cell" data-cap="$">0,18</span>
@@ -10194,11 +10225,11 @@ We worked with sleep experts, converting our shared experiences into a digital s
       <div class="spend__row" role="row">
         <span role="cell" class="spend__role">голосующий</span>
         <span role="cell" data-cap="Модель">deepseek/deepseek-v4.1-flash<small>openrouter</small></span>
-        <span role="cell" data-cap="Вызовы">25</span>
-        <span role="cell" data-cap="Из кеша">23</span>
-        <span role="cell" data-cap="Токены, вход">129 037</span>
-        <span role="cell" data-cap="Токены, выход">138 422</span>
-        <span role="cell" data-cap="$">0,13</span>
+        <span role="cell" data-cap="Вызовы">26</span>
+        <span role="cell" data-cap="Из кеша">25</span>
+        <span role="cell" data-cap="Токены, вход">134 223</span>
+        <span role="cell" data-cap="Токены, выход">140 427</span>
+        <span role="cell" data-cap="$">0,14</span>
       </div>
       <div class="spend__row" role="row">
         <span role="cell" class="spend__role">голосующий</span>
@@ -10237,22 +10268,767 @@ We worked with sleep experts, converting our shared experiences into a digital s
         <span role="cell" data-cap="$">0,04</span>
       </div>
     </div>
-    <p class="quiet">anthropic: $2,42, openrouter: $0,46. Всего $2,87.</p>
+    <p class="quiet">anthropic: $2,40, openrouter: $0,46. Всего $2,86.</p>
   </section>
 
   <section class="block">
     <h2>Сверка с разметкой человека</h2>
     <p class="lead">Разметка человеком ещё не внесена, сверять не с чем.</p>
   </section>
-</section><section class="panel" id="panel-documents" data-panel="documents" aria-labelledby="h-documents">
+</section>
+
+
+
+<section class="panel" id="panel-settings" data-panel="settings" aria-labelledby="h-settings">
   <header class="hero">
-    <h1 id="h-documents">Решения и то, что работает криво</h1>
-    <p>Почему конвейер устроен так, что было отброшено, как распределены веса. И отдельно честный список слабых мест.</p>
+    <h1 id="h-settings">С какими настройками шёл прогон</h1>
+    <p>Это параметры, с которыми шёл прогон. Сейчас они задаются в файлах настроек; менять их прямо здесь — первый пункт в «Что улучшить».</p>
   </header>
-  <div class="papers">
-    <article class="prose">
-      <h1>Решения</h1>
-<p>Пять развилок, на которых конвейер мог пойти иначе, веса оценки и замечания к самой постановке.</p>
+
+  <div class="sheet">
+    <section class="zone" data-section="criteria">
+      <p class="zone__cap">Критерии отбора: модель проходит, только если прошла все 5</p>
+      <div class="tree-maps">
+        <article class="box">
+          <h3 class="box__title">Законно и полностью онлайн, без своей лицензии до первого клиента</h3>
+          <ol class="qmap">
+            <li class="qmap__item">
+              <span class="qmap__number">1</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Признаки незаконной деятельности</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Основная деятельность незаконна на домашнем рынке</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><b>вопрос 2</b> Продаётся и оказывается полностью онлайн</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">2</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Продаётся и оказывается полностью онлайн</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><b>вопрос 3</b> Своя лицензия до первого клиента</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Нужны физические товары, оборудование или работа на месте</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">3</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Своя лицензия до первого клиента</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> До первого клиента нужна своя лицензия</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--pos">прошла</span> Лицензия до первого клиента не нужна</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </article>
+        <article class="box">
+          <h3 class="box__title">Деньги повторяются: подписка или комиссия с регулярных операций</h3>
+          <ol class="qmap">
+            <li class="qmap__item">
+              <span class="qmap__number">1</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Подписка или регулярная плата</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--pos">прошла</span> Клиенты платят по подписке</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><b>вопрос 2</b> Комиссия с регулярных операций</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">2</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Комиссия с регулярных операций</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--pos">прошла</span> Комиссия с операций, которые клиенты повторяют</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Продажи разовые, повторяющегося дохода нет</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </article>
+        <article class="box">
+          <h3 class="box__title">Мы не берём на себя кредит, страховку или хранение чужих денег</h3>
+          <ol class="qmap">
+            <li class="qmap__item">
+              <span class="qmap__number">1</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Выдаёт кредиты за свой счёт</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Компания сама несёт кредитный риск</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><b>вопрос 2</b> Сама страхует риски</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">2</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Сама страхует риски</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Компания сама несёт страховой риск</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><b>вопрос 3</b> Хранит чужие деньги</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">3</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Хранит чужие деньги</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Компания хранит деньги или активы клиентов</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--pos">прошла</span> Чужих денег и рисков на балансе нет</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </article>
+        <article class="box">
+          <h3 class="box__title">Не трейдинг и не государственный сервис</h3>
+          <ol class="qmap">
+            <li class="qmap__item">
+              <span class="qmap__number">1</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Трейдинг или инвестиции</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Основной продукт - трейдинг или инвестиции</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><b>вопрос 2</b> Государственный сервис</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">2</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Государственный сервис</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--neg">отказ</span> Сервис государственный или продаётся в основном госорганам</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--pos">прошла</span> Частный продукт для частных клиентов</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </article>
+        <article class="box">
+          <h3 class="box__title">Есть компания с такой моделью размером порядка $300 млн и больше</h3>
+          <ol class="qmap">
+            <li class="qmap__item">
+              <span class="qmap__number">1</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Названа компания с такой же моделью</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><b>вопрос 2</b> Её размер порядка $300 млн</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--warn">не удалось проверить</span> В источниках не названа компания с такой же моделью</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+            <li class="qmap__item">
+              <span class="qmap__number">2</span>
+              <div class="qmap__body">
+                <p class="qmap__label">Её размер порядка $300 млн</p>
+                <ul class="branches">
+                  <li class="branch">
+                    <span class="branch__answer">да</span>
+                    <span class="branch__to"><span class="tag tag--pos">прошла</span> Размер компании с такой моделью подтверждён источником</span>
+                  </li>
+                  <li class="branch">
+                    <span class="branch__answer">нет</span>
+                    <span class="branch__to"><span class="tag tag--warn">не удалось проверить</span> Размер компании-аналога источниками не подтверждён</span>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ol>
+        </article>
+      </div>
+      <p class="sheet__note">Модели отвечают на вопросы «да», «нет» или «не знают», путь и исход считает код. Если модели не знают ответа и отдельной ветки для этого нет, исход: не удалось проверить.</p>
+    </section>
+
+    <div class="duo">
+<section class="zone" data-section="weights">
+  <p class="zone__cap">Шкалы и веса</p>
+  <div class="box">      <ul class="weights">
+        <li class="weight foldable">
+          <button class="weight__row" type="button" data-fold aria-expanded="false">
+            <span class="weight__name">Скорость до работающего теста</span>
+            <span class="weight__bar"><i style="--w:1.0"></i></span>
+            <span class="weight__value">25</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="fold"><div class="fold__in"><div class="weight__more">
+            <dl class="levels">
+<dt>1</dt><dd>Нужны месяцы разработки, свои данные или партнёры, которых нет</dd><dt>3</dt><dd>Тест собирается за 6-8 недель, есть одна внешняя зависимость</dd><dt>5</dt><dd>Тест собирается за 2-4 недели из готовых сервисов</dd>            </dl>
+          </div></div></div>
+        </li>
+        <li class="weight foldable">
+          <button class="weight__row" type="button" data-fold aria-expanded="false">
+            <span class="weight__name">Доступ к первым клиентам</span>
+            <span class="weight__bar"><i style="--w:1.0"></i></span>
+            <span class="weight__value">25</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="fold"><div class="fold__in"><div class="weight__more">
+            <dl class="levels">
+<dt>1</dt><dd>Покупатель - крупная компания или ведомство, цикл сделки от полугода</dd><dt>3</dt><dd>Покупатель - средний бизнес, решение принимают несколько человек за 1-2 месяца</dd><dt>5</dt><dd>Покупателя можно достать рекламой или холодным письмом за недели, решает один человек</dd>            </dl>
+          </div></div></div>
+        </li>
+        <li class="weight foldable">
+          <button class="weight__row" type="button" data-fold aria-expanded="false">
+            <span class="weight__name">Скорость первой оплаты</span>
+            <span class="weight__bar"><i style="--w:0.8"></i></span>
+            <span class="weight__value">20</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="fold"><div class="fold__in"><div class="weight__more">
+            <dl class="levels">
+<dt>1</dt><dd>Оплата только после пилота, закупочной процедуры и договора</dd><dt>3</dt><dd>Оплата по счёту после короткого пробного периода</dd><dt>5</dt><dd>Оплата картой при регистрации, цена в пределах личного лимита покупателя</dd>            </dl>
+          </div></div></div>
+        </li>
+        <li class="weight foldable">
+          <button class="weight__row" type="button" data-fold aria-expanded="false">
+            <span class="weight__name">Доказанность спроса</span>
+            <span class="weight__bar"><i style="--w:0.4"></i></span>
+            <span class="weight__value">10</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="fold"><div class="fold__in"><div class="weight__more">
+            <dl class="levels">
+<dt>1</dt><dd>Есть только аналог по модели, спрос в этом сегменте не подтверждён</dd><dt>3</dt><dd>Есть компания с подтверждённым размером и публичными ценами</dd><dt>5</dt><dd>Несколько компаний с публичными ценами и подтверждённым ростом</dd>            </dl>
+          </div></div></div>
+        </li>
+        <li class="weight foldable">
+          <button class="weight__row" type="button" data-fold aria-expanded="false">
+            <span class="weight__name">Барьеры и зависимости</span>
+            <span class="weight__bar"><i style="--w:0.4"></i></span>
+            <span class="weight__value">10</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="fold"><div class="fold__in"><div class="weight__more">
+            <dl class="levels">
+<dt>1</dt><dd>Всё держится на одной платформе, регуляторе или холодном старте двух сторон рынка</dd><dt>3</dt><dd>Есть зависимость от чужих данных или интеграций, но ей есть замена</dd><dt>5</dt><dd>Внешних зависимостей нет</dd>            </dl>
+          </div></div></div>
+        </li>
+        <li class="weight foldable">
+          <button class="weight__row" type="button" data-fold aria-expanded="false">
+            <span class="weight__name">Возражения критика, устоявшие после проверки</span>
+            <span class="weight__bar"><i style="--w:0.4"></i></span>
+            <span class="weight__value">10</span>
+            <span class="chev" aria-hidden="true"></span>
+          </button>
+          <div class="fold"><div class="fold__in"><div class="weight__more">
+            <dl class="levels">
+<dt>1</dt><dd>Все сильные возражения подтверждены источниками</dd><dt>3</dt><dd>Часть возражений подтверждена или осталась без проверки</dd><dt>5</dt><dd>Ни одно сильное возражение не подтвердилось</dd>            </dl>
+<p class="quiet">Уровень этой шкалы ставит код по итогам проверки возражений, а не модель.</p>          </div></div></div>
+        </li>
+      </ul>
+      <p class="sheet__text">Каждая шкала даёт от нуля до своего веса: уровень 1 даёт ноль, уровень 3 половину веса, уровень 5 весь вес. Балл складывается из 6 шкал, веса в сумме дают 100.</p>
+</div>
+</section>
+
+<section class="zone" data-section="rules">
+  <p class="zone__cap">Возражения, уверенность и доверие</p>
+  <div class="box">      <p class="sheet__sub">Сколько весит возражение в оценке устоявших возражений</p>
+      <dl class="rules">
+        <dt><span class="tag tag--pos">подтверждено источником</span></dt><dd>считается полностью</dd>
+        <dt><span class="tag tag--plain">без источника</span></dt><dd>считается наполовину</dd>
+        <dt><span class="tag tag--warn">источник недоступен</span></dt><dd>считается наполовину</dd>
+        <dt><span class="tag tag--neg">источник не подтверждает</span></dt><dd>не считается</dd>
+        <dt><span class="tag tag--neg">источник говорит иное</span></dt><dd>не считается</dd>
+      </dl>
+      <p class="sheet__sub">Уверенность в утверждении</p>
+      <dl class="rules">
+        <dt><span class="tag tag--pos">высокая</span></dt><dd>Дословная цитата найдена на сохранённой странице и голоса единогласны, либо источник подтверждён проверяющим</dd>
+        <dt><span class="tag tag--plain">средняя</span></dt><dd>Дословная цитата найдена, решение принято кворумом или арбитром; либо расчёт по подтверждённым числам</dd>
+        <dt><span class="tag tag--warn">низкая</span></dt><dd>Цитаты нет, источник недоступен или голоса разошлись</dd>
+      </dl>
+      <p class="sheet__sub">Доверие к карточке</p>
+      <p class="sheet__text">Высокое, если цитатой из источника подтверждено не меньше 80% фактов, среднее от 65%, ниже низкое.</p>
+</div>
+</section>
+    </div>
+
+<section class="zone" data-section="funnel">
+  <p class="zone__cap">Воронка</p>
+  <div class="box">    <dl class="facts-list">
+      <div><dt>Источник</dt><dd>открытый каталог стартапов, yc-oss.github.io</dd></div>
+      <div><dt>Компаний в выборке</dt><dd>200</dd></div>
+      <div><dt>Зерно выборки</dt><dd>20261126: с тем же зерном выборка повторяется</dd></div>
+      <div><dt>Описание компании</dt><dd>не короче 200 знаков</dd></div>
+      <div><dt>Исключённые регионы</dt><dd>Россия, Беларусь, Украина, Казахстан, Киргизия, Грузия, Армения, Азербайджан, Молдова, Таджикистан, Туркмения, Узбекистан</dd></div>
+      <div><dt>В глубокую проверку</dt><dd>15 лучших по грубой оценке</dd></div>
+      <div><dt>Из одной отрасли</dt><dd>не больше 3</dd></div>
+      <div><dt>Контрольная выборка</dt><dd>10 отказов дешёвого слоя проходят полную проверку</dd></div>
+      <div><dt>Ответ на вопрос принят</dt><dd>если согласны 5 из 6 моделей, иначе решает арбитр</dd></div>
+      <div><dt>Поисковых запросов на компанию</dt><dd>4 при проверке критериев, 4 у критика</dd></div>
+      <div><dt>Возражений на проверку</dt><dd>3 самых сильных</dd></div>
+    </dl>
+</div>
+</section>
+
+<section class="zone" data-section="models">
+  <p class="zone__cap">Модели по ролям, набор «основной»</p>
+  <div class="box">    <div class="roles" role="table" aria-label="Модели по ролям">
+  <div class="roles__head" role="row"><span role="columnheader">Роль</span><span role="columnheader">Основная модель</span><span role="columnheader">Запасная</span></div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">дешёвый слой</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-haiku-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-haiku-5.5<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">поисковые запросы</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-sonnet-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-sonnet-5.5<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">голосующие</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">google/gemma-4-26b-a4b-it<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">meta-llama/llama-4-maverick<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">mistralai/mistral-small-2603<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">deepseek/deepseek-v4.1-flash<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">openai/gpt-6-luna<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-sonnet-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-sonnet-5.5<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">арбитр<small>средние рассуждения</small></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-opus-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-opus-5.5<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">критик<small>глубокие рассуждения</small></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-opus-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-opus-5.5<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">проверяющий</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">openai/gpt-6.2-sol<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">google/gemini-4-carbon<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">сборщик карточки<small>средние рассуждения</small></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-sonnet-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-sonnet-5.5<small>через OpenRouter</small></span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">советник<small>средние рассуждения</small></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-sonnet-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="model">anthropic/claude-sonnet-5.5<small>через OpenRouter</small></span></span>
+  </div>
+</div>
+
+    <p class="sheet__text">Потолок расхода за прогон: Anthropic напрямую до $10, через OpenRouter до $1, свой сервер без ограничения. Если основная модель не ответила, запрос уходит запасной.</p>
+    <div class="more foldable">
+      <button class="more__head" type="button" data-fold aria-expanded="false">Цены за миллион токенов<span class="chev" aria-hidden="true"></span></button>
+      <div class="fold"><div class="fold__in">
+        <div class="prices" role="table" aria-label="Цены за миллион токенов">
+          <div class="prices__head" role="row"><span role="columnheader">Модель</span><span role="columnheader">Вход, $</span><span role="columnheader">Выход, $</span></div>
+          <div class="prices__row" role="row"><span role="cell">claude-haiku-5-5</span><span role="cell">0.1</span><span role="cell">0.5</span></div>
+          <div class="prices__row" role="row"><span role="cell">claude-sonnet-5-5</span><span role="cell">2.0</span><span role="cell">10.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">claude-opus-5-5</span><span role="cell">4.0</span><span role="cell">20.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">anthropic/claude-haiku-5.5</span><span role="cell">0.1</span><span role="cell">0.5</span></div>
+          <div class="prices__row" role="row"><span role="cell">anthropic/claude-sonnet-5.5</span><span role="cell">2.0</span><span role="cell">10.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">anthropic/claude-opus-5.5</span><span role="cell">4.0</span><span role="cell">20.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">meta-llama/llama-4-maverick</span><span role="cell">0.35</span><span role="cell">1.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">google/gemma-4-26b-a4b-it</span><span role="cell">0.09</span><span role="cell">0.3</span></div>
+          <div class="prices__row" role="row"><span role="cell">deepseek/deepseek-v4.1-flash</span><span role="cell">0.051</span><span role="cell">0.203</span></div>
+          <div class="prices__row" role="row"><span role="cell">meta-llama/llama-4-scout</span><span role="cell">0.1</span><span role="cell">0.3</span></div>
+          <div class="prices__row" role="row"><span role="cell">mistralai/mistral-small-2603</span><span role="cell">0.15</span><span role="cell">0.6</span></div>
+          <div class="prices__row" role="row"><span role="cell">openai/gpt-6-luna</span><span role="cell">0.1</span><span role="cell">0.5</span></div>
+          <div class="prices__row" role="row"><span role="cell">openai/gpt-6.2-sol</span><span role="cell">2.0</span><span role="cell">10.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">google/gemini-4-carbon</span><span role="cell">2.0</span><span role="cell">10.0</span></div>
+          <div class="prices__row" role="row"><span role="cell">qwen</span><span role="cell">0</span><span role="cell">0</span></div>
+        </div>
+      </div></div>
+    </div>
+    <div class="more foldable">
+      <button class="more__head" type="button" data-fold aria-expanded="false">Другие наборы моделей: дешёвый, для разработки, всё на своём сервере<span class="chev" aria-hidden="true"></span></button>
+      <div class="fold"><div class="fold__in">
+        <p class="sheet__sub">Набор «дешёвый, для разработки»</p>
+        <div class="roles" role="table" aria-label="Модели по ролям">
+  <div class="roles__head" role="row"><span role="columnheader">Роль</span><span role="columnheader">Основная модель</span><span role="columnheader">Запасная</span></div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">дешёвый слой</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-haiku-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">поисковые запросы</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-haiku-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">голосующие</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">meta-llama/llama-4-scout<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">mistralai/mistral-small-2603<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row roles__row--more" role="row">
+    <span role="cell" class="roles__role"></span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-haiku-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">арбитр</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-sonnet-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">критик</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-sonnet-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">проверяющий</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">openai/gpt-6-luna<small>через OpenRouter</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">сборщик карточки</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-haiku-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">советник</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">claude-haiku-5-5<small>Anthropic напрямую</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+</div>
+
+        <p class="sheet__sub">Набор «всё на своём сервере»</p>
+        <div class="roles" role="table" aria-label="Модели по ролям">
+  <div class="roles__head" role="row"><span role="columnheader">Роль</span><span role="columnheader">Основная модель</span><span role="columnheader">Запасная</span></div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">дешёвый слой</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">поисковые запросы</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">голосующие</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">арбитр</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">критик</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">проверяющий</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">сборщик карточки</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+  <div class="roles__row" role="row">
+    <span role="cell" class="roles__role">советник</span>
+    <span role="cell" data-cap="Основная модель"><span class="model">qwen<small>свой сервер</small></span></span>
+    <span role="cell" data-cap="Запасная" class="roles__models"><span class="quiet">нет</span></span>
+  </div>
+</div>
+
+      </div></div>
+    </div>
+</div>
+</section>
+
+    <div class="duo">
+<section class="zone" data-section="team">
+  <p class="zone__cap">Допущения о команде</p>
+  <div class="box">      <dl class="facts-list facts-list--single">
+        <div><dt>Команда</dt><dd>2-3 человека без собственной тяжёлой разработки</dd></div>
+        <div><dt>Бюджет теста</dt><dd>$10 000</dd></div>
+        <div><dt>Горизонт</dt><dd>12 недель</dd></div>
+        <div><dt>Рынок</dt><dd>англоязычный</dd></div>
+      </dl>
+      <p class="sheet__text quiet">На эти допущения опираются оценки и советник.</p>
+</div>
+</section>
+
+<section class="zone" data-section="holding">
+  <p class="zone__cap">Компании холдинга</p>
+  <div class="box">      <p class="sheet__text">Список пуст. Если вписать компании холдинга и их клиентов, советник в каждой карточке назовёт, к какой из них находку можно пристегнуть как допродажу.</p>
+</div>
+</section>
+    </div>
+
+<section class="zone" data-section="answers">
+  <p class="zone__cap">Ответы человека</p>
+  <div class="box">    <p class="sheet__text">Правок человека в этом прогоне: 0. Ответ человека побеждает голоса моделей; сейчас он вписывается в файл, на стенде — в «Что улучшить».</p>
+    <p class="sheet__sub">Открытые вопросы этого прогона: 10</p>
+    <ul class="open-questions">
+      <li><a href="#forest/maxi">Maxi</a><span>Своя лицензия до первого клиента</span></li>
+      <li><a href="#forest/maxi">Maxi</a><span>Подписка или регулярная плата</span></li>
+      <li><a href="#forest/stellar-sleep">Stellar Sleep</a><span>Своя лицензия до первого клиента</span></li>
+      <li><a href="#forest/stellar-sleep">Stellar Sleep</a><span>Её размер порядка $300 млн</span></li>
+      <li><a href="#forest/centauri-ai">Centauri AI</a><span>Её размер порядка $300 млн</span></li>
+      <li><a href="#forest/accountable">Accountable</a><span>Своя лицензия до первого клиента</span></li>
+      <li><a href="#forest/accountable">Accountable</a><span>Хранит чужие деньги</span></li>
+      <li><a href="#forest/poko">Poko</a><span>Своя лицензия до первого клиента</span></li>
+      <li><a href="#forest/poko">Poko</a><span>Подписка или регулярная плата</span></li>
+      <li><a href="#forest/poko">Poko</a><span>Хранит чужие деньги</span></li>
+    </ul>
+</div>
+</section>
+
+<section class="zone" data-section="prompts">
+  <p class="zone__cap">Инструкции моделей</p>
+  <div class="box">    <ul class="prompts">
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">дешёвый слой<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You screen startups for an owner who wants to launch a business on a model that already works somewhere else. You see only a short catalog description. No web search happens at this step: a later step checks every company you let through against real sources, so let through anything you are not sure about.
+
+Do three things.
+
+1. Describe the business model: who pays, what they pay for, how often, and the revenue type.
+
+2. Check the description against every criterion listed, one entry per criterion, using the criterion ids exactly as given. Set `violated` to true only when the description states a fact that breaks the criterion outright: the company lends its own money, underwrites insurance, holds customer funds, sells hardware or physical goods, needs on-site work, trades financial instruments, sells mainly to government agencies, charges one-off instead of recurring. If the description says nothing either way, or you are unsure, `violated` is false. `reason`: one short sentence in Russian naming the fact from the description.
+
+3. Rate from 1 to 5 how quickly a team of two or three people could launch a test of this model and get a first payment within three months.
+   - 5: a self-serve online product for small businesses or consumers, built from ready-made services.
+   - 3: a product that needs integrations or a sales process of a month or two.
+   - 1: enterprise sales, regulated data, heavy engineering or research.
+
+Write `payer`, `pays_for`, `frequency` and `speed_reason` in Russian, one short sentence each.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">поисковые запросы<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You prepare web searches for a fact check of one company. You get the company and the questions that will be asked about it.
+
+`comparable`: the largest company you know that runs the same business model: the same kind of payer, the same kind of product paid for, the same way of charging. The product need not be identical. Pick a company big enough to have a publicly reported valuation, funding round, market cap or acquisition price. One company name, or empty if you know none. This is a lead for the search, not a fact: reviewers will check it against the pages found.
+
+`queries`: search queries in English that are most likely to surface pages answering the questions. Stay within the limit given.
+
+- One query must look for the valuation, funding round or acquisition price of the comparable company. If you named none, describe the model in the query instead.
+- One query should find how this company charges: pricing page, plans, fees.
+- Use the remaining queries for the questions the description leaves most open: licensing, who holds customer money, who the customers are.
+- Do not search for what the description already states.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">голосующий<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You check one company against a list of yes/no questions. Another program decides what the answers mean, so answer only what is asked.
+
+- Use only the company description and the numbered evidence. Do not rely on what you remember about the company or its market.
+- Read each question literally. Several of them ask whether something unwanted is present (lending, custody of funds, a required license, signs of illegal activity). For those, &#34;no&#34; is the answer when the evidence shows nothing of the kind and the product plainly has nothing to do with it: a language-learning app does not lend money.
+- Answer &#34;yes&#34; or &#34;no&#34; when the evidence settles the question, including when it follows plainly from what the product is. Answer &#34;unknown&#34; when the evidence leaves the question open: the product is in a regulated field and nothing says who holds the license, or no page gives the figure asked for.
+- The comparable candidate is only a lead. Count it only if the evidence itself shows that this company runs the same business model.
+- For every &#34;yes&#34; or &#34;no&#34;, name the evidence item that settles it and copy a short passage from it word for word: under 200 characters, no paraphrase, no ellipsis. If the answer follows from the overall picture and no single passage states it, leave `quote` empty and name the closest evidence item.
+- For &#34;unknown&#34;, leave `evidence_id` and `quote` empty.
+- Answer every question once, using the question ids exactly as given.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">арбитр<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">Several reviewers disagreed on some yes/no questions about a company. Settle each listed question from the evidence alone. You are not told how they voted.
+
+- Use only the company description and the numbered evidence. Do not rely on what you remember about the company or its market.
+- Read each question literally. Several ask whether something unwanted is present (lending, custody of funds, a required license, signs of illegal activity). For those, &#34;no&#34; is the answer when the evidence shows nothing of the kind and the product plainly has nothing to do with it.
+- Answer &#34;yes&#34; or &#34;no&#34; when the evidence settles the question, including when it follows plainly from what the product is. If the evidence does not settle it, answer &#34;unknown&#34;: a person will look at it, and that is better than a guess.
+- The comparable candidate is only a lead. Count it only if the evidence itself shows that this company runs the same business model.
+- For &#34;yes&#34; or &#34;no&#34;, name the evidence item that settles it and copy a short passage from it word for word: under 200 characters, no paraphrase, no ellipsis. If no single passage states it, leave `quote` empty and name the closest evidence item. For &#34;unknown&#34;, leave both empty.
+- `why`: one sentence in Russian on what decided it.
+- Give one ruling per listed question, using the question ids exactly as given.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">критик, поисковые запросы<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You are the critic in a pipeline that decides which business models an owner should test next. Your only job is to find why this one will not work: why the team described below will fail to launch a test, prove demand and get a first payment within the stated time, or why the model itself is weaker than it looks.
+
+Before arguing, you search. Write web search queries in English that would surface the strongest evidence against this business model. Stay within the limit given.
+
+Look for facts about the category and its real companies: churn and retention figures, incumbents bundling the same feature for free, price pressure, platform or regulatory changes, companies in the category that shut down or pivoted, long sales cycles, high acquisition costs. Do not search for opinions about this particular startup: it is too young to have any.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">критик<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You are the critic in a pipeline that decides which business models an owner should test next. Your only job is to find why this one will not work: why the team described below will fail to launch a test, prove demand and get a first payment within the stated time, or why the model itself is weaker than it looks.
+
+Write three or four objections, strongest first. For each one:
+
+- `text`: the claim itself in one sentence of at most 20 words. Make it a checkable statement of fact wherever you can: &#34;Median monthly churn of SMB SaaS at this price is 3-5%&#34; rather than &#34;retention may be hard&#34;.
+- `reasoning`: why this claim hurts the chance of a first payment within the horizon, one sentence of at most 25 words.
+- `strength`: 5 if this alone could kill the test, 1 if it is a nuisance.
+- `evidence_id` and `quote`: the evidence item the claim rests on and a passage copied from it word for word, under 250 characters, no ellipsis. If the claim is your own judgment and no evidence item states it, leave both empty. Never attach a source that does not state the claim: a separate fact checker opens every source you cite.
+- `source_date`: the publication date shown in that evidence item, as YYYY-MM-DD, YYYY-MM or YYYY. Empty if none is shown.
+
+Write `text` and `reasoning` in Russian. Do not soften the objections and do not add anything in favour of the model: another part of the pipeline weighs both sides.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">проверяющий<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You are a fact checker. You get one claim and the text of the web page cited as its source. Decide whether the page backs the claim.
+
+- `supported`: the page states the claim, or states facts that directly entail it.
+- `not_supported`: the page does not state it. A related topic, vaguer wording or a weaker number is not support.
+- `contradicts`: the page states the opposite or a materially different number.
+
+Judge only what the page says. Do not use what you know from elsewhere, and do not judge whether the claim matters.
+
+- `quote`: the passage that settles it, copied from the page word for word, under 250 characters, no ellipsis. Empty for `not_supported`.
+- `source_date`: the publication date shown on the page, as YYYY-MM-DD, YYYY-MM or YYYY. Empty if none is shown.
+- `note`: one sentence in Russian of at most 20 words explaining the verdict.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">сборщик карточки<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You assemble a standard card about one business model. The owner will put several such cards side by side and pick what to test next. The single ranking criterion is the probability that the owner&#39;s team launches a test, proves demand and gets a first payment within the stated horizon.
+
+You get the company, its business model, the facts established by the screening step, the critic&#39;s objections with the fact checker&#39;s verdict on each, the team assumptions and the scales.
+
+Fill in:
+
+- `anchor`: the company that proves this model at scale and its size, at most 15 words. Use only the screening facts. If they name none, say so.
+- `scores`: one entry for each scale listed under &#34;Scales to score&#34;, with the scale id in `rubric`. Pick a level from 1 to 5 by the level descriptions; levels 2 and 4 sit between the described ones. `why` is one sentence of at most 15 words naming the fact behind the level. Score what the facts imply for the owner&#39;s team under the stated assumptions, not what the startup itself has achieved.
+- `channel`, `offer`, `success_sign`: a three-line sketch of the first test, at most 15 words each. Where the first customers come from, what exactly is offered and at what price, and what observable result within the horizon counts as proven demand.
+- `upsell`: what kind of existing company, with what customer base, could sell this as an add-on, at most 15 words. If holding companies are listed, name the one it fits best, or say that none fits. If none are listed, do not mention it.
+- `needs_human`: at most three questions a person must settle before money is spent, the most important first, at most 15 words each: unverified facts, objections whose source could not be checked, gaps in the evidence. An empty list if there are none.
+
+Weigh the objections by verdict. `supported` is an established risk. `not_supported` and `contradicts` are not risks. `no_source`, `source_unavailable` and `not_checked` are open questions.
+
+When two facts in the input disagree (two different prices, two valuations, a fact and an objection that says otherwise), score on the more cautious one, mention both with their sources in `why`, and add the conflict to `needs_human`.
+
+Write everything in Russian, plainly, for a business owner without technical background. Never mention internal labels such as verdict names (`supported`, `not_checked` and the like), scale ids or evidence ids. Do not invent numbers: use only figures present in the input.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">советник<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You are a financial adviser to the owner of several companies. You read one finished card about a business model and give advice the owner can act on this week. You do not rescore anything: the score and the rank are already computed and are not yours to change.
+
+- `verdict`: `launch` (test it now), `postpone` (worth keeping, not now) or `needs_human` (cannot be decided until the open questions on the card are answered).
+- `test_budget`: how much of the available test budget to put into this test and on what, in one sentence. Stay within the budget given in the assumptions.
+- `first_step`: the one thing to do this week.
+- `main_risk`: the risk most likely to sink the test, taken from the card.
+- `stop_signal`: the observable result at which the test is stopped and the remaining money saved.
+
+Use only sums and percentages that appear in the card or in the assumptions. Do not cite market sizes, benchmarks or prices from memory. If holding companies are listed and the card&#39;s upsell line fits one of them, say so in `first_step`.
+
+Write in Russian, plainly, one sentence of at most 20 words per field. Never mention internal labels such as verdict names or scale ids. If no holding companies are listed, do not mention them.
+</pre></div></div>
+      </li>
+      <li class="foldable">
+        <button class="more__head" type="button" data-fold aria-expanded="false">записка по портфелю<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in"><pre class="prompt">You are a financial adviser to the owner of several companies. You get short summaries of every card from one screening run, already ranked. The owner will launch one test first and put a couple of models aside.
+
+Write a memo of at most 120 words in Russian: which model to test first and why, which two to postpone and why, and what the owner should settle personally before spending anything. Refer to models by company name.
+
+Use only sums and percentages that appear in the summaries or in the assumptions. Plain paragraphs, no headings, no lists. Never mention internal labels such as verdict names or scale ids.
+</pre></div></div>
+      </li>
+    </ul>
+</div>
+</section>
+  </div>
+</section><section class="panel" id="panel-decisions" data-panel="decisions" aria-labelledby="h-decisions">
+  <header class="hero">
+    <h1 id="h-decisions">Почему конвейер устроен так</h1>
+    <p>Развилки, на которых конвейер мог пойти иначе: что выбрано, что отброшено и как распределены веса.</p>
+  </header>
+  <article class="prose">
+    <p>Пять развилок, на которых конвейер мог пойти иначе, веса оценки и замечания к самой постановке.</p>
 <h2>1. Широкая воронка вместо 10-15 моделей на входе</h2>
 <p>В задании 10-15 моделей. Если взять их сразу, выборка решает всё: десять случайных стартапов почти наверняка дадут три-четыре прошедших, и сравнивать будет не из чего. Поэтому конвейер берёт 200 действующих компаний из каталога Y Combinator, поровну из восьми отраслей и не из СНГ. Дешёвая модель читает только описание и отсеивает явные нарушения: кредиты, страхование, железо, госзаказчик. Остальных она грубо оценивает по главному критерию собственника. В глубокую проверку идут 15 лучших, не больше трёх из одной отрасли, а остальные прошедшие ждут в очереди.</p>
 <p>Дешёвый слой может ошибиться в сторону отказа. Поэтому 10 случайных отказов проходят ту же глубокую проверку, и доля ложных отказов показана на стенде.</p>
@@ -10268,7 +11044,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
 <p>Отсутствие крупной компании-аналога нельзя доказать поиском. Поэтому пятый критерий никогда не даёт отказ, только «прошёл» или «не удалось проверить».</p>
 <p><strong>Отбросил:</strong>
 - Одну модель с вердиктом по всем критериям: не видно, что сработало, и нечего проверить.
-- Обучаемый случайный лес: на 15 примерах он ничему не научится. Он заложен на будущее, см. <code>FULL_VERSION.md</code>.</p>
+- Обучаемый случайный лес: на 15 примерах он ничему не научится. Он заложен на будущее, см. «Что улучшить».</p>
 <h2>3. Как критик и проверяющий остаются независимыми</h2>
 <p>В задании есть противоречие. Агенты «не должны видеть выводов друг друга», но второй «проверяет источники утверждений первого». Значит, что-то от первого второй увидеть обязан.</p>
 <p>Я провёл границу так: проверяющий получает только текст утверждения, адрес источника и текст страницы. Рассуждений критика, его оценки силы, остальных возражений и вердикта у него нет. Критик заканчивает работу раньше, чем проверяющий начинает, и ответа проверяющего не видит никогда.</p>
@@ -10328,7 +11104,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
 <p>У каждой шкалы описаны уровни 1, 3 и 5. Модель выбирает уровень и называет факт, на котором он держится, а балл считает код по весам. Последнюю шкалу код считает сам по вердиктам проверяющего: подтверждённое сильное возражение тянет вниз, опровергнутое ничего не стоит.</p>
 <p>Доверие к карточке считается отдельно от балла: какая доля фактов подтверждена цитатой из источника. Высокий балл на слабых данных видно сразу.</p>
 <p><strong>Отбросил:</strong>
-- Вероятность от модели. Число, которое модель называет сама, не откалибровано, а настоящей калибровки на 15 примерах не построить. Поэтому это балл, а не вероятность. Как он станет вероятностью, описано в <code>FULL_VERSION.md</code>.</p>
+- Вероятность от модели. Число, которое модель называет сама, не откалибровано, а настоящей калибровки на 15 примерах не построить. Поэтому это балл, а не вероятность. Как он станет вероятностью, описано в «Что улучшить».</p>
 <h2>5. Сбой провайдера и противоречивые данные</h2>
 <p>Это то, что в задании не сказано намеренно. Я задал оба вопроса до старта и, не дожидаясь ответа, решил так.</p>
 <p><strong>Сбой провайдера:</strong>
@@ -10352,10 +11128,16 @@ We worked with sleep experts, converting our shared experiences into a digital s
 </ol>
 <h2>Чем пользовался</h2>
 <p>Код, тексты и стенд я писал вместе с Claude Code: я ставил задачу, решал развилки и проверял результат. Каждый модуль покрыт тестами, все цифры на стенде получены настоящим прогоном. Модели в самом конвейере перечислены в <code>config/models.yaml</code>.</p>
-    </article>
+  </article>
+</section><section class="panel" id="panel-improve" data-panel="improve" aria-labelledby="h-improve">
+  <header class="hero">
+    <h1 id="h-improve">Что не готово и что будет дальше</h1>
+    <p>Сначала честный список слабых мест этой версии, потом что изменится в полной.</p>
+  </header>
+  <div class="papers">
     <article class="prose">
-      <h1>Что не работает или работает криво</h1>
-<h2>Данные на входе</h2>
+      <h2 class="prose__part">Что не готово</h2>
+      <h2>Данные на входе</h2>
 <ul>
 <li><strong>Описания в каталоге пишут сами компании.</strong> Это реклама, а не факты, и дешёвый слой судит именно по ним. Красиво описанная модель с подвохом может пройти в глубокую проверку, скромно описанная хорошая — отсеяться. Контроль ложных отказов это измеряет, но десять компаний — маленькая выборка.</li>
 <li><strong>Компании молодые.</strong> Пятый критерий почти никогда не подтверждается самой компанией, только аналогом. Аналог предлагает модель по памяти, и это лишь наводка для поиска. Если наводка неудачная, модель получает «не удалось проверить», хотя аналог, возможно, есть.</li>
@@ -10365,7 +11147,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
 <h2>Проверка</h2>
 <ul>
 <li><strong>Цитата проверяется на дословность, но не на смысл.</strong> Код ловит выдуманную цитату, но не дословную, которая на самом деле о другом. По смыслу второй агент проверяет только возражения критика, а ответы фильтра — нет.</li>
-<li><strong>Положительные факты карточки никто не проверяет</strong> отдельно от фильтра. Подробнее в <code>DECISIONS.md</code>, в замечаниях к заданию.</li>
+<li><strong>Положительные факты карточки никто не проверяет</strong> отдельно от фильтра. Подробнее в «Решениях», в замечаниях к заданию.</li>
 <li><strong>Проверяются только три сильнейших возражения.</strong> Остальные видны в карточке с пометкой «не проверялось».</li>
 <li><strong>Расхождение чисел между источниками код не ищет.</strong> Его видит модель, которая собирает карточку, по инструкции. Код видит только расхождение голосов и вердикт «источник говорит иное».</li>
 </ul>
@@ -10389,6 +11171,123 @@ We worked with sleep experts, converting our shared experiences into a digital s
 <li><strong>Эталонную разметку делал один человек.</strong> Совпадение с ней — ориентир, а не точность.</li>
 </ul>
     </article>
+    <article class="prose">
+      <h2 class="prose__part">Полная версия</h2>
+      <p>Прототип отвечает на вопрос «работает ли схема». Ниже то, что я бы делал дальше, в порядке отдачи.</p>
+<h2>1. Интерфейс собственника</h2>
+<p>Стенд сейчас только показывает результат: настройки видны на вкладке «Настройки», но меняются в файлах репозитория. Чтобы собственник работал с системой сам, нужны четыре вещи.</p>
+<ul>
+<li><strong>Главная.</strong> Три числа (сколько проверено, сколько дошло до карточки, сколько ждут вашего ответа), записка советника о том, что запускать первым, три лучшие модели и кнопки действий.</li>
+<li><strong>Ответы человека прямо на стенде.</strong> Сейчас ответ на вопрос, по которому модели не договорились, вписывается в <code>config/overrides.yaml</code>, и после следующего прогона компания проходит или отсеивается. В этом прогоне из-за таких вопросов пять компаний из глубокой проверки остались «не удалось проверить»: модели либо не договорились, либо дружно ответили «не знаю», либо источники не дали нужной цифры. На стенде у каждого вопроса будут цитаты и кнопки «да», «нет», «не знаю», и сразу видно, что изменится. Вопросы из карточек вроде «чем платный продукт лучше бесплатного у конкурента» остаются списком «решить до вложений»: на них отвечают решением, а не полем ввода.</li>
+<li><strong>Веса ползунками.</strong> Уровни по шкалам уже выставлены, балл — простая арифметика, поэтому рейтинг можно пересчитывать сразу, без нового прогона. Подобранные веса сохраняются как настройка для следующих прогонов.</li>
+<li><strong>Кнопка «Запустить» с параметрами:</strong> сколько компаний взять, сколько проверять глубоко, потолок расхода, профиль моделей и ответы человека. Стенд статический и открытый, ключей в нём быть не может. Поэтому запуск идёт на сервере: в прототипе это GitHub Actions с ключами в секретах репозитория, в рабочей версии — свой сервер холдинга.</li>
+</ul>
+<h2>2. Проверять и то, что говорит в пользу модели</h2>
+<p>Сейчас проверяющий открывает источники только у возражений критика, как сказано в задании. Положительные факты карточки (кто платит, сколько, как быстро) проверены лесом лишь в той части, которая нужна критериям. Получается перекос: сомнения проверены строже, чем надежды. В полной версии проверяющий берёт все утверждения, на которых держится балл, и критик получает напарника, который ищет доводы «за» в таком же изолированном контексте.</p>
+<h2>3. Несколько источников и схема вместо компании</h2>
+<p>Каталог Y Combinator удобен для прототипа: открыт, структурирован, компании молодые. Дальше нужны новости о раундах, каталоги продуктов, сервисы с открытой выручкой небольших компаний. Источник подключается одним модулем по образцу <code>source.py</code>. Вместе с этим появится склейка: несколько компаний с одной схемой «кто платит, за что, как часто» должны давать одну карточку с несколькими примерами, а не три похожие.</p>
+<h2>4. Что покупает больший бюджет</h2>
+<p>Потолок расхода стоит в <code>config/models.yaml</code> и был выставлен под мой кошелёк. Для вас цифры другие, и вот что меняется вместе с ними:</p>
+<table>
+<thead>
+<tr>
+<th>Что растёт</th>
+<th>Сейчас</th>
+<th>С бюджетом</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Компаний на входе</td>
+<td>200</td>
+<td>вся свежая часть каталога и другие источники</td>
+</tr>
+<tr>
+<td>В глубокой проверке</td>
+<td>15</td>
+<td>50-100</td>
+</tr>
+<tr>
+<td>Поисковых запросов на компанию</td>
+<td>4 фильтру, 4 критику</td>
+<td>критик ищет в несколько заходов, пока находит новое</td>
+</tr>
+<tr>
+<td>Проверяемых утверждений</td>
+<td>3 самых сильных возражения</td>
+<td>все, на которых держится балл</td>
+</tr>
+<tr>
+<td>Повторов прогона</td>
+<td>один</td>
+<td>3-5, чтобы видеть, насколько устойчив рейтинг</td>
+</tr>
+</tbody>
+</table>
+<p>Последняя строка важнее, чем кажется: без повторов нельзя сказать, чем отличается третье место от пятого, реальной разницей или шумом моделей.</p>
+<h2>5. Свои GPU</h2>
+<p>Весь слой моделей работает по OpenAI-совместимому протоколу, поэтому перенос на своё железо - это запись в <code>config/models.yaml</code> (профиль <code>local</code> уже есть), а не переписывание кода. Четыре из шести голосующих - открытые веса, и их можно поставить у себя:</p>
+<table>
+<thead>
+<tr>
+<th>Модель</th>
+<th>Что нужно, чтобы запустить</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemma 4 26B-A4B</td>
+<td>Одна карта на 24 ГБ или ноутбук с 32 ГБ общей памяти (4-битная версия занимает около 16 ГБ)</td>
+</tr>
+<tr>
+<td>DeepSeek V4.1 Flash</td>
+<td>552 млрд параметров, веса под лицензией MIT: узел из 8 карт по 80 ГБ, оправдан только при большом потоке</td>
+</tr>
+<tr>
+<td>Mistral Small 4</td>
+<td>119 млрд параметров, около 120 ГБ в 8-битной версии: сервер с двумя картами по 80 ГБ</td>
+</tr>
+<tr>
+<td>Llama 4 Maverick</td>
+<td>Узел из нескольких карт по 80 ГБ</td>
+</tr>
+</tbody>
+</table>
+<p>Когда это оправдано, зависит от того, сколько вы готовы держать в своих ресурсах:</p>
+<ul>
+<li><strong>Данные не должны уходить наружу.</strong> Как только конвейер начнёт читать внутренние цифры холдинга, а не открытые страницы, свой контур становится требованием, а не оптимизацией.</li>
+<li><strong>Объём.</strong> Один прогон прототипа стоит единицы долларов, на таком объёме своё железо не окупится никогда. Оно начинает окупаться на потоке в тысячи компаний в день, и в первую очередь на массовых шагах: дешёвый слой и голосование.</li>
+<li><strong>Свои адаптеры.</strong> Дообученную модель удобнее держать у себя.</li>
+</ul>
+<p>Разумный порядок: сначала одна карта под дешёвый слой и голоса открытых моделей, сильные роли (критик, арбитр) остаются на API. Полный перенос - только если этого требует первая причина.</p>
+<h2>6. Дообучение адаптера</h2>
+<p>Дообучение здесь не первая мера. Что именно стоит и не стоит учить:</p>
+<ul>
+<li><strong>Факты о компаниях</strong> не учим никогда: они меняются каждую неделю и приходят из поиска.</li>
+<li><strong>Формулировки критериев и шкал</strong> пока меняются от прогона к прогону, это работа с инструкциями, а не с весами.</li>
+<li><strong>Ответы на вопросы узлов по готовым страницам</strong> - кандидат. Поведение устойчивое, примеров много, правильность проверяется. Цель: чтобы одна небольшая открытая модель на своей карте отвечала так же, как сейчас шестёрка с арбитром.</li>
+<li><strong>Вкус собственника</strong> (какие возражения он считает весомыми, какие карточки открывает) - второй кандидат, когда накопятся его оценки.</li>
+</ul>
+<p>Что уже заложено:</p>
+<ol>
+<li><strong>Датасет растёт сам.</strong> Каждый прогон дописывает в <code>cache/dataset/gate.jsonl</code> пример в формате диалога: вопросы и страницы на входе, итоговые ответы леса на выходе.</li>
+<li><strong>Правки человека</strong> из <code>config/overrides.yaml</code> побеждают голоса моделей и попадают в тот же датасет как эталон. Самые ценные примеры как раз те, где человек поправил лес.</li>
+<li><strong>Проверочный набор</strong> собирается командой <code>bizmodel labels</code>: человек размечает вслепую, без подсказок моделей. Без него учить нельзя: нечем доказать, что стало лучше.</li>
+</ol>
+<p>Порядок действий, когда примеров наберётся несколько тысяч:</p>
+<ol>
+<li>Сначала дешёвая проверка: помогает ли просто модель покрупнее. Размер модели обычно даёт больше, чем любая настройка обучения.</li>
+<li>Если нет: обучение с учителем на примерах, адаптер LoRA поверх открытой модели, квантование в 4 бита (QLoRA), если карта одна. Библиотеки PEFT и TRL с Hugging Face.</li>
+<li>Для вкуса собственника метод другой: пары «эту карточку выбрал, эту отложил» учат предпочтениям (DPO), одиночные оценки «полезно / бесполезно» - KTO.</li>
+<li>Новый адаптер выпускается, только если на проверочном наборе он не хуже действующей схемы, и отдельно проверяется, что он не разучился говорить «не знаю».</li>
+<li>Подача: vLLM умеет держать базовую модель и несколько адаптеров на одном сервере; для ноутбука адаптер сливается с моделью и переводится в GGUF.</li>
+</ol>
+<h2>7. Обучаемый лес</h2>
+<p>Сейчас деревья написаны руками по пяти критериям собственника, и это правильно: жёсткие критерии не должны «выучиваться». Но балл карточки - другое дело. Когда появятся исходы настоящих тестов (запустили, получили оплату или нет), по ним можно обучить обычный случайный лес: признаки - уровни шкал и факты карточки, цель - исход теста. Он покажет, какие шкалы на самом деле предсказывают успех, и заменит веса, которые сейчас назначены рассуждением. До двух-трёх сотен размеченных исходов этого делать не стоит, поэтому в прототипе заложены только данные: каждая карточка уже лежит в <code>runs/</code> в виде, из которого признаки достаются напрямую.</p>
+<p>Тогда же балл можно будет честно называть вероятностью. Сейчас это балл.</p>
+<h2>8. Маршрутизатор моделей</h2>
+<p>На потоке в тысячи компаний массовые шаги выгодно отдавать маршрутизатору, который сам выбирает самую дешёвую модель, справляющуюся с запросом (например, <code>typesafe/jev-router</code> на OpenRouter). В прототипе он не используется намеренно: критик и проверяющий должны работать на закреплённых моделях разных семейств, иначе маршрутизатор может выдать обоим одну и ту же, и независимость пропадёт.</p>
+    </article>
   </div>
 </section></main>
 <div class="spot" id="spot" aria-hidden="true"></div>
@@ -10401,7 +11300,7 @@ We worked with sleep experts, converting our shared experiences into a digital s
 <section class="dock" id="dock" aria-label="Демонстрация">
   <div class="dock__in">
     <div class="dock__idle">
-      <p>Данные прогона от 26 ноября 2026</p>
+      <p>Данные прогона от 27 ноября 2026</p>
       <button class="btn btn--primary" type="button" data-tour-act="start">Пройти демонстрацию</button>
     </div>
     <div class="dock__tour">
@@ -10433,8 +11332,9 @@ We worked with sleep experts, converting our shared experiences into a digital s
 
 
 
-<script type="application/json" id="tour-steps">[{"title": "Итог прогона", "text": "До карточки дошли 9 моделей из 200. Балл от 0 до 100 показывает, насколько реально за три месяца запустить тест и получить первую оплату.", "tab": "rating", "hash": "rating", "open": [], "pick": [], "target": "h-rating"}, {"title": "Как отбирали модели", "text": "Из каталога взято 200 моделей: 74 отсеяны по описанию, 15 ушли в глубокую проверку. Все критерии прошли 9, отказ у 1, проверить не удалось у 5.", "tab": "forest", "hash": "forest", "open": [], "pick": [], "target": "funnel"}, {"title": "Отказ с причиной", "text": "Postal не прошла критерий «Законно и полностью онлайн, без своей лицензии до первого клиента». Нужны физические товары, оборудование или работа на месте.", "tab": "forest", "hash": "forest/postal", "open": ["gate-postal"], "pick": [], "target": "tree-postal-online_legal"}, {"title": "Голоса моделей", "text": "На вопрос «Своя лицензия до первого клиента» по Miyagi Labs отвечают 6 моделей, ответ принят, если согласны 5 из 6. Здесь согласны только 4, поэтому решал арбитр; если не уверен и он, вопрос уходит человеку.", "tab": "forest", "hash": "forest/miyagi-labs", "open": ["gate-miyagi-labs"], "pick": [], "target": "q-miyagi-labs-online_legal.license"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Карточка модели", "text": "Самая перспективная модель: Miyagi Labs, 72 из 100. В шапке схема денег: кто платит, за что и как часто.", "open": ["card-miyagi-labs"], "target": "card-head-miyagi-labs"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Совет собственнику", "text": "Советник читает готовую карточку и пишет, что делать: здесь «Нужен человек». На балл и место в рейтинге он не влияет.", "open": ["card-miyagi-labs"], "target": "advice-miyagi-labs"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Из чего складывается балл", "text": "Балл складывается из 6 оценок с весами, больше всего весят «Скорость до работающего теста» и «Доступ к первым клиентам». Модель ставит только уровень по шкале, итог считает код.", "open": ["card-miyagi-labs"], "target": "scores-miyagi-labs"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Критик и проверяющий", "text": "Первый агент ищет, почему модель не сработает, второй открывает его источник и сверяет. У этого возражения итог проверки: подтверждено источником.", "open": ["card-miyagi-labs", "obj-miyagi-labs-O2"], "target": "obj-miyagi-labs-O2"}, {"title": "Агенты не видят выводов друг друга", "text": "Проверяющему ушли только текст утверждения и страница источника, без рассуждений критика. Утечек в этом прогоне: 0.", "tab": "agents", "hash": "agents/miyagi-labs", "open": ["iso-miyagi-labs"], "pick": [], "target": "call-miyagi-labs-verifier"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Паспорта и доверие", "text": "У каждого утверждения есть паспорт: источник, дата, метод и уверенность. Доверие к карточке считается отдельно от балла, у Miyagi Labs оно высокое.", "open": ["card-miyagi-labs", "pp-miyagi-labs"], "target": "pp-table-miyagi-labs"}, {"title": "Сравнение рядом", "text": "Три лучшие модели рядом: строки стоят на одной высоте, поэтому различия читаются поперёк. Выбор можно поменять кнопками над таблицей.", "tab": "compare", "hash": "compare/miyagi-labs,audora,fluently", "open": [], "pick": ["miyagi-labs", "audora", "fluently"], "target": "cmp"}, {"title": "Решения и честный список", "text": "Здесь записано, почему конвейер устроен именно так, и честный список того, что работает криво. Дальше можно смотреть самостоятельно.", "tab": "documents", "hash": "documents", "open": [], "pick": [], "target": "h-documents", "final": true}]</script>
-<script src="assets/app.js?v=d1c5fe1ac4"></script>
+
+<script type="application/json" id="tour-steps">[{"title": "Итог прогона", "text": "До карточки дошли 9 моделей из 200. Балл от 0 до 100 показывает, насколько реально за три месяца запустить тест и получить первую оплату.", "tab": "rating", "hash": "rating", "open": [], "pick": [], "target": "h-rating"}, {"title": "Как отбирали модели", "text": "Из каталога взято 200 моделей: 74 отсеяны по описанию, 15 ушли в глубокую проверку. Все критерии прошли 9, отказ у 1, проверить не удалось у 5.", "tab": "forest", "hash": "forest", "open": [], "pick": [], "target": "funnel"}, {"title": "Отказ с причиной", "text": "Postal не прошла критерий «Законно и полностью онлайн, без своей лицензии до первого клиента». Нужны физические товары, оборудование или работа на месте.", "tab": "forest", "hash": "forest/postal", "open": ["gate-postal"], "pick": [], "target": "tree-postal-online_legal"}, {"title": "Голоса моделей", "text": "На вопрос «Своя лицензия до первого клиента» по Miyagi Labs отвечают 6 моделей, ответ принят, если согласны 5 из 6. Здесь согласны только 4, поэтому решал арбитр; если не уверен и он, вопрос уходит человеку.", "tab": "forest", "hash": "forest/miyagi-labs", "open": ["gate-miyagi-labs"], "pick": [], "target": "q-miyagi-labs-online_legal.license"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Карточка модели", "text": "Самая перспективная модель: Miyagi Labs, 72 из 100. В шапке схема денег: кто платит, за что и как часто.", "open": ["card-miyagi-labs"], "target": "card-head-miyagi-labs"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Совет собственнику", "text": "Советник читает готовую карточку и пишет, что делать: здесь «Нужен человек». На балл и место в рейтинге он не влияет.", "open": ["card-miyagi-labs"], "target": "advice-miyagi-labs"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Из чего складывается балл", "text": "Балл складывается из 6 оценок с весами, больше всего весят «Скорость до работающего теста» и «Доступ к первым клиентам». Модель ставит только уровень по шкале, итог считает код.", "open": ["card-miyagi-labs"], "target": "scores-miyagi-labs"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Критик и проверяющий", "text": "Первый агент ищет, почему модель не сработает, второй открывает его источник и сверяет. У этого возражения итог проверки: подтверждено источником.", "open": ["card-miyagi-labs", "obj-miyagi-labs-O2"], "target": "obj-miyagi-labs-O2"}, {"title": "Агенты не видят выводов друг друга", "text": "Проверяющему ушли только текст утверждения и страница источника, без рассуждений критика. Утечек в этом прогоне: 0.", "tab": "agents", "hash": "agents/miyagi-labs", "open": ["iso-miyagi-labs"], "pick": [], "target": "call-miyagi-labs-verifier"}, {"tab": "rating", "hash": "rating/miyagi-labs", "pick": [], "title": "Паспорта и доверие", "text": "У каждого утверждения есть паспорт: источник, дата, метод и уверенность. Доверие к карточке считается отдельно от балла, у Miyagi Labs оно высокое.", "open": ["card-miyagi-labs", "pp-miyagi-labs"], "target": "pp-table-miyagi-labs"}, {"title": "Сравнение рядом", "text": "Три лучшие модели рядом: строки стоят на одной высоте, поэтому различия читаются поперёк. Выбор можно поменять кнопками над таблицей.", "tab": "compare", "hash": "compare/miyagi-labs,audora,fluently", "open": [], "pick": ["miyagi-labs", "audora", "fluently"], "target": "cmp"}, {"title": "Настройки прогона", "text": "Здесь всё, что можно поменять: 5 критериев, 6 шкал с весами, модели для 13 ролей и бюджет теста $10 000. Сейчас это файлы настроек, в полной версии правка будет прямо здесь.", "tab": "settings", "hash": "settings", "open": [], "pick": [], "target": "h-settings"}, {"title": "Что улучшить", "text": "Честный список того, что пока не готово, и что изменится в полной версии. Почему конвейер устроен именно так, записано на вкладке «Решения».", "tab": "improve", "hash": "improve", "open": [], "pick": [], "target": "h-improve", "final": true}]</script>
+<script src="assets/app.js?v=73f094dc5b"></script>
 <script src="assets/tour.js?v=91b5193ba4"></script>
 </body>
 </html>
