@@ -100,6 +100,7 @@ class Scoring(BaseModel):
 
 class Stand(BaseModel):
     live_url: str
+    run_usd: float = 5
     budget_usd: dict[str, float]
 
 

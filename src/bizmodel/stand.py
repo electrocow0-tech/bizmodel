@@ -384,7 +384,7 @@ def _launch(run: Run) -> dict:
                     "horizon_weeks": assumptions.get("horizon_weeks", 0),
                 },
                 "profile": run.profile if run.profile in profiles else pipeline.get("profile"),
-                "max_usd": sum(budgets.values()),
+                "max_usd": min(stand.get("run_usd", 5), sum(budgets.values())),
             },
         },
     }

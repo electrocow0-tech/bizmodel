@@ -50,6 +50,7 @@ concurrency: 8
 # Живой стенд с кнопкой запуска и общий потолок расхода на все запуски с него.
 stand:
   live_url: https://bizmodel.87-199-207-214.sslip.io
+  run_usd: 5
   budget_usd:
     anthropic: 10
     openrouter: 5
