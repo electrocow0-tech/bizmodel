@@ -35,7 +35,8 @@ def stand(run_id: str = RUN_ID) -> None:
 
     result = load(run_id)
     documents = {
-        name: read_or_empty(ROOT / f"{name.upper()}.md") for name in ("decisions", "limitations")
+        name: read_or_empty(ROOT / f"{name.upper()}.md")
+        for name in ("decisions", "limitations", "full_version")
     }
     build(result, ROOT / "docs", documents)
     typer.echo(f"Стенд собран из прогона {result.id}: docs/index.html")
