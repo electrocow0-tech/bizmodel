@@ -1,6 +1,6 @@
 """Всё, что прогон записывает на диск. Стенд строится только из этих моделей."""
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
@@ -256,6 +256,8 @@ class Run(BaseModel):
     profile: str
     voters: list[str]
     quorum: int
+    config: dict[str, Any]
+    prompts: dict[str, str]
     funnel: Funnel
     companies: dict[str, Company]
     prescreens: list[Prescreen]

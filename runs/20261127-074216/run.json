@@ -1,7 +1,7 @@
 {
- "id": "20261126-183746",
- "started": "2026-11-26T18:37:46",
- "finished": "2026-11-26T18:39:41",
+ "id": "20261127-074216",
+ "started": "2026-11-27T07:42:16",
+ "finished": "2026-11-27T07:43:03",
  "profile": "showcase",
  "voters": [
   "google/gemma-4-26b-a4b-it",
@@ -12,6 +12,563 @@
   "claude-sonnet-5-5"
  ],
  "quorum": 5,
+ "config": {
+  "criteria": {
+   "trees": [
+    {
+     "id": "online_legal",
+     "title": "Законно и полностью онлайн, без своей лицензии до первого клиента",
+     "root": "illegal",
+     "nodes": {
+      "illegal": {
+       "label": "Признаки незаконной деятельности",
+       "ask": "Does the evidence show that the company's core activity is illegal or banned in its home market (unlicensed gambling, controlled substances, sanctions evasion, piracy)?",
+       "yes": {
+        "fail": "Основная деятельность незаконна на домашнем рынке"
+       },
+       "no": "online"
+      },
+      "online": {
+       "label": "Продаётся и оказывается полностью онлайн",
+       "ask": "Can the product be sold and delivered fully online, with no physical goods, hardware, on-site work or in-person service?",
+       "yes": "license",
+       "no": {
+        "fail": "Нужны физические товары, оборудование или работа на месте"
+       }
+      },
+      "license": {
+       "label": "Своя лицензия до первого клиента",
+       "ask": "Would an operator of this business need its own regulatory license or registration (financial, medical, legal, insurance, gambling, telecom) before serving the first paying customer?",
+       "yes": {
+        "fail": "До первого клиента нужна своя лицензия"
+       },
+       "no": {
+        "pass": "Лицензия до первого клиента не нужна"
+       }
+      }
+     }
+    },
+    {
+     "id": "recurring",
+     "title": "Деньги повторяются: подписка или комиссия с регулярных операций",
+     "root": "subscription",
+     "nodes": {
+      "subscription": {
+       "label": "Подписка или регулярная плата",
+       "ask": "Do customers pay a recurring subscription, seat fee or usage fee billed on a regular schedule?",
+       "yes": {
+        "pass": "Клиенты платят по подписке"
+       },
+       "no": "commission"
+      },
+      "commission": {
+       "label": "Комиссия с регулярных операций",
+       "ask": "Does the company take a fee or commission on transactions that the same customers repeat regularly?",
+       "yes": {
+        "pass": "Комиссия с операций, которые клиенты повторяют"
+       },
+       "no": {
+        "fail": "Продажи разовые, повторяющегося дохода нет"
+       }
+      }
+     }
+    },
+    {
+     "id": "no_balance_sheet_risk",
+     "title": "Мы не берём на себя кредит, страховку или хранение чужих денег",
+     "root": "lending",
+     "nodes": {
+      "lending": {
+       "label": "Выдаёт кредиты за свой счёт",
+       "ask": "Does the company itself lend money or carry credit risk on its own balance sheet?",
+       "yes": {
+        "fail": "Компания сама несёт кредитный риск"
+       },
+       "no": "insurance"
+      },
+      "insurance": {
+       "label": "Сама страхует риски",
+       "ask": "Does the company itself underwrite insurance risk?",
+       "yes": {
+        "fail": "Компания сама несёт страховой риск"
+       },
+       "no": "custody"
+      },
+      "custody": {
+       "label": "Хранит чужие деньги",
+       "ask": "Does the company itself hold or safeguard customer funds or assets (deposits, wallets, escrow, custody)?",
+       "yes": {
+        "fail": "Компания хранит деньги или активы клиентов"
+       },
+       "no": {
+        "pass": "Чужих денег и рисков на балансе нет"
+       }
+      }
+     }
+    },
+    {
+     "id": "not_trading_or_government",
+     "title": "Не трейдинг и не государственный сервис",
+     "root": "trading",
+     "nodes": {
+      "trading": {
+       "label": "Трейдинг или инвестиции",
+       "ask": "Is the core product trading or investing in securities, crypto, FX or other financial instruments (brokerage, exchange, trading bots, funds)?",
+       "yes": {
+        "fail": "Основной продукт - трейдинг или инвестиции"
+       },
+       "no": "government"
+      },
+      "government": {
+       "label": "Государственный сервис",
+       "ask": "Is the product a public service delivered by or on behalf of a government, or sold primarily to government agencies?",
+       "yes": {
+        "fail": "Сервис государственный или продаётся в основном госорганам"
+       },
+       "no": {
+        "pass": "Частный продукт для частных клиентов"
+       }
+      }
+     }
+    },
+    {
+     "id": "proven_at_scale",
+     "title": "Есть компания с такой моделью размером порядка $300 млн и больше",
+     "root": "named",
+     "nodes": {
+      "named": {
+       "label": "Названа компания с такой же моделью",
+       "ask": "Does the evidence name a company (the one being checked, the comparable candidate or another) that runs the same business model: the same kind of payer, the same kind of product paid for, the same way of charging? The product need not be identical.",
+       "yes": "size",
+       "no": {
+        "unknown": "В источниках не названа компания с такой же моделью"
+       }
+      },
+      "size": {
+       "label": "Её размер порядка $300 млн",
+       "ask": "Does the evidence state that a company running the same business model (the one being checked, the comparable candidate or another) has a valuation, market cap or acquisition price on the order of $300 million or more (roughly $200 million and up)?",
+       "yes": {
+        "pass": "Размер компании с такой моделью подтверждён источником"
+       },
+       "no": {
+        "unknown": "Размер компании-аналога источниками не подтверждён"
+       }
+      }
+     }
+    }
+   ]
+  },
+  "holding": {
+   "companies": []
+  },
+  "models": {
+   "providers": {
+    "anthropic": {
+     "kind": "anthropic",
+     "key_env": "ANTHROPIC_API_KEY",
+     "budget_usd": 10
+    },
+    "openrouter": {
+     "kind": "openai_compatible",
+     "base_url": "https://openrouter.ai/api/v1",
+     "key_env": "OPENROUTER_API_KEY",
+     "budget_usd": 1
+    },
+    "local": {
+     "kind": "openai_compatible",
+     "base_url": "http://127.0.0.1:8080/v1",
+     "key_env": "LOCAL_API_KEY",
+     "budget_usd": null
+    }
+   },
+   "prices": {
+    "claude-haiku-5-5": [
+     0.1,
+     0.5
+    ],
+    "claude-sonnet-5-5": [
+     2.0,
+     10.0
+    ],
+    "claude-opus-5-5": [
+     4.0,
+     20.0
+    ],
+    "anthropic/claude-haiku-5.5": [
+     0.1,
+     0.5
+    ],
+    "anthropic/claude-sonnet-5.5": [
+     2.0,
+     10.0
+    ],
+    "anthropic/claude-opus-5.5": [
+     4.0,
+     20.0
+    ],
+    "meta-llama/llama-4-maverick": [
+     0.35,
+     1.0
+    ],
+    "google/gemma-4-26b-a4b-it": [
+     0.09,
+     0.3
+    ],
+    "deepseek/deepseek-v4.1-flash": [
+     0.051,
+     0.203
+    ],
+    "meta-llama/llama-4-scout": [
+     0.1,
+     0.3
+    ],
+    "mistralai/mistral-small-2603": [
+     0.15,
+     0.6
+    ],
+    "openai/gpt-6-luna": [
+     0.1,
+     0.5
+    ],
+    "openai/gpt-6.2-sol": [
+     2.0,
+     10.0
+    ],
+    "google/gemini-4-carbon": [
+     2.0,
+     10.0
+    ],
+    "qwen": [
+     0,
+     0
+    ]
+   },
+   "profiles": {
+    "showcase": {
+     "prescreen": {
+      "routes": [
+       "anthropic:claude-haiku-5-5",
+       "openrouter:anthropic/claude-haiku-5.5"
+      ]
+     },
+     "planner": {
+      "routes": [
+       "anthropic:claude-sonnet-5-5",
+       "openrouter:anthropic/claude-sonnet-5.5"
+      ]
+     },
+     "voters": [
+      {
+       "routes": [
+        "openrouter:google/gemma-4-26b-a4b-it"
+       ]
+      },
+      {
+       "routes": [
+        "openrouter:meta-llama/llama-4-maverick"
+       ]
+      },
+      {
+       "routes": [
+        "openrouter:mistralai/mistral-small-2603"
+       ]
+      },
+      {
+       "routes": [
+        "openrouter:deepseek/deepseek-v4.1-flash"
+       ]
+      },
+      {
+       "routes": [
+        "openrouter:openai/gpt-6-luna"
+       ]
+      },
+      {
+       "routes": [
+        "anthropic:claude-sonnet-5-5",
+        "openrouter:anthropic/claude-sonnet-5.5"
+       ]
+      }
+     ],
+     "arbiter": {
+      "routes": [
+       "anthropic:claude-opus-5-5",
+       "openrouter:anthropic/claude-opus-5.5"
+      ],
+      "effort": "medium"
+     },
+     "critic": {
+      "routes": [
+       "anthropic:claude-opus-5-5",
+       "openrouter:anthropic/claude-opus-5.5"
+      ],
+      "effort": "high"
+     },
+     "verifier": {
+      "routes": [
+       "openrouter:openai/gpt-6.2-sol",
+       "openrouter:google/gemini-4-carbon"
+      ]
+     },
+     "card": {
+      "routes": [
+       "anthropic:claude-sonnet-5-5",
+       "openrouter:anthropic/claude-sonnet-5.5"
+      ],
+      "effort": "medium"
+     },
+     "advisor": {
+      "routes": [
+       "anthropic:claude-sonnet-5-5",
+       "openrouter:anthropic/claude-sonnet-5.5"
+      ],
+      "effort": "medium"
+     }
+    },
+    "dev": {
+     "prescreen": {
+      "routes": [
+       "anthropic:claude-haiku-5-5"
+      ]
+     },
+     "planner": {
+      "routes": [
+       "anthropic:claude-haiku-5-5"
+      ]
+     },
+     "voters": [
+      {
+       "routes": [
+        "openrouter:meta-llama/llama-4-scout"
+       ]
+      },
+      {
+       "routes": [
+        "openrouter:mistralai/mistral-small-2603"
+       ]
+      },
+      {
+       "routes": [
+        "anthropic:claude-haiku-5-5"
+       ]
+      }
+     ],
+     "arbiter": {
+      "routes": [
+       "anthropic:claude-sonnet-5-5"
+      ]
+     },
+     "critic": {
+      "routes": [
+       "anthropic:claude-sonnet-5-5"
+      ]
+     },
+     "verifier": {
+      "routes": [
+       "openrouter:openai/gpt-6-luna"
+      ]
+     },
+     "card": {
+      "routes": [
+       "anthropic:claude-haiku-5-5"
+      ]
+     },
+     "advisor": {
+      "routes": [
+       "anthropic:claude-haiku-5-5"
+      ]
+     }
+    },
+    "local": {
+     "prescreen": {
+      "routes": [
+       "local:qwen"
+      ]
+     },
+     "planner": {
+      "routes": [
+       "local:qwen"
+      ]
+     },
+     "voters": [
+      {
+       "routes": [
+        "local:qwen"
+       ]
+      }
+     ],
+     "arbiter": {
+      "routes": [
+       "local:qwen"
+      ]
+     },
+     "critic": {
+      "routes": [
+       "local:qwen"
+      ]
+     },
+     "verifier": {
+      "routes": [
+       "local:qwen"
+      ]
+     },
+     "card": {
+      "routes": [
+       "local:qwen"
+      ]
+     },
+     "advisor": {
+      "routes": [
+       "local:qwen"
+      ]
+     }
+    }
+   }
+  },
+  "overrides": {},
+  "pipeline": {
+   "profile": "showcase",
+   "source": {
+    "url": "https://yc-oss.github.io/api/companies/all.json",
+    "sample_size": 200,
+    "seed": 20261126,
+    "min_description_chars": 200,
+    "excluded_regions": [
+     "Russia",
+     "Belarus",
+     "Ukraine",
+     "Kazakhstan",
+     "Kyrgyzstan",
+     "Georgia",
+     "Armenia",
+     "Azerbaijan",
+     "Moldova",
+     "Tajikistan",
+     "Turkmenistan",
+     "Uzbekistan"
+    ]
+   },
+   "funnel": {
+    "deep_check": 15,
+    "per_industry_cap": 3,
+    "control_sample": 10
+   },
+   "gate": {
+    "quorum": 5,
+    "search_queries": 4
+   },
+   "critic": {
+    "search_queries": 4,
+    "objections_to_verify": 3
+   },
+   "search": {
+    "results_per_query": 3,
+    "snippet_chars": 1500,
+    "site_chars": 3000,
+    "page_chars": 12000
+   },
+   "assumptions": {
+    "team": "2-3 человека без собственной тяжёлой разработки",
+    "test_budget_usd": 10000,
+    "horizon_weeks": 12,
+    "market": "англоязычный"
+   },
+   "concurrency": 8
+  },
+  "scoring": {
+   "rubrics": [
+    {
+     "id": "time_to_test",
+     "title": "Скорость до работающего теста",
+     "weight": 25,
+     "levels": {
+      "1": "Нужны месяцы разработки, свои данные или партнёры, которых нет",
+      "3": "Тест собирается за 6-8 недель, есть одна внешняя зависимость",
+      "5": "Тест собирается за 2-4 недели из готовых сервисов"
+     }
+    },
+    {
+     "id": "customer_access",
+     "title": "Доступ к первым клиентам",
+     "weight": 25,
+     "levels": {
+      "1": "Покупатель - крупная компания или ведомство, цикл сделки от полугода",
+      "3": "Покупатель - средний бизнес, решение принимают несколько человек за 1-2 месяца",
+      "5": "Покупателя можно достать рекламой или холодным письмом за недели, решает один человек"
+     }
+    },
+    {
+     "id": "time_to_payment",
+     "title": "Скорость первой оплаты",
+     "weight": 20,
+     "levels": {
+      "1": "Оплата только после пилота, закупочной процедуры и договора",
+      "3": "Оплата по счёту после короткого пробного периода",
+      "5": "Оплата картой при регистрации, цена в пределах личного лимита покупателя"
+     }
+    },
+    {
+     "id": "demand_proof",
+     "title": "Доказанность спроса",
+     "weight": 10,
+     "levels": {
+      "1": "Есть только аналог по модели, спрос в этом сегменте не подтверждён",
+      "3": "Есть компания с подтверждённым размером и публичными ценами",
+      "5": "Несколько компаний с публичными ценами и подтверждённым ростом"
+     }
+    },
+    {
+     "id": "barriers",
+     "title": "Барьеры и зависимости",
+     "weight": 10,
+     "levels": {
+      "1": "Всё держится на одной платформе, регуляторе или холодном старте двух сторон рынка",
+      "3": "Есть зависимость от чужих данных или интеграций, но ей есть замена",
+      "5": "Внешних зависимостей нет"
+     }
+    },
+    {
+     "id": "objections",
+     "title": "Возражения критика, устоявшие после проверки",
+     "weight": 10,
+     "computed": true,
+     "levels": {
+      "1": "Все сильные возражения подтверждены источниками",
+      "3": "Часть возражений подтверждена или осталась без проверки",
+      "5": "Ни одно сильное возражение не подтвердилось"
+     }
+    }
+   ],
+   "objection_weight": {
+    "supported": 1.0,
+    "no_source": 0.5,
+    "source_unavailable": 0.5,
+    "not_supported": 0.0,
+    "contradicts": 0.0
+   },
+   "confidence": {
+    "high": "Дословная цитата найдена на сохранённой странице и голоса единогласны, либо источник подтверждён проверяющим",
+    "medium": "Дословная цитата найдена, решение принято кворумом или арбитром; либо расчёт по подтверждённым числам",
+    "low": "Цитаты нет, источник недоступен или голоса разошлись"
+   },
+   "trust": {
+    "high": 0.8,
+    "medium": 0.65
+   }
+  }
+ },
+ "prompts": {
+  "advisor": "You are a financial adviser to the owner of several companies. You read one finished card about a business model and give advice the owner can act on this week. You do not rescore anything: the score and the rank are already computed and are not yours to change.\n\n- `verdict`: `launch` (test it now), `postpone` (worth keeping, not now) or `needs_human` (cannot be decided until the open questions on the card are answered).\n- `test_budget`: how much of the available test budget to put into this test and on what, in one sentence. Stay within the budget given in the assumptions.\n- `first_step`: the one thing to do this week.\n- `main_risk`: the risk most likely to sink the test, taken from the card.\n- `stop_signal`: the observable result at which the test is stopped and the remaining money saved.\n\nUse only sums and percentages that appear in the card or in the assumptions. Do not cite market sizes, benchmarks or prices from memory. If holding companies are listed and the card's upsell line fits one of them, say so in `first_step`.\n\nWrite in Russian, plainly, one sentence of at most 20 words per field. Never mention internal labels such as verdict names or scale ids. If no holding companies are listed, do not mention them.\n",
+  "arbiter": "Several reviewers disagreed on some yes/no questions about a company. Settle each listed question from the evidence alone. You are not told how they voted.\n\n- Use only the company description and the numbered evidence. Do not rely on what you remember about the company or its market.\n- Read each question literally. Several ask whether something unwanted is present (lending, custody of funds, a required license, signs of illegal activity). For those, \"no\" is the answer when the evidence shows nothing of the kind and the product plainly has nothing to do with it.\n- Answer \"yes\" or \"no\" when the evidence settles the question, including when it follows plainly from what the product is. If the evidence does not settle it, answer \"unknown\": a person will look at it, and that is better than a guess.\n- The comparable candidate is only a lead. Count it only if the evidence itself shows that this company runs the same business model.\n- For \"yes\" or \"no\", name the evidence item that settles it and copy a short passage from it word for word: under 200 characters, no paraphrase, no ellipsis. If no single passage states it, leave `quote` empty and name the closest evidence item. For \"unknown\", leave both empty.\n- `why`: one sentence in Russian on what decided it.\n- Give one ruling per listed question, using the question ids exactly as given.\n",
+  "card": "You assemble a standard card about one business model. The owner will put several such cards side by side and pick what to test next. The single ranking criterion is the probability that the owner's team launches a test, proves demand and gets a first payment within the stated horizon.\n\nYou get the company, its business model, the facts established by the screening step, the critic's objections with the fact checker's verdict on each, the team assumptions and the scales.\n\nFill in:\n\n- `anchor`: the company that proves this model at scale and its size, at most 15 words. Use only the screening facts. If they name none, say so.\n- `scores`: one entry for each scale listed under \"Scales to score\", with the scale id in `rubric`. Pick a level from 1 to 5 by the level descriptions; levels 2 and 4 sit between the described ones. `why` is one sentence of at most 15 words naming the fact behind the level. Score what the facts imply for the owner's team under the stated assumptions, not what the startup itself has achieved.\n- `channel`, `offer`, `success_sign`: a three-line sketch of the first test, at most 15 words each. Where the first customers come from, what exactly is offered and at what price, and what observable result within the horizon counts as proven demand.\n- `upsell`: what kind of existing company, with what customer base, could sell this as an add-on, at most 15 words. If holding companies are listed, name the one it fits best, or say that none fits. If none are listed, do not mention it.\n- `needs_human`: at most three questions a person must settle before money is spent, the most important first, at most 15 words each: unverified facts, objections whose source could not be checked, gaps in the evidence. An empty list if there are none.\n\nWeigh the objections by verdict. `supported` is an established risk. `not_supported` and `contradicts` are not risks. `no_source`, `source_unavailable` and `not_checked` are open questions.\n\nWhen two facts in the input disagree (two different prices, two valuations, a fact and an objection that says otherwise), score on the more cautious one, mention both with their sources in `why`, and add the conflict to `needs_human`.\n\nWrite everything in Russian, plainly, for a business owner without technical background. Never mention internal labels such as verdict names (`supported`, `not_checked` and the like), scale ids or evidence ids. Do not invent numbers: use only figures present in the input.\n",
+  "critic": "You are the critic in a pipeline that decides which business models an owner should test next. Your only job is to find why this one will not work: why the team described below will fail to launch a test, prove demand and get a first payment within the stated time, or why the model itself is weaker than it looks.\n\nWrite three or four objections, strongest first. For each one:\n\n- `text`: the claim itself in one sentence of at most 20 words. Make it a checkable statement of fact wherever you can: \"Median monthly churn of SMB SaaS at this price is 3-5%\" rather than \"retention may be hard\".\n- `reasoning`: why this claim hurts the chance of a first payment within the horizon, one sentence of at most 25 words.\n- `strength`: 5 if this alone could kill the test, 1 if it is a nuisance.\n- `evidence_id` and `quote`: the evidence item the claim rests on and a passage copied from it word for word, under 250 characters, no ellipsis. If the claim is your own judgment and no evidence item states it, leave both empty. Never attach a source that does not state the claim: a separate fact checker opens every source you cite.\n- `source_date`: the publication date shown in that evidence item, as YYYY-MM-DD, YYYY-MM or YYYY. Empty if none is shown.\n\nWrite `text` and `reasoning` in Russian. Do not soften the objections and do not add anything in favour of the model: another part of the pipeline weighs both sides.\n",
+  "critic_plan": "You are the critic in a pipeline that decides which business models an owner should test next. Your only job is to find why this one will not work: why the team described below will fail to launch a test, prove demand and get a first payment within the stated time, or why the model itself is weaker than it looks.\n\nBefore arguing, you search. Write web search queries in English that would surface the strongest evidence against this business model. Stay within the limit given.\n\nLook for facts about the category and its real companies: churn and retention figures, incumbents bundling the same feature for free, price pressure, platform or regulatory changes, companies in the category that shut down or pivoted, long sales cycles, high acquisition costs. Do not search for opinions about this particular startup: it is too young to have any.\n",
+  "planner": "You prepare web searches for a fact check of one company. You get the company and the questions that will be asked about it.\n\n`comparable`: the largest company you know that runs the same business model: the same kind of payer, the same kind of product paid for, the same way of charging. The product need not be identical. Pick a company big enough to have a publicly reported valuation, funding round, market cap or acquisition price. One company name, or empty if you know none. This is a lead for the search, not a fact: reviewers will check it against the pages found.\n\n`queries`: search queries in English that are most likely to surface pages answering the questions. Stay within the limit given.\n\n- One query must look for the valuation, funding round or acquisition price of the comparable company. If you named none, describe the model in the query instead.\n- One query should find how this company charges: pricing page, plans, fees.\n- Use the remaining queries for the questions the description leaves most open: licensing, who holds customer money, who the customers are.\n- Do not search for what the description already states.\n",
+  "portfolio": "You are a financial adviser to the owner of several companies. You get short summaries of every card from one screening run, already ranked. The owner will launch one test first and put a couple of models aside.\n\nWrite a memo of at most 120 words in Russian: which model to test first and why, which two to postpone and why, and what the owner should settle personally before spending anything. Refer to models by company name.\n\nUse only sums and percentages that appear in the summaries or in the assumptions. Plain paragraphs, no headings, no lists. Never mention internal labels such as verdict names or scale ids.\n",
+  "prescreen": "You screen startups for an owner who wants to launch a business on a model that already works somewhere else. You see only a short catalog description. No web search happens at this step: a later step checks every company you let through against real sources, so let through anything you are not sure about.\n\nDo three things.\n\n1. Describe the business model: who pays, what they pay for, how often, and the revenue type.\n\n2. Check the description against every criterion listed, one entry per criterion, using the criterion ids exactly as given. Set `violated` to true only when the description states a fact that breaks the criterion outright: the company lends its own money, underwrites insurance, holds customer funds, sells hardware or physical goods, needs on-site work, trades financial instruments, sells mainly to government agencies, charges one-off instead of recurring. If the description says nothing either way, or you are unsure, `violated` is false. `reason`: one short sentence in Russian naming the fact from the description.\n\n3. Rate from 1 to 5 how quickly a team of two or three people could launch a test of this model and get a first payment within three months.\n   - 5: a self-serve online product for small businesses or consumers, built from ready-made services.\n   - 3: a product that needs integrations or a sales process of a month or two.\n   - 1: enterprise sales, regulated data, heavy engineering or research.\n\nWrite `payer`, `pays_for`, `frequency` and `speed_reason` in Russian, one short sentence each.\n",
+  "verifier": "You are a fact checker. You get one claim and the text of the web page cited as its source. Decide whether the page backs the claim.\n\n- `supported`: the page states the claim, or states facts that directly entail it.\n- `not_supported`: the page does not state it. A related topic, vaguer wording or a weaker number is not support.\n- `contradicts`: the page states the opposite or a materially different number.\n\nJudge only what the page says. Do not use what you know from elsewhere, and do not judge whether the claim matters.\n\n- `quote`: the passage that settles it, copied from the page word for word, under 250 characters, no ellipsis. Empty for `not_supported`.\n- `source_date`: the publication date shown on the page, as YYYY-MM-DD, YYYY-MM or YYYY. Empty if none is shown.\n- `note`: one sentence in Russian of at most 20 words explaining the verdict.\n",
+  "voter": "You check one company against a list of yes/no questions. Another program decides what the answers mean, so answer only what is asked.\n\n- Use only the company description and the numbered evidence. Do not rely on what you remember about the company or its market.\n- Read each question literally. Several of them ask whether something unwanted is present (lending, custody of funds, a required license, signs of illegal activity). For those, \"no\" is the answer when the evidence shows nothing of the kind and the product plainly has nothing to do with it: a language-learning app does not lend money.\n- Answer \"yes\" or \"no\" when the evidence settles the question, including when it follows plainly from what the product is. Answer \"unknown\" when the evidence leaves the question open: the product is in a regulated field and nothing says who holds the license, or no page gives the figure asked for.\n- The comparable candidate is only a lead. Count it only if the evidence itself shows that this company runs the same business model.\n- For every \"yes\" or \"no\", name the evidence item that settles it and copy a short passage from it word for word: under 200 characters, no paraphrase, no ellipsis. If the answer follows from the overall picture and no single passage states it, leave `quote` empty and name the closest evidence item.\n- For \"unknown\", leave `evidence_id` and `quote` empty.\n- Answer every question once, using the question ids exactly as given.\n"
+ },
  "funnel": {
   "sourced": 200,
   "prescreen_rejected": 74,
@@ -6994,7 +7551,7 @@
      "url": "https://www.ycombinator.com/companies/cleverdeck",
      "title": "CleverDeck in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "eb6e4a1184fa65ffd033ae19699cee133f935cb9684380f5eb6b4099a2443213"
     },
     {
@@ -7104,7 +7661,7 @@
      "source_url": "https://www.ycombinator.com/companies/cleverdeck",
      "quote": "CleverDeck is a customizable-spaced repetition flashcard application for learning foreign language vocabulary.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -7188,7 +7745,7 @@
      "source_url": "https://www.ycombinator.com/companies/cleverdeck",
      "quote": "CleverDeck is a customizable-spaced repetition flashcard application for learning foreign language vocabulary.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -7800,7 +8357,7 @@
      "url": "https://www.ycombinator.com/companies/parrot",
      "title": "Parrot in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "7bab38a35dfcbdfaea4c3e4e81f3639f35588ebdd7eb236fde113d0c47ae4cdc"
     },
     {
@@ -8606,7 +9163,7 @@
      "url": "https://www.ycombinator.com/companies/alice-tech",
      "title": "Alice.tech in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "5e8a73bea523275f980640c0f18dc5e72a8f4bfbcf634c03aa39cfaeacef92a5"
     },
     {
@@ -8716,7 +9273,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -8740,7 +9297,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -8764,7 +9321,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -8776,7 +9333,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -8788,7 +9345,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -8800,7 +9357,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -8812,7 +9369,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "more than 10k college students have already used Alice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -9412,7 +9969,7 @@
      "url": "https://www.ycombinator.com/companies/miyagi-labs",
      "title": "Miyagi Labs in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "4f6ce91d4774945b05214a44bda3346ae96c82d4188ebe4f9c557fa68cdb57c9"
     },
     {
@@ -9514,7 +10071,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -9562,7 +10119,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -9574,7 +10131,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -9586,7 +10143,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -9598,7 +10155,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10163,7 +10720,7 @@
      "url": "https://www.ycombinator.com/companies/postal",
      "title": "Postal in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "07ad86e9d141d5f52253e6da5405172102023f4a5e38b7506ed7f0775890e667"
     },
     {
@@ -10281,7 +10838,7 @@
      "source_url": "https://www.ycombinator.com/companies/postal",
      "quote": "Postal offers a modern virtual mailbox for businesses.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10317,7 +10874,7 @@
      "source_url": "https://www.ycombinator.com/companies/postal",
      "quote": "Postal offers a modern virtual mailbox for businesses.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10329,7 +10886,7 @@
      "source_url": "https://www.ycombinator.com/companies/postal",
      "quote": "Postal offers a modern virtual mailbox for businesses.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10341,7 +10898,7 @@
      "source_url": "https://www.ycombinator.com/companies/postal",
      "quote": "Postal offers a modern virtual mailbox for businesses.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10353,7 +10910,7 @@
      "source_url": "https://www.ycombinator.com/companies/postal",
      "quote": "Postal offers a modern virtual mailbox for businesses.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10365,7 +10922,7 @@
      "source_url": "https://www.ycombinator.com/companies/postal",
      "quote": "Postal provides an official address for government, IRS, and vendor communications",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -10965,7 +11522,7 @@
      "url": "https://www.ycombinator.com/companies/ciro",
      "title": "Ciro in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "5ea9fffea0207d24c532ae0927e82c63388c20e6cd0e2d660e88eb7556f1284d"
     },
     {
@@ -11087,7 +11644,7 @@
      "source_url": "https://www.ycombinator.com/companies/ciro",
      "quote": "Ciro is an AI agent that finds prospects, researches their buying signals, and drafts personalized outreach, all from Slack.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11771,7 +12328,7 @@
      "url": "https://www.ycombinator.com/companies/fluently",
      "title": "Fluently in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "1cb00ac1238c101875146e4fcd4395e91000f70e90b90fc03d971c119d35853c"
     },
     {
@@ -11889,7 +12446,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11913,7 +12470,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11937,7 +12494,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11949,7 +12506,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11961,7 +12518,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11973,7 +12530,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -11985,7 +12542,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12585,7 +13142,7 @@
      "url": "https://www.ycombinator.com/companies/audora",
      "title": "Audora in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "20026665f4068f45da02fefdadeeecf0e037b670feff8c55856c56c5debdf83b"
     },
     {
@@ -12703,7 +13260,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook where every character has their own voice.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12727,7 +13284,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12751,7 +13308,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12763,7 +13320,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12775,7 +13332,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12787,7 +13344,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -12799,7 +13356,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13399,7 +13956,7 @@
      "url": "https://www.ycombinator.com/companies/maxi",
      "title": "Maxi in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "1ba3d6270146a2f46846a8f7f8f91d38a87e3b488ef1b610dac2b359c107e17e"
     },
     {
@@ -13517,7 +14074,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "Maxi is an iMessage-based, AI-native agent for your personal finances.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13529,7 +14086,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "Maxi is an iMessage-based, AI-native agent for your personal finances.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13565,7 +14122,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "It connects to all your accounts (secure read-only access)",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13577,7 +14134,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "It connects to all your accounts (secure read-only access)",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13589,7 +14146,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "It connects to all your accounts (secure read-only access)",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13601,7 +14158,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "It connects to all your accounts (secure read-only access)",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -13613,7 +14170,7 @@
      "source_url": "https://www.ycombinator.com/companies/maxi",
      "quote": "Maxi is an iMessage-based, AI-native agent for your personal finances.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -14213,7 +14770,7 @@
      "url": "https://www.ycombinator.com/companies/stellar-sleep",
      "title": "Stellar Sleep in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "b20fd2989e206c574f12e85872ef0ae8c73b6f1ae40cfbe689a99035a1192cec"
     },
     {
@@ -14315,7 +14872,7 @@
      "source_url": "https://www.ycombinator.com/companies/stellar-sleep",
      "quote": "25 million Americans with chronic insomnia are getting inadequate and superficial care advice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -14363,7 +14920,7 @@
      "source_url": "https://www.ycombinator.com/companies/stellar-sleep",
      "quote": "Stellar Sleep uses psychology to help these people break the insomnia cycle.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -14375,7 +14932,7 @@
      "source_url": "https://www.ycombinator.com/companies/stellar-sleep",
      "quote": "Stellar Sleep uses psychology to help these people break the insomnia cycle.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -14399,7 +14956,7 @@
      "source_url": "https://www.ycombinator.com/companies/stellar-sleep",
      "quote": "Stellar Sleep uses psychology to help these people break the insomnia cycle.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15017,7 +15574,7 @@
      "url": "https://www.ycombinator.com/companies/centauri-ai",
      "title": "Centauri AI in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "78f73dec4c716aa6120827bafcc08b8e94d70994b1fc1c084f030852d43e900b"
     },
     {
@@ -15127,7 +15684,7 @@
      "source_url": "https://www.ycombinator.com/companies/centauri-ai",
      "quote": "We build coSlash, a management layer for AI coding agents.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15151,7 +15708,7 @@
      "source_url": "https://www.ycombinator.com/companies/centauri-ai",
      "quote": "We build coSlash, a management layer for AI coding agents.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15175,7 +15732,7 @@
      "source_url": "https://www.ycombinator.com/companies/centauri-ai",
      "quote": "We build coSlash, a management layer for AI coding agents.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15187,7 +15744,7 @@
      "source_url": "https://www.ycombinator.com/companies/centauri-ai",
      "quote": "We build coSlash, a management layer for AI coding agents.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15211,7 +15768,7 @@
      "source_url": "https://www.ycombinator.com/companies/centauri-ai",
      "quote": "We build coSlash, a management layer for AI coding agents.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15223,7 +15780,7 @@
      "source_url": "https://www.ycombinator.com/companies/centauri-ai",
      "quote": "We build coSlash, a management layer for AI coding agents.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15282,9 +15839,11 @@
      "title": "Мы не берём на себя кредит, страховку или хранение чужих денег",
      "outcome": "unknown",
      "path": [
-      "no_balance_sheet_risk.lending"
+      "no_balance_sheet_risk.lending",
+      "no_balance_sheet_risk.insurance",
+      "no_balance_sheet_risk.custody"
      ],
-     "reason": "Не удалось проверить: выдаёт кредиты за свой счёт"
+     "reason": "Не удалось проверить: хранит чужие деньги"
     },
     {
      "tree_id": "not_trading_or_government",
@@ -15299,12 +15858,12 @@
     {
      "tree_id": "proven_at_scale",
      "title": "Есть компания с такой моделью размером порядка $300 млн и больше",
-     "outcome": "unknown",
+     "outcome": "pass",
      "path": [
       "proven_at_scale.named",
       "proven_at_scale.size"
      ],
-     "reason": "Не удалось проверить: её размер порядка $300 млн"
+     "reason": "Размер компании с такой моделью подтверждён источником"
     }
    ],
    "decisions": [
@@ -15328,6 +15887,12 @@
        "voter": "mistralai/mistral-small-2603",
        "answer": "no",
        "quote": "AI-powered accounting automation for vacation rental property managers.",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
        "evidence_id": "E0"
       },
       {
@@ -15371,6 +15936,12 @@
        "evidence_id": "E1"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "yes",
+       "quote": "About 15 minutes to connect your cards, PMS and accounting system.",
+       "evidence_id": "E5"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "yes",
        "quote": "Your office team works in the Accountable web app.",
@@ -15406,6 +15977,12 @@
       },
       {
        "voter": "mistralai/mistral-small-2603",
+       "answer": "unknown",
+       "quote": "",
+       "evidence_id": ""
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
        "answer": "unknown",
        "quote": "",
        "evidence_id": ""
@@ -15451,6 +16028,12 @@
        "evidence_id": "E5"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "yes",
+       "quote": "Per property pricing with unlimited users and cardholders. Bill pay methods are priced separately.",
+       "evidence_id": "E5"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "unknown",
        "quote": "",
@@ -15464,8 +16047,8 @@
       }
      ],
      "answer": "yes",
-     "agreement": 0.8,
-     "decided_by": "arbiter",
+     "agreement": 0.8333333333333334,
+     "decided_by": "vote",
      "passport_id": "gate.recurring.subscription"
     },
     {
@@ -15491,6 +16074,12 @@
        "evidence_id": "E0"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
+       "evidence_id": "E0"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "It's a spend management and expense capture layer that sits on top of your existing tools.",
@@ -15503,10 +16092,102 @@
        "evidence_id": ""
       }
      ],
-     "answer": "unknown",
-     "agreement": 0.2,
-     "decided_by": "unresolved",
+     "answer": "no",
+     "agreement": 0.8333333333333334,
+     "decided_by": "vote",
      "passport_id": "gate.no_balance_sheet_risk.lending"
+    },
+    {
+     "question_id": "no_balance_sheet_risk.insurance",
+     "question": "Сама страхует риски",
+     "votes": [
+      {
+       "voter": "google/gemma-4-26b-a4b-it",
+       "answer": "no",
+       "quote": "Accountable is AI-powered accounting automation for vacation rental property managers.",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "meta-llama/llama-4-maverick",
+       "answer": "no",
+       "quote": "AI-powered accounting automation for vacation rental property managers.",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "mistralai/mistral-small-2603",
+       "answer": "no",
+       "quote": "AI-powered accounting automation for vacation rental property managers.",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "openai/gpt-6-luna",
+       "answer": "no",
+       "quote": "Expenses, bill pay, owner payments, work orders and inventory in one platform.",
+       "evidence_id": "E1"
+      },
+      {
+       "voter": "claude-sonnet-5-5",
+       "answer": "no",
+       "quote": "Expenses, bill pay, owner payments, work orders and inventory in one platform.",
+       "evidence_id": "E1"
+      }
+     ],
+     "answer": "no",
+     "agreement": 1.0,
+     "decided_by": "vote",
+     "passport_id": "gate.no_balance_sheet_risk.insurance"
+    },
+    {
+     "question_id": "no_balance_sheet_risk.custody",
+     "question": "Хранит чужие деньги",
+     "votes": [
+      {
+       "voter": "google/gemma-4-26b-a4b-it",
+       "answer": "no",
+       "quote": "It's not a full accounting system; it's a spend management and expense capture layer that sits on top of your existing tools.",
+       "evidence_id": "E7"
+      },
+      {
+       "voter": "meta-llama/llama-4-maverick",
+       "answer": "no",
+       "quote": "Accountable handles payments, cards, approvals and expense tracking in one place",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "mistralai/mistral-small-2603",
+       "answer": "no",
+       "quote": "AI-powered accounting automation for vacation rental property managers.",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "openai/gpt-6-luna",
+       "answer": "unknown",
+       "quote": "",
+       "evidence_id": ""
+      },
+      {
+       "voter": "claude-sonnet-5-5",
+       "answer": "unknown",
+       "quote": "",
+       "evidence_id": ""
+      }
+     ],
+     "answer": "unknown",
+     "agreement": 0.3333333333333333,
+     "decided_by": "unresolved",
+     "passport_id": "gate.no_balance_sheet_risk.custody"
     },
     {
      "question_id": "not_trading_or_government.trading",
@@ -15528,6 +16209,12 @@
        "voter": "mistralai/mistral-small-2603",
        "answer": "no",
        "quote": "AI-powered accounting automation for vacation rental property managers.",
+       "evidence_id": "E0"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
        "evidence_id": "E0"
       },
       {
@@ -15571,6 +16258,12 @@
        "evidence_id": "E0"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "no",
+       "quote": "",
+       "evidence_id": "E0"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "no",
        "quote": "AI-powered accounting automation for vacation rental property managers.",
@@ -15609,6 +16302,12 @@
        "answer": "yes",
        "quote": "Ramp, Amex, Chase and more",
        "evidence_id": "E6"
+      },
+      {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "yes",
+       "quote": "",
+       "evidence_id": "E2"
       },
       {
        "voter": "openai/gpt-6-luna",
@@ -15651,6 +16350,12 @@
        "evidence_id": "E2"
       },
       {
+       "voter": "deepseek/deepseek-v4.1-flash",
+       "answer": "yes",
+       "quote": "boosting its valuation to $32 billion",
+       "evidence_id": "E2"
+      },
+      {
        "voter": "openai/gpt-6-luna",
        "answer": "unknown",
        "quote": "",
@@ -15663,9 +16368,9 @@
        "evidence_id": "E2"
       }
      ],
-     "answer": "unknown",
-     "agreement": 0.2,
-     "decided_by": "unresolved",
+     "answer": "yes",
+     "agreement": 0.8333333333333334,
+     "decided_by": "vote",
      "passport_id": "gate.proven_at_scale.size"
     }
    ],
@@ -15675,7 +16380,7 @@
      "url": "https://www.ycombinator.com/companies/accountable",
      "title": "Accountable in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "e1b01f087a7cdd9d6a739eacb12ba3b6a7dbba26b9a27326bc6846e76535c21f"
     },
     {
@@ -15793,7 +16498,7 @@
      "source_url": "https://www.ycombinator.com/companies/accountable",
      "quote": "Accountable is AI-powered accounting automation for vacation rental property managers.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15805,7 +16510,7 @@
      "source_url": "https://www.ycombinator.com/companies/accountable",
      "quote": "Accountable handles payments, cards, approvals and expense tracking in one place, and syncs everything to the tools property managers already use",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15827,14 +16532,38 @@
      "method": "primary_source",
      "confidence": "medium",
      "source_url": "https://www.accountablevr.com",
-     "quote": "Per property pricing with unlimited users and cardholders. Bill pay methods are priced separately. Your first month comes with a money-back guarantee.",
+     "quote": "Per property pricing with unlimited users and cardholders.",
      "source_date": null,
      "accessed": "2026-11-26",
      "note": ""
     },
     {
      "id": "gate.no_balance_sheet_risk.lending",
-     "claim": "Выдаёт кредиты за свой счёт: не удалось проверить",
+     "claim": "Выдаёт кредиты за свой счёт: нет",
+     "origin": "gate",
+     "method": "primary_source",
+     "confidence": "medium",
+     "source_url": "https://accountablevr.com",
+     "quote": "Your tech pays with a Ramp or connected card.",
+     "source_date": null,
+     "accessed": "2026-11-26",
+     "note": ""
+    },
+    {
+     "id": "gate.no_balance_sheet_risk.insurance",
+     "claim": "Сама страхует риски: нет",
+     "origin": "gate",
+     "method": "primary_source",
+     "confidence": "high",
+     "source_url": "https://www.ycombinator.com/companies/accountable",
+     "quote": "Accountable is AI-powered accounting automation for vacation rental property managers.",
+     "source_date": null,
+     "accessed": "2026-11-27",
+     "note": ""
+    },
+    {
+     "id": "gate.no_balance_sheet_risk.custody",
+     "claim": "Хранит чужие деньги: не удалось проверить",
      "origin": "gate",
      "method": "needs_human",
      "confidence": "low",
@@ -15853,7 +16582,7 @@
      "source_url": "https://www.ycombinator.com/companies/accountable",
      "quote": "Accountable is AI-powered accounting automation for vacation rental property managers.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15865,7 +16594,7 @@
      "source_url": "https://www.ycombinator.com/companies/accountable",
      "quote": "Accountable is AI-powered accounting automation for vacation rental property managers.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -15882,14 +16611,14 @@
     },
     {
      "id": "gate.proven_at_scale.size",
-     "claim": "Её размер порядка $300 млн: не удалось проверить",
+     "claim": "Её размер порядка $300 млн: да",
      "origin": "gate",
-     "method": "needs_human",
-     "confidence": "low",
-     "source_url": null,
-     "quote": null,
+     "method": "primary_source",
+     "confidence": "medium",
+     "source_url": "https://finovate.com/ramp-valued-at-32-billion-after-300-million-financing-round",
+     "quote": "The New York-based company closed $300 million in funding, boosting its valuation to $32 billion",
      "source_date": null,
-     "accessed": null,
+     "accessed": "2026-11-26",
      "note": ""
     }
    ],
@@ -16465,7 +17194,7 @@
      "url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "title": "You Got Listings in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "82add1d3bdf1a0417f0223276d5a9c1d408a1d637b6203ada3eabb6ffad2303a"
     },
     {
@@ -16567,7 +17296,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "You Got Listings is an all-in-one apartment Marketing Platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -16615,7 +17344,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "All-in-one apartment Marketing Platform for brokerages and landlords.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -16627,7 +17356,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "All-in-one apartment Marketing Platform for brokerages and landlords.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -16639,7 +17368,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "All-in-one apartment Marketing Platform for brokerages and landlords.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -16651,7 +17380,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "You Got Listings is an all-in-one apartment Marketing Platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -16663,7 +17392,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "You Got Listings is an all-in-one apartment Marketing Platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17269,7 +17998,7 @@
      "url": "https://www.ycombinator.com/companies/emi-labs",
      "title": "Emi Labs in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "c1b69c67158e175653e76b710c1e54d9187ac329267f7429007aeabd2a8ae31d"
     },
     {
@@ -17379,7 +18108,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17391,7 +18120,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17403,7 +18132,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17415,7 +18144,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17427,7 +18156,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17439,7 +18168,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17451,7 +18180,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17463,7 +18192,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -17475,7 +18204,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18075,7 +18804,7 @@
      "url": "https://www.ycombinator.com/companies/poko",
      "title": "Poko in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "c76e1a5f97268cbc5f1ccc1239a124fbd3c9a30ce4bc72aaf3a5227c7bd6d7f6"
     },
     {
@@ -18177,7 +18906,7 @@
      "source_url": "https://www.ycombinator.com/companies/poko",
      "quote": "Poko enables seamless transfers from local payment rails to web3 infrastructure enabling web3 wallets, marketplaces, games and DApps to acquire more users.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18189,7 +18918,7 @@
      "source_url": "https://www.ycombinator.com/companies/poko",
      "quote": "Poko enables seamless transfers from local payment rails to web3 infrastructure enabling web3 wallets, marketplaces, games and DApps to acquire more users.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18225,7 +18954,7 @@
      "source_url": "https://www.ycombinator.com/companies/poko",
      "quote": "Poko enables seamless transfers from local payment rails to web3 infrastructure enabling web3 wallets, marketplaces, games and DApps to acquire more users.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18237,7 +18966,7 @@
      "source_url": "https://www.ycombinator.com/companies/poko",
      "quote": "Poko enables seamless transfers from local payment rails to web3 infrastructure enabling web3 wallets, marketplaces, games and DApps to acquire more users.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18261,7 +18990,7 @@
      "source_url": "https://www.ycombinator.com/companies/poko",
      "quote": "Poko enables seamless transfers from local payment rails to web3 infrastructure enabling web3 wallets, marketplaces, games and DApps to acquire more users.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18273,7 +19002,7 @@
      "source_url": "https://www.ycombinator.com/companies/poko",
      "quote": "Poko enables seamless transfers from local payment rails to web3 infrastructure enabling web3 wallets, marketplaces, games and DApps to acquire more users.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18826,7 +19555,7 @@
      "url": "https://www.ycombinator.com/companies/zenysis",
      "title": "Zenysis in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "5ac9d0a23a303961d74ce02728de7bf2c01634fb50de7f96a7548b83917a85f4"
     },
     {
@@ -18936,7 +19665,7 @@
      "source_url": "https://www.ycombinator.com/companies/zenysis",
      "quote": "Zenysis builds data integration software that helps governments view and analyze all their data in one place.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18972,7 +19701,7 @@
      "source_url": "https://www.ycombinator.com/companies/zenysis",
      "quote": "Zenysis builds data integration software that helps governments view and analyze all their data in one place.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18984,7 +19713,7 @@
      "source_url": "https://www.ycombinator.com/companies/zenysis",
      "quote": "Zenysis builds data integration software that helps governments view and analyze all their data in one place.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -18996,7 +19725,7 @@
      "source_url": "https://www.ycombinator.com/companies/zenysis",
      "quote": "Zenysis builds data integration software that helps governments view and analyze all their data in one place.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -19008,7 +19737,7 @@
      "source_url": "https://www.ycombinator.com/companies/zenysis",
      "quote": "Zenysis builds data integration software that helps governments view and analyze all their data in one place.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -19020,7 +19749,7 @@
      "source_url": "https://www.ycombinator.com/companies/zenysis",
      "quote": "Zenysis builds data integration software that helps governments view and analyze all their data in one place.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -19667,7 +20396,7 @@
      "url": "https://www.ycombinator.com/companies/token-transit",
      "title": "Token Transit in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "2881eaae76c2ece7bd8173aeea92e1de5ea12bc7249b16b6e84d00318c8f5e0b"
     },
     {
@@ -19769,7 +20498,7 @@
      "source_url": "https://www.ycombinator.com/companies/token-transit",
      "quote": "Complete fare payment platform for public transportation.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -19829,7 +20558,7 @@
      "source_url": "https://www.ycombinator.com/companies/token-transit",
      "quote": "Complete fare payment platform for public transportation.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -19841,7 +20570,7 @@
      "source_url": "https://www.ycombinator.com/companies/token-transit",
      "quote": "Complete fare payment platform for public transportation.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -19865,7 +20594,7 @@
      "source_url": "https://www.ycombinator.com/companies/token-transit",
      "quote": "Complete fare payment platform for public transportation.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20477,7 +21206,7 @@
      "url": "https://www.ycombinator.com/companies/axal",
      "title": "Axal in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "2a72727c8ea687aef9a64a661d66e4875e68964f9cdf6c1e7a79b04071b488ae"
     },
     {
@@ -20579,7 +21308,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20603,7 +21332,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20615,7 +21344,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20627,7 +21356,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20639,7 +21368,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20651,7 +21380,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20663,7 +21392,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -20675,7 +21404,7 @@
      "source_url": "https://www.ycombinator.com/companies/axal",
      "quote": "Axal is a quick-turn PCB assembly shop in San Francisco.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -21275,7 +22004,7 @@
      "url": "https://www.ycombinator.com/companies/novig",
      "title": "Novig in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "5ba9398de99b8ef0c99dec4245a4b3b02c876478b0b5130ebdea7cb2646e1a8e"
     },
     {
@@ -21397,7 +22126,7 @@
      "source_url": "https://www.ycombinator.com/companies/novig",
      "quote": "Novig is building America's #1 sports prediction market.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -21457,7 +22186,7 @@
      "source_url": "https://www.ycombinator.com/companies/novig",
      "quote": "Novig is building America's #1 sports prediction market.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -21481,7 +22210,7 @@
      "source_url": "https://www.ycombinator.com/companies/novig",
      "quote": "Novig is building America's #1 sports prediction market.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22081,7 +22810,7 @@
      "url": "https://www.ycombinator.com/companies/waypoint-transit",
      "title": "Waypoint Transit in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "fb7494ef0cd872c4f9075be8695bc0df1454296d8016e926639d1e539fd2fed7"
     },
     {
@@ -22175,7 +22904,7 @@
      "source_url": "https://www.ycombinator.com/companies/waypoint-transit",
      "quote": "We automate urban planning so cities can build cheaper and faster.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22223,7 +22952,7 @@
      "source_url": "https://www.ycombinator.com/companies/waypoint-transit",
      "quote": "Waypoint Transit is an AI city planner that generates civil infrastructure studies.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22235,7 +22964,7 @@
      "source_url": "https://www.ycombinator.com/companies/waypoint-transit",
      "quote": "Waypoint Transit is an AI city planner that generates civil infrastructure studies.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22247,7 +22976,7 @@
      "source_url": "https://www.ycombinator.com/companies/waypoint-transit",
      "quote": "Waypoint Transit is an AI city planner that generates civil infrastructure studies.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22259,7 +22988,7 @@
      "source_url": "https://www.ycombinator.com/companies/waypoint-transit",
      "quote": "Waypoint Transit is an AI city planner that generates civil infrastructure studies.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22271,7 +23000,7 @@
      "source_url": "https://www.ycombinator.com/companies/waypoint-transit",
      "quote": "In the United States, state and local governments spend $50B/year on planning.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -22871,7 +23600,7 @@
      "url": "https://www.ycombinator.com/companies/synapse-semiconductor",
      "title": "Synapse Semiconductor in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "bae0561578b8686ed5a99f5773d770bac06ca88db9d029f9806fa42b08126ec4"
     },
     {
@@ -23025,7 +23754,7 @@
      "source_url": "https://www.ycombinator.com/companies/synapse-semiconductor",
      "quote": "New semiconductors",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23049,7 +23778,7 @@
      "source_url": "https://www.ycombinator.com/companies/synapse-semiconductor",
      "quote": "New semiconductors",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23595,7 +24324,7 @@
      "url": "https://www.ycombinator.com/companies/cocusocial",
      "title": "CocuSocial in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "38003c52ade5abe25b7b82e6bbc297c55fca26c21fa5727e393ed3e1613771a6"
     },
     {
@@ -23697,7 +24426,7 @@
      "source_url": "https://www.ycombinator.com/companies/cocusocial",
      "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23709,7 +24438,7 @@
      "source_url": "https://www.ycombinator.com/companies/cocusocial",
      "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23745,7 +24474,7 @@
      "source_url": "https://www.ycombinator.com/companies/cocusocial",
      "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23757,7 +24486,7 @@
      "source_url": "https://www.ycombinator.com/companies/cocusocial",
      "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23781,7 +24510,7 @@
      "source_url": "https://www.ycombinator.com/companies/cocusocial",
      "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -23793,7 +24522,7 @@
      "source_url": "https://www.ycombinator.com/companies/cocusocial",
      "quote": "CocuSocial is a marketplace for culinary experience including cooking, baking and tasting classes that are hosted at restaurants and hotels.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24346,7 +25075,7 @@
      "url": "https://www.ycombinator.com/companies/ravn",
      "title": "Ravn in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "7437514af3f472049cb9ce23008f046a9df6448a9908a59788db87ff0191324d"
     },
     {
@@ -24464,7 +25193,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Ravn is a DefenseTech company building a heads-up display for soldiers",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24476,7 +25205,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Our lightweight heads-up display displays videos feeds from a camera on a gun, to drones, robots or other external platforms.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24500,7 +25229,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Ravn is a DefenseTech company building a heads-up display for soldiers",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24512,7 +25241,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Ravn is a DefenseTech company building a heads-up display for soldiers",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24524,7 +25253,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Ravn is a DefenseTech company building a heads-up display for soldiers",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24536,7 +25265,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Ravn is a DefenseTech company building a heads-up display for soldiers",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -24548,7 +25277,7 @@
      "source_url": "https://www.ycombinator.com/companies/ravn",
      "quote": "Ravn is a DefenseTech company building a heads-up display for soldiers",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -25101,7 +25830,7 @@
      "url": "https://www.ycombinator.com/companies/spruceid",
      "title": "SpruceID in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "9ac9f4d72297d7e96434bcd6bbc60e69844d15fbbd5fec382a2d2ca7920290b7"
     },
     {
@@ -25211,7 +25940,7 @@
      "source_url": "https://www.ycombinator.com/companies/spruceid",
      "quote": "SpruceID lets users control their data across the web.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -25259,7 +25988,7 @@
      "source_url": "https://www.ycombinator.com/companies/spruceid",
      "quote": "SpruceID lets users control their data across the web.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -25271,7 +26000,7 @@
      "source_url": "https://www.ycombinator.com/companies/spruceid",
      "quote": "SpruceID lets users control their data across the web.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -25283,7 +26012,7 @@
      "source_url": "https://www.ycombinator.com/companies/spruceid",
      "quote": "SpruceID lets users control their data across the web.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -25295,7 +26024,7 @@
      "source_url": "https://www.ycombinator.com/companies/spruceid",
      "quote": "SpruceID lets users control their data across the web.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -25895,7 +26624,7 @@
      "url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "title": "Redcliffe Lifetech in the YC directory",
      "published": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "sha256": "6a1e6ee00a81278aae09230d20a9d79fa47acb7a3fbff5f204e82f6038559315"
     },
     {
@@ -26005,7 +26734,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Redcliffe Labs (a unit of Redcliffe Lifetech Inc) provides diagnostics",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26017,7 +26746,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Its digital first approach with on-demand 1-hour home collection and same day report is disrupting the way diagnostics is delivered today",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26053,7 +26782,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Redcliffe Labs is India's Largest Omni-channel Diagnostics platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26065,7 +26794,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Redcliffe Labs (a unit of Redcliffe Lifetech Inc) provides diagnostics",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26077,7 +26806,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Redcliffe Labs (a unit of Redcliffe Lifetech Inc) provides diagnostics",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26089,7 +26818,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Redcliffe Labs (a unit of Redcliffe Lifetech Inc) provides diagnostics",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26101,7 +26830,7 @@
      "source_url": "https://www.ycombinator.com/companies/redcliffe-lifetech",
      "quote": "Redcliffe Labs is India's Largest Omni-channel Diagnostics platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26271,7 +27000,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26319,7 +27048,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26331,7 +27060,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26343,7 +27072,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26355,7 +27084,7 @@
      "source_url": "https://www.ycombinator.com/companies/miyagi-labs",
      "quote": "Miyagi Labs is an AI-powered exam preparation platform built to unlock human intelligence and democratize world-class education globally.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26616,7 +27345,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook where every character has their own voice.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26640,7 +27369,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26664,7 +27393,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26676,7 +27405,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26688,7 +27417,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26700,7 +27429,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26712,7 +27441,7 @@
      "source_url": "https://www.ycombinator.com/companies/audora",
      "quote": "Audora turns your book or story into an audiobook",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26960,7 +27689,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -26984,7 +27713,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27008,7 +27737,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27020,7 +27749,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27032,7 +27761,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27044,7 +27773,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27056,7 +27785,7 @@
      "source_url": "https://www.ycombinator.com/companies/fluently",
      "quote": "Fluently is an AI language tutor for speaking practice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27304,7 +28033,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27328,7 +28057,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27352,7 +28081,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27364,7 +28093,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27376,7 +28105,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27388,7 +28117,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "AI-driven exam prep",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27400,7 +28129,7 @@
      "source_url": "https://www.ycombinator.com/companies/alice-tech",
      "quote": "more than 10k college students have already used Alice",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27660,7 +28389,7 @@
      "source_url": "https://www.ycombinator.com/companies/ciro",
      "quote": "Ciro is an AI agent that finds prospects, researches their buying signals, and drafts personalized outreach, all from Slack.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -27992,7 +28721,7 @@
      "source_url": "https://www.ycombinator.com/companies/cleverdeck",
      "quote": "CleverDeck is a customizable-spaced repetition flashcard application for learning foreign language vocabulary.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28076,7 +28805,7 @@
      "source_url": "https://www.ycombinator.com/companies/cleverdeck",
      "quote": "CleverDeck is a customizable-spaced repetition flashcard application for learning foreign language vocabulary.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28682,7 +29411,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "You Got Listings is an all-in-one apartment Marketing Platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28730,7 +29459,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "All-in-one apartment Marketing Platform for brokerages and landlords.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28742,7 +29471,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "All-in-one apartment Marketing Platform for brokerages and landlords.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28754,7 +29483,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "All-in-one apartment Marketing Platform for brokerages and landlords.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28766,7 +29495,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "You Got Listings is an all-in-one apartment Marketing Platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -28778,7 +29507,7 @@
      "source_url": "https://www.ycombinator.com/companies/you-got-listings-inc",
      "quote": "You Got Listings is an all-in-one apartment Marketing Platform",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29027,7 +29756,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29039,7 +29768,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29051,7 +29780,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29063,7 +29792,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29075,7 +29804,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29087,7 +29816,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29099,7 +29828,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29111,7 +29840,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29123,7 +29852,7 @@
      "source_url": "https://www.ycombinator.com/companies/emi-labs",
      "quote": "Our product is a SaaS recruitment platform powered by AI that helps companies engage with candidates via text to drive faster and more efficient hiring processes.",
      "source_date": null,
-     "accessed": "2026-11-26",
+     "accessed": "2026-11-27",
      "note": ""
     },
     {
@@ -29259,7 +29988,7 @@
    "role": "advisor",
    "model": "claude-sonnet-5-5",
    "calls": 12,
-   "cached": 0,
+   "cached": 12,
    "input_tokens": 39808,
    "output_tokens": 2728,
    "usd": 0.1069
@@ -29270,16 +29999,16 @@
    "model": "claude-opus-5-5",
    "calls": 18,
    "cached": 17,
-   "input_tokens": 137175,
-   "output_tokens": 13555,
-   "usd": 0.8198
+   "input_tokens": 137009,
+   "output_tokens": 12691,
+   "usd": 0.8019
   },
   {
    "provider": "anthropic",
    "role": "card",
    "model": "claude-sonnet-5-5",
    "calls": 9,
-   "cached": 0,
+   "cached": 9,
    "input_tokens": 33316,
    "output_tokens": 7184,
    "usd": 0.1385
@@ -29289,7 +30018,7 @@
    "role": "critic",
    "model": "claude-opus-5-5",
    "calls": 18,
-   "cached": 9,
+   "cached": 18,
    "input_tokens": 70461,
    "output_tokens": 15234,
    "usd": 0.5865
@@ -29329,7 +30058,7 @@
    "role": "verifier",
    "model": "openai/gpt-6.2-sol",
    "calls": 24,
-   "cached": 0,
+   "cached": 24,
    "input_tokens": 63233,
    "output_tokens": 2413,
    "usd": 0.1822
@@ -29338,11 +30067,11 @@
    "provider": "openrouter",
    "role": "voter",
    "model": "deepseek/deepseek-v4.1-flash",
-   "calls": 25,
-   "cached": 23,
-   "input_tokens": 129037,
-   "output_tokens": 138422,
-   "usd": 0.1347
+   "calls": 26,
+   "cached": 25,
+   "input_tokens": 134223,
+   "output_tokens": 140427,
+   "usd": 0.1379
   },
   {
    "provider": "openrouter",
@@ -29388,8 +30117,8 @@
  "validators": {
   "schema_retries": 2,
   "schema_failures": 0,
-  "quotes_checked": 1409,
-  "quotes_dropped": 167,
+  "quotes_checked": 1412,
+  "quotes_dropped": 168,
   "advice_numbers_flagged": 0,
   "cards_rejected": 0
  },
@@ -29789,6 +30518,12 @@
   }
  ],
  "failures": [],
- "outage_drill": null,
+ "outage_drill": {
+  "role": "prescreen",
+  "failed_route": "anthropic:claude-haiku-5-5",
+  "error": "simulated outage",
+  "served_by": "openrouter:anthropic/claude-haiku-5.5",
+  "seconds": 4.5
+ },
  "golden": null
 }

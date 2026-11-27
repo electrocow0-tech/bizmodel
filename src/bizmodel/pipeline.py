@@ -6,6 +6,8 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
+import yaml
+
 from bizmodel import advisor, card, config, critic, gate, prescreen, source, verifier
 from bizmodel.context import Context
 from bizmodel.journal import Journal
@@ -87,6 +89,8 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
         profile=settings.profile,
         voters=[voter.routes[0].split(":", 1)[1] for voter in settings.roles.voters],
         quorum=min(settings.gate.quorum, len(settings.roles.voters)),
+        config=snapshot(root / "config", "*.yaml", yaml.safe_load),
+        prompts=snapshot(root / "prompts", "*.md", str),
         funnel=Funnel(
             sourced=len(companies),
             prescreen_rejected=rejected,
@@ -123,6 +127,13 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
     )
     (folder / "run.json").write_text(result.model_dump_json(indent=1), encoding="utf-8")
     return result
+
+
+def snapshot(folder: Path, pattern: str, parse: Callable[[str], object]) -> dict:
+    """Настройки и инструкции, с которыми шёл прогон: стенд показывает их, а не текущие файлы."""
+    return {
+        path.stem: parse(path.read_text(encoding="utf-8")) for path in sorted(folder.glob(pattern))
+    }
 
 
 def confirmed(screened, checked) -> bool:
