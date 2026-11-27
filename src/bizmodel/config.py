@@ -43,6 +43,7 @@ class Source(BaseModel):
     seed: int
     min_description_chars: int
     excluded_regions: list[str]
+    industries: list[str] | None = None
 
 
 class Funnel(BaseModel):
@@ -97,6 +98,11 @@ class Scoring(BaseModel):
         return self
 
 
+class Stand(BaseModel):
+    live_url: str
+    budget_usd: dict[str, float]
+
+
 class HoldingCompany(BaseModel):
     name: str
     customers: str
@@ -112,6 +118,7 @@ class Settings(BaseModel):
     search: SearchSettings
     assumptions: Assumptions
     concurrency: int
+    stand: Stand
     models: Models
     scoring: Scoring
     forest: forest.Forest
@@ -126,19 +133,28 @@ class Settings(BaseModel):
         return (self.root / "prompts" / f"{name}.md").read_text(encoding="utf-8")
 
 
-def load(root: Path, profile: str | None = None) -> Settings:
-    def read(name: str) -> dict:
-        return yaml.safe_load((root / "config" / name).read_text(encoding="utf-8"))
+def read(root: Path) -> dict[str, dict]:
+    """Файлы настроек как есть: прогон сохраняет их копию вместе с результатом."""
+    return {
+        path.stem: yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        for path in sorted((root / "config").glob("*.yaml"))
+    }
 
-    pipeline = read("pipeline.yaml")
+
+def build(root: Path, raw: dict[str, dict], profile: str | None = None) -> Settings:
+    pipeline = dict(raw["pipeline"])
     if profile:
         pipeline["profile"] = profile
     return Settings(
         root=root,
-        models=read("models.yaml"),
-        scoring=read("scoring.yaml"),
-        forest=forest.load(root / "config" / "criteria.yaml"),
-        holding=read("holding.yaml")["companies"],
-        overrides=read("overrides.yaml") or {},
+        models=raw["models"],
+        scoring=raw["scoring"],
+        forest=raw["criteria"],
+        holding=raw["holding"].get("companies") or [],
+        overrides=raw["overrides"],
         **pipeline,
     )
+
+
+def load(root: Path, profile: str | None = None) -> Settings:
+    return build(root, read(root), profile)

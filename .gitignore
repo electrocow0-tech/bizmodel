@@ -14,3 +14,7 @@ screenshots/
 runs/*
 !runs/20261127-074216/
 tour-report.json
+
+# живой стенд на сервере
+served/
+state/

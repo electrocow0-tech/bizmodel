@@ -5,6 +5,7 @@ description = "Screens business models with independent LLM agents and ranks the
 requires-python = ">=3.12"
 dependencies = [
     "anthropic",
+    "fastapi",
     "httpx",
     "jinja2",
     "markdown",
@@ -13,6 +14,7 @@ dependencies = [
     "python-dotenv",
     "pyyaml",
     "typer",
+    "uvicorn",
 ]
 
 [project.scripts]

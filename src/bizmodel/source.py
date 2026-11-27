@@ -1,5 +1,6 @@
 """Источник бизнес-моделей: открытый каталог компаний Y Combinator."""
 
+import gzip
 import json
 import random
 from collections import defaultdict
@@ -12,19 +13,14 @@ from bizmodel.schemas import Company
 
 
 def load(settings: Source, snapshot: Path) -> list[Company]:
-    """Выборка фиксируется снимком: каталог меняется каждый день, а прогон должен повторяться."""
-    if snapshot.exists():
-        saved = json.loads(snapshot.read_text(encoding="utf-8"))
-        return [Company(**entry) for entry in saved]
-
-    catalog = httpx.get(settings.url, timeout=120).raise_for_status().json()
-    companies = sample(catalog, settings)
-    snapshot.parent.mkdir(parents=True, exist_ok=True)
-    snapshot.write_text(
-        json.dumps([company.model_dump() for company in companies], ensure_ascii=False, indent=1),
-        encoding="utf-8",
-    )
-    return companies
+    """Каталог берётся из снимка: он меняется каждый день, а прогон должен повторяться."""
+    if not snapshot.exists():
+        catalog = httpx.get(settings.url, timeout=120).raise_for_status().json()
+        snapshot.parent.mkdir(parents=True, exist_ok=True)
+        with gzip.open(snapshot, "wt", encoding="utf-8") as file:
+            json.dump(catalog, file, ensure_ascii=False, separators=(",", ":"))
+    with gzip.open(snapshot, "rt", encoding="utf-8") as file:
+        return sample(json.load(file), settings)
 
 
 def sample(catalog: list[dict], settings: Source) -> list[Company]:
@@ -68,6 +64,7 @@ def eligible(entry: dict, settings: Source) -> bool:
         entry.get("status") == "Active"
         and not entry.get("nonprofit")
         and entry.get("industry") not in (None, "Unspecified")
+        and (settings.industries is None or entry.get("industry") in settings.industries)
         and len(entry.get("long_description") or "") >= settings.min_description_chars
         and not set(entry.get("regions") or []) & set(settings.excluded_regions)
     )

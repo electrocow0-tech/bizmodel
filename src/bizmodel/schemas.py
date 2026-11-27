@@ -266,6 +266,7 @@ class Run(BaseModel):
     memo: str
     control: ControlSample
     costs: list[Cost]
+    spent: dict[str, float] = {}
     validators: ValidatorStats
     isolation: list[Isolation]
     failures: list[Failure]

@@ -22,8 +22,8 @@ class StepFailed(Exception):
     """Ни один маршрут цепочки не ответил. Шаг остаётся непроверенным, ничего не выдумывается."""
 
 
-class BudgetExceeded(Exception):
-    pass
+class BudgetExceeded(StepFailed):
+    """Потолок расхода достигнут: оставшиеся компании остаются непроверенными, прогон доходит до конца."""
 
 
 def sha(text: str) -> str:
@@ -52,8 +52,10 @@ class LLM:
         journal: Journal,
         cache: Path,
         down: frozenset[str] = frozenset(),
+        total_budget: float | None = None,
     ):
         self.models = models
+        self.total_budget = total_budget
         self.journal = journal
         self.cache = cache
         self.down = down
@@ -158,6 +160,9 @@ class LLM:
         budget = self.models.providers[provider].budget_usd
         if budget is not None and self.spent[provider] >= budget:
             raise BudgetExceeded(f"{provider}: spent ${self.spent[provider]:.2f} of ${budget:.2f}")
+        total = sum(self.spent.values())
+        if self.total_budget is not None and total >= self.total_budget:
+            raise BudgetExceeded(f"run: spent ${total:.2f} of ${self.total_budget:.2f}")
 
     def _price(self, model: str, completion: Completion) -> float:
         per_input, per_output = self.models.prices[model]

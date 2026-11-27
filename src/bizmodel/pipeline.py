@@ -2,16 +2,15 @@
 
 from collections import defaultdict
 from collections.abc import Callable
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
-
-import yaml
 
 from bizmodel import advisor, card, config, critic, gate, prescreen, source, verifier
 from bizmodel.context import Context
 from bizmodel.journal import Journal
 from bizmodel.llm import LLM, StepFailed
+from bizmodel.params import Params
 from bizmodel.schemas import (
     AgentCall,
     Card,
@@ -24,27 +23,46 @@ from bizmodel.schemas import (
     Run,
 )
 
+Progress = Callable[[str, int, int], None]
 
-def run(root: Path, profile: str | None = None, report: Callable[[str], None] = print) -> Run:
-    settings = config.load(root, profile)
+
+def run(
+    root: Path,
+    profile: str | None = None,
+    report: Callable[[str], None] = print,
+    params: Params | None = None,
+    budgets: dict[str, float] | None = None,
+    progress: Progress | None = None,
+) -> Run:
+    """Прогон целиком. params - выбор собственника со стенда, budgets - остаток общего потолка."""
+    raw = config.read(root)
+    if params:
+        raw = params.apply(raw)
+        profile = params.profile
+    for provider, left in (budgets or {}).items():
+        raw["models"]["providers"][provider]["budget_usd"] = left
+    settings = config.build(root, raw, profile)
+
     run_id = datetime.now().strftime("%Y%m%d-%H%M%S")
     folder = root / "runs" / run_id
     journal = Journal(folder / "calls.jsonl")
-    ctx = Context(
-        settings=settings,
-        llm=LLM(settings.models, journal, root / "cache" / "llm"),
-        journal=journal,
-        cache=root / "cache",
+    llm = LLM(
+        settings.models,
+        journal,
+        root / "cache" / "llm",
+        total_budget=params.max_usd if params else None,
     )
+    ctx = Context(settings=settings, llm=llm, journal=journal, cache=root / "cache")
+    step = progress or (lambda stage, done, total: None)
     started = datetime.now().isoformat(timespec="seconds")
     failures: list[Failure] = []
 
-    companies = source.load(settings.source, root / "data" / "source" / "sample.json")
+    companies = source.load(settings.source, root / "data" / "source" / "catalog.json.gz")
     by_slug = {company.slug: company for company in companies}
     report(f"Источник: {len(companies)} компаний")
 
     prescreens = attempt(
-        "prescreen", companies, lambda one: prescreen.screen(one, ctx), ctx, failures
+        "prescreen", companies, lambda one: prescreen.screen(one, ctx), ctx, failures, step
     )
     selected, control = prescreen.select(
         list(prescreens.values()),
@@ -56,7 +74,7 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
     report(f"Дешёвый слой: отсеяно {rejected}, в глубокую проверку {len(selected)}")
 
     checked = [by_slug[slug] for slug in selected + control]
-    gates = attempt("gate", checked, lambda one: gate.check(one, ctx), ctx, failures)
+    gates = attempt("gate", checked, lambda one: gate.check(one, ctx), ctx, failures, step)
     passed = [by_slug[slug] for slug in selected if slug in gates and gates[slug].outcome == "pass"]
     report(f"Лес: прошли {len(passed)} из {len(selected)}")
 
@@ -66,12 +84,12 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
         passports = verifier.check(objections, company.slug, ctx)
         return card.build(company, screened, gates[company.slug], objections, passports, ctx)
 
-    cards = list(attempt("card", passed, examine, ctx, failures).values())
+    cards = list(attempt("card", passed, examine, ctx, failures, step).values())
     cards.sort(key=lambda one: (-one.score, one.slug))
     for rank, one in enumerate(cards, 1):
         one.rank = rank
 
-    advice = attempt("advice", cards, lambda one: advisor.advise(one, ctx), ctx, failures)
+    advice = attempt("advice", cards, lambda one: advisor.advise(one, ctx), ctx, failures, step)
     for one in cards:
         one.advice = advice.get(one.slug)
     try:
@@ -89,7 +107,7 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
         profile=settings.profile,
         voters=[voter.routes[0].split(":", 1)[1] for voter in settings.roles.voters],
         quorum=min(settings.gate.quorum, len(settings.roles.voters)),
-        config=snapshot(root / "config", "*.yaml", yaml.safe_load),
+        config=raw,
         prompts=snapshot(root / "prompts", "*.md", str),
         funnel=Funnel(
             sourced=len(companies),
@@ -116,6 +134,7 @@ def run(root: Path, profile: str | None = None, report: Callable[[str], None] = 
             ],
         ),
         costs=costs(journal),
+        spent={provider: round(amount, 4) for provider, amount in llm.spent.items()},
         validators=ctx.stats.model_copy(
             update={
                 "schema_retries": ctx.llm.schema_retries,
@@ -142,7 +161,14 @@ def confirmed(screened, checked) -> bool:
     return any(violation.criterion in failed for violation in screened.violations)
 
 
-def attempt(stage: str, items: list, work: Callable, ctx: Context, failures: list[Failure]) -> dict:
+def attempt(
+    stage: str,
+    items: list,
+    work: Callable,
+    ctx: Context,
+    failures: list[Failure],
+    step: Progress,
+) -> dict:
     """Шаг для каждой компании. Сбой одной не останавливает остальных: она помечается непроверенной."""
 
     def one(item):
@@ -151,11 +177,17 @@ def attempt(stage: str, items: list, work: Callable, ctx: Context, failures: lis
         except StepFailed as error:
             return error
 
+    results = {}
+    step(stage, 0, len(items))
     with ThreadPoolExecutor(ctx.settings.concurrency) as pool:
-        results = list(pool.map(one, items))
+        futures = {pool.submit(one, item): item for item in items}
+        for finished in as_completed(futures):
+            results[futures[finished].slug] = finished.result()
+            step(stage, len(results), len(items))
 
     done = {}
-    for item, result in zip(items, results):
+    for item in items:
+        result = results[item.slug]
         if isinstance(result, StepFailed):
             failures.append(Failure(slug=item.slug, stage=stage, error=str(result)))
         else:

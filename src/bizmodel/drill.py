@@ -16,7 +16,7 @@ def run(settings: Settings) -> OutageDrill:
     """Настоящий запрос дешёвого слоя при выключенном основном провайдере, без кеша."""
     chain = settings.roles.prescreen
     primary = chain.routes[0].split(":", 1)[0]
-    company = source.load(settings.source, settings.root / "data" / "source" / "sample.json")[0]
+    company = source.load(settings.source, settings.root / "data" / "source" / "catalog.json.gz")[0]
 
     with tempfile.TemporaryDirectory() as scratch:
         journal = Journal(Path(scratch) / "calls.jsonl")
