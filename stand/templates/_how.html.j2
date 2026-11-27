@@ -1,0 +1,162 @@
+{% import "_macros.html.j2" as ui %}
+{% set f = run.funnel %}
+{% set voters = run.voters|length %}
+
+{% macro facts(items) %}
+<dl class="stage-facts">
+  {% for value, caption in items %}<div><dd>{{ value }}</dd><dt>{{ caption }}</dt></div>{% endfor %}
+</dl>
+{% endmacro %}
+
+<section class="panel" id="panel-how" data-panel="how" aria-labelledby="h-how">
+  <header class="hero hero--short">
+    <h1 id="h-how">Как работает конвейер</h1>
+    <p>Из {{ f.sourced }} компаний каталога до карточки {{ f.carded|plural("дошла", "дошли", "дошли") }} {{ f.carded }}. Нажмите на этап, чтобы увидеть, что на нём произошло.</p>
+  </header>
+
+  <section class="flow" id="flow" aria-label="Схема конвейера" data-flow="{{ how.flow|tojson|forceescape }}">
+    <canvas class="flow__canvas" aria-hidden="true"></canvas>
+    <ol class="flow__stages">
+      {% for stage in how.stages %}
+      <li class="flow__stage">
+        <span class="flow__count">{{ stage.count if stage.count is not none else "" }}</span>
+        <button class="flow__node" id="stage-{{ stage.key }}" type="button" data-stage="{{ stage.key }}" aria-pressed="{{ 'true' if stage.key == 'gate' else 'false' }}" aria-controls="stage-panel-{{ stage.key }}">
+          {% if stage.key == "agents" %}
+          <span class="flow__pair"><span>Критик</span><i class="flow__wall" aria-hidden="true"></i><span>Проверяющий</span></span>
+          {% else %}
+          <span class="flow__title">{{ stage.title }}</span>
+          {% endif %}
+        </button>
+        <span class="flow__lane" aria-hidden="true"></span>
+        <span class="flow__who">{{ stage.who }}</span>
+      </li>
+      {% endfor %}
+    </ol>
+  </section>
+
+  <div class="stage-panels">
+    <section class="stage-panel" id="stage-panel-catalog" data-stage-panel="catalog" hidden>
+      <h2>Каталог</h2>
+      {{ facts([
+        (f.sourced, "компаний взято случайно"),
+        ((how.source.get("excluded_regions") or [])|length, "стран исключено: Россия и соседние"),
+      ]) }}
+      <p>Источник: открытый каталог стартапов {{ (how.source.get("url") or "")|host }}. Выборку задаёт зерно {{ how.source.get("seed") }}: с ним она повторяется один в один.</p>
+    </section>
+
+    <section class="stage-panel" id="stage-panel-filter" data-stage-panel="filter" hidden>
+      <h2>Дешёвый фильтр</h2>
+      {{ facts([
+        (f.prescreen_rejected, "отсеяно по описанию"),
+        (f.queued + f.deep_checked, "прошли"),
+        (f.deep_checked, "лучших идут в глубокую проверку"),
+      ]) }}
+      {% if how.reasons %}
+      <p class="stage-panel__cap">Самые частые причины</p>
+      <ul class="stage-list">
+        {% for reason in how.reasons %}<li><span>{{ reason.title }}</span><b>{{ reason.count }}</b></li>{% endfor %}
+      </ul>
+      {% endif %}
+      {% set sampled = run.control.slugs|length %}
+      {% if sampled %}
+      <p>Контроль ложных отказов: полная проверка подтвердила {{ sampled - run.control.wrongly_rejected|length }} из {{ sampled }} случайных отказов.</p>
+      {% endif %}
+    </section>
+
+    <section class="stage-panel" id="stage-panel-gate" data-stage-panel="gate">
+      <h2>Проверка по критериям</h2>
+      <p>На каждый вопрос отвечают {{ voters }} {{ voters|plural("модель", "модели", "моделей") }}, ответ принят, если согласны {{ run.quorum }} из {{ voters }}. Иначе решает арбитр, если и он не уверен, вопрос уходит человеку.</p>
+      <div class="stage-grid">
+        {% if how.path %}
+        <div>
+          <p class="stage-panel__cap">Пример: {{ how.path.company }}, «{{ how.path.tree.title }}»</p>
+          <ol class="path">
+            {% for step in how.path.steps %}
+            <li class="path__step is-{{ step.state }}">
+              <span class="path__node">{{ loop.index }}</span>
+              <div class="path__body">
+                <p class="path__question">{{ step.decision.question }}</p>
+                <p class="path__ruling">{{ ui.ruling(step.decision) }}</p>
+              </div>
+            </li>
+            {% endfor %}
+          </ol>
+        </div>
+        {% endif %}
+        <div>
+          <p class="stage-panel__cap">Отказ: {{ how.refusals|length }}</p>
+          <ul class="stage-notes">
+            {% for item in how.refusals %}<li><b>{{ item.company }}</b> {{ item.tree.reason }}</li>{% else %}<li class="quiet">Отказов в глубокой проверке нет.</li>{% endfor %}
+          </ul>
+          <p class="stage-panel__cap">Не удалось проверить: {{ f.gate_unknown }}</p>
+          <ul class="stage-notes">
+            {% for item in how.open_questions %}<li><b>{{ item.company }}</b> {{ item.questions|join("; ") }}</li>{% else %}<li class="quiet">Таких нет.</li>{% endfor %}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="stage-panel" id="stage-panel-agents" data-stage-panel="agents" hidden>
+      <h2>Критик и проверяющий</h2>
+      {% if how.isolation %}
+      <div class="walled">
+        <div>
+          <p class="stage-panel__cap">Критик получил</p>
+          <ul class="plain">{% for part in how.isolation.critic %}<li>{{ part|label("inputs") }}</li>{% endfor %}</ul>
+        </div>
+        <i class="walled__wall" aria-hidden="true"></i>
+        <div>
+          <p class="stage-panel__cap">Проверяющий получил</p>
+          <ul class="plain">{% for part in how.isolation.verifier %}<li>{{ part|label("inputs") }}</li>{% endfor %}</ul>
+        </div>
+      </div>
+      <p>Проверка утечки: {{ how.isolation.leaks }} из {{ how.isolation.checks }}. Рассуждений критика проверяющий не видел ни разу.</p>
+      {% endif %}
+      {% if how.verdicts %}
+      <p class="stage-panel__cap">Вердикты проверяющего</p>
+      <p class="chips">
+        {% for status in ["supported", "contradicts", "not_supported", "source_unavailable", "no_source", "failed", "unchecked"] if how.verdicts[status] %}{{ ui.tag(status|label("verdict") ~ ": " ~ how.verdicts[status], status|tone("verdict")) }}{% endfor %}
+      </p>
+      {% endif %}
+    </section>
+
+    <section class="stage-panel" id="stage-panel-card" data-stage-panel="card" hidden>
+      <h2>Карточка</h2>
+      {% set heaviest = how.rubrics|map(attribute="weight")|max if how.rubrics else 1 %}
+      <ul class="weights weights--static">
+        {% for rubric in how.rubrics %}
+        <li class="weight__row"><span class="weight__name">{{ rubric.title }}</span><span class="weight__bar"><i style="--w:{{ (rubric.weight / heaviest)|round(3) }}"></i></span><span class="weight__value">{{ rubric.weight }}</span></li>
+        {% endfor %}
+      </ul>
+      <p>Модель ставит каждой шкале уровень от 1 до 5 по описанной шкале. Балл считает код: шкала даёт от нуля до своего веса, сумма весов 100.</p>
+    </section>
+
+    <section class="stage-panel" id="stage-panel-advisor" data-stage-panel="advisor" hidden>
+      <h2>Советник</h2>
+      {% if how.advice %}
+      <p class="chips">
+        {% for verdict in ["launch", "postpone", "needs_human"] if how.advice[verdict] %}{{ ui.tag(verdict|label("advice") ~ ": " ~ how.advice[verdict], verdict|tone("advice")) }}{% endfor %}
+      </p>
+      {% endif %}
+      {% if run.memo %}
+      <div class="stage-memo">{{ run.memo|paragraphs }}</div>
+      {% endif %}
+      <p class="quiet">Совет написан моделью по готовой карточке и на балл не влияет.</p>
+    </section>
+
+    <section class="stage-panel" id="stage-panel-rating" data-stage-panel="rating" hidden>
+      <h2>Рейтинг</h2>
+      <ol class="stage-list stage-list--ranked">
+        {% for card in how.best %}<li><span>{{ card.name }}</span><b>{{ card.score|round|int }}</b></li>{% endfor %}
+      </ol>
+      <p><a href="#rating">Открыть рейтинг</a></p>
+    </section>
+  </div>
+
+  {% if documents.get("decisions") %}
+  <div class="more foldable why">
+    <button class="more__head" type="button" data-fold aria-expanded="false">Почему так устроено<span class="chev" aria-hidden="true"></span></button>
+    <div class="fold"><div class="fold__in"><article class="prose">{{ documents["decisions"]|md }}</article></div></div>
+  </div>
+  {% endif %}
+</section>

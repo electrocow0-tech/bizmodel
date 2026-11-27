@@ -750,6 +750,7 @@ def build() -> Run:
         profile="fixture",
         voters=VOTERS,
         quorum=QUORUM,
+        spent={"anthropic": 2.52, "openrouter": 0.48},
         config={
             path.stem: yaml.safe_load(path.read_text(encoding="utf-8"))
             for path in sorted((ROOT / "config").glob("*.yaml"))

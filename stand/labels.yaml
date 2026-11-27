@@ -96,6 +96,31 @@ labels:
     Tajikistan: Таджикистан
     Turkmenistan: Туркмения
     Uzbekistan: Узбекистан
+  industry:
+    B2B: B2B
+    Fintech: Финтех
+    Real Estate and Construction: Недвижимость и стройка
+    Education: Образование
+    Healthcare: Медицина
+    Industrials: Промышленность
+    Consumer: Потребительские
+    Government: Госсектор
+    Unspecified: Без отрасли
+  provider_short:
+    anthropic: Anthropic
+    openrouter: OpenRouter
+    local: свой сервер
+  profile_choice:
+    showcase: Точный
+    dev: Дешёвый
+  inputs:
+    Company: описание компании из каталога
+    Business model: схема денег, кто платит, за что и как часто
+    Team: допущения о команде
+    Evidence: найденные критиком источники
+    Claim: текст одного утверждения
+    Source: адрес источника
+    Page text: текст страницы, скачанный заново
   stage:
     prescreen: дешёвый слой
     evidence: сбор источников

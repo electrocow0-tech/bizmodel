@@ -18,10 +18,17 @@
     {% for card in cards %}{{ ui.card_item(card, carded) }}{% endfor %}
   </ol>
   {% endif %}
-  {% if run.memo %}
-  <section class="memo">
-    <h2>Что запускать первым {{ ui.tag("суждение модели") }}</h2>
-    <div class="prose">{{ run.memo|paragraphs }}</div>
-  </section>
+  {% if dropped.total %}
+  <div class="more foldable dropped">
+    <button class="more__head" type="button" data-fold aria-expanded="false">Отсеяны: {{ dropped.total }}, почему<span class="chev" aria-hidden="true"></span></button>
+    <div class="fold"><div class="fold__in">
+      <ul class="dropped__list">
+        <li><b>По описанию: {{ dropped.by_description }}.</b> {% for reason in dropped.reasons %}{{ reason.title }}: {{ reason.count }}{% if not loop.last %}; {% endif %}{% endfor %}.</li>
+        {% if dropped.refusals %}<li><b>По критериям: {{ dropped.refusals|length }}.</b> {% for item in dropped.refusals %}{{ item.company }}: {{ item.tree.reason }}{% if not loop.last %}; {% endif %}{% endfor %}.</li>{% endif %}
+        {% if dropped.unknown %}<li><b>Не удалось проверить: {{ dropped.unknown|length }}.</b> {{ dropped.unknown|join(", ") }}. Нужен ответ человека.</li>{% endif %}
+        {% if dropped.queued %}<li>Ещё {{ dropped.queued }} прошли описание, но не вошли в {{ dropped.deep }} лучших для глубокой проверки.</li>{% endif %}
+      </ul>
+    </div></div>
+  </div>
   {% endif %}
 </section>

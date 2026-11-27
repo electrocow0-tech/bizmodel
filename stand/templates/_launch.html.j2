@@ -1,0 +1,139 @@
+{% import "_macros.html.j2" as ui %}
+{% set data = launch.data %}
+{% set defaults = data.defaults %}
+
+{% macro range_field(name, title, low, high, step, value) %}
+<label class="field">
+  <span class="field__top"><span>{{ title }}</span><output id="out-{{ name }}">{{ value }}</output></span>
+  <input name="{{ name }}" type="range" min="{{ low }}" max="{{ high }}" step="{{ step }}" value="{{ value }}" data-output="out-{{ name }}">
+</label>
+{% endmacro %}
+
+<section class="panel" id="panel-run" data-panel="run" aria-labelledby="h-run">
+  <header class="hero hero--short">
+    <h1 id="h-run">Настройки и запуск</h1>
+    <p>Задайте параметры нового прогона. Значения по умолчанию взяты из этого прогона.</p>
+  </header>
+
+  <form class="launch" id="launch" novalidate>
+    <div class="launch__form" id="launch-form">
+      <section class="zone">
+        <p class="zone__cap">Выборка</p>
+        <div class="box fields">
+          {{ range_field("sample_size", "Сколько компаний взять из каталога", 50, 300, 10, defaults.sample_size) }}
+          {{ range_field("deep_check", "Сколько проверять глубоко", 5, 20, 1, defaults.deep_check) }}
+          <fieldset class="field">
+            <legend>Отрасли</legend>
+            <div class="checks">
+              {% for name, count in launch.industries %}
+              <label class="check"><input type="checkbox" name="industries" value="{{ name }}" checked><span>{{ name|label("industry") }}</span></label>
+              {% endfor %}
+            </div>
+          </fieldset>
+        </div>
+      </section>
+
+      <section class="zone">
+        <p class="zone__cap">Веса шкал: сумма всегда 100, остальные подстраиваются сами</p>
+        <div class="box fields" id="weights">
+          {% for rubric in launch.rubrics %}
+          <label class="field">
+            <span class="field__top"><span>{{ rubric.title }}</span><output id="out-weight-{{ rubric.id }}">{{ defaults.weights[rubric.id] }}</output></span>
+            <input type="range" min="0" max="100" step="1" value="{{ defaults.weights[rubric.id] }}" data-weight="{{ rubric.id }}" data-output="out-weight-{{ rubric.id }}">
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      <section class="zone">
+        <p class="zone__cap">Команда и тест</p>
+        <div class="box fields fields--grid">
+          <label class="field field--wide"><span>Команда</span><input name="team" type="text" value="{{ defaults.assumptions.team }}" autocomplete="off"></label>
+          <label class="field"><span>Бюджет теста, $</span><input name="test_budget_usd" type="number" min="0" step="500" value="{{ defaults.assumptions.test_budget_usd }}"></label>
+          <label class="field"><span>Горизонт, недель</span><input name="horizon_weeks" type="number" min="1" max="52" step="1" value="{{ defaults.assumptions.horizon_weeks }}"></label>
+        </div>
+      </section>
+
+      <section class="zone">
+        <p class="zone__cap">Набор моделей</p>
+        <div class="choices">
+          {% for profile in launch.profiles %}
+          <label class="choice">
+            <input type="radio" name="profile" value="{{ profile.key }}"{% if profile.key == defaults.profile %} checked{% endif %}>
+            <span class="choice__title">{{ profile.key|label("profile_choice") }}</span>
+            {% if profile.key == "dev" %}
+            <span class="choice__text">{{ profile.voters }} {{ profile.voters|plural("голосующая модель", "голосующие модели", "голосующих моделей") }}, недорогие модели на всех ролях. Дешевле, но грубее.</span>
+            {% else %}
+            <span class="choice__text">{{ profile.voters }} {{ profile.voters|plural("голосующая модель", "голосующие модели", "голосующих моделей") }} разных семейств, сильные модели у критика, арбитра и карточки.</span>
+            {% endif %}
+          </label>
+          {% endfor %}
+        </div>
+      </section>
+
+      {% if launch.trees %}
+      <div class="more foldable criteria-fold">
+        <button class="more__head" type="button" data-fold aria-expanded="false">Критерии отбора: {{ launch.trees|length }}, меняются по согласованию<span class="chev" aria-hidden="true"></span></button>
+        <div class="fold"><div class="fold__in">
+          <div class="tree-maps">
+            {% for tree in launch.trees %}
+            <article class="box">
+              <h3 class="box__title">{{ tree.title }}</h3>
+              <ol class="qmap">
+                {% for question in tree.questions %}
+                <li class="qmap__item">
+                  <span class="qmap__number">{{ question.number }}</span>
+                  <div>
+                    <p class="qmap__label">{{ question.label }}</p>
+                    <ul class="branches">
+                      {% for branch in question.branches %}
+                      <li class="branch">
+                        <span class="branch__answer">{{ branch.answer|label("branch") }}</span>
+                        {% if branch.get("next") %}
+                        <span class="branch__to"><b>вопрос {{ branch.next }}</b></span>
+                        {% else %}
+                        <span class="branch__to">{{ ui.tag(branch.outcome|label("outcome"), branch.outcome|tone("outcome")) }} {{ branch.text }}</span>
+                        {% endif %}
+                      </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                </li>
+                {% endfor %}
+              </ol>
+            </article>
+            {% endfor %}
+          </div>
+        </div></div>
+      </div>
+      {% endif %}
+    </div>
+
+    <aside class="launch__side">
+      <div class="box run-box">
+        <p class="run-box__cap">Оценка</p>
+        <p class="run-estimate" id="estimate"></p>
+        <p class="run-detail" id="estimate-detail"></p>
+        <label class="field"><span>Потолок расхода на прогон, $</span><input name="max_usd" type="number" min="1" step="1" value="{{ defaults.max_usd }}"></label>
+        <label class="field"><span>Код запуска</span><input name="code" type="password" autocomplete="off" spellcheck="false"></label>
+        <button class="btn btn--primary btn--wide" type="submit" id="launch-go" disabled>Запустить</button>
+        <p class="run-note" id="launch-note" aria-live="polite"></p>
+      </div>
+      <div class="box run-box">
+        <p class="run-box__cap">Ход прогона</p>
+        <span class="meter-line meter-line--progress"><i id="progress-bar"></i></span>
+        <p class="run-detail" id="progress-text">Прогон не идёт.</p>
+        <p class="run-detail">Последний прогон стоил ${{ data.lastCost|usd }}.</p>
+      </div>
+      <div class="box run-box">
+        <p class="run-box__cap">Остаток бюджета</p>
+        <ul class="budgets" id="budgets">
+          {% for provider, limit in data.budgets.items() %}
+          <li data-provider="{{ provider }}"><span>{{ provider|label("provider_short") }}</span><span class="budgets__value">лимит ${{ limit }}</span><span class="meter-line"><i></i></span></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+  </form>
+  <script type="application/json" id="launch-data">{{ data|tojson }}</script>
+</section>

@@ -87,7 +87,11 @@
         opened = true;
       }
     });
-    if (step.pick.length) Stand.choose(step.pick);
+    const node = step.stage && document.getElementById(`stage-${step.stage}`);
+    if (node && node.getAttribute('aria-pressed') !== 'true') {
+      Stand.stage(step.stage, instant);
+      opened = true;
+    }
     return opened;
   }
 
@@ -238,7 +242,7 @@
     } else {
       await wait(150);
       if (mine !== token) return;
-      if (prepare(step, false)) await wait(280);
+      if (prepare(step, false)) await wait(400);
       if (mine !== token) return;
       const found = element();
       if (found) await glide(plan(found));

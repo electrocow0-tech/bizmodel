@@ -1,6 +1,7 @@
 """Собирает из готового прогона статический стенд в папку docs/."""
 
 import hashlib
+import re
 import shutil
 from collections import Counter
 from pathlib import Path
@@ -11,18 +12,13 @@ import yaml
 from jinja2 import Environment, FileSystemLoader, StrictUndefined
 from markupsafe import Markup
 
-from bizmodel.schemas import Card, Decision, Gate, Isolation, Objection, Run, TreeResult
+from bizmodel.schemas import Card, Cost, Decision, Gate, Objection, Run, TreeResult
 
 STAND = Path(__file__).resolve().parents[2] / "stand"
 NO_DATE = '<span class="quiet">нет</span>'
 VOTE_EXAMPLE_ORDER = {"arbiter": 0, "human": 1, "unresolved": 1}
-VERDICT_EXAMPLE_ORDER = {"supported": 0, "contradicts": 1, "not_supported": 2}
-ROLE_ORDER = ["prescreen", "planner", "voters", "arbiter", "critic", "verifier", "card", "advisor"]
 BRANCH_ORDER = ("yes", "no", "unknown")
-PROMPT_ORDER = [
-    "prescreen", "planner", "voter", "arbiter", "critic_plan", "critic", "verifier", "card",
-    "advisor", "portfolio",
-]  # fmt: skip
+PROFILES = ("showcase", "dev")
 VERDICT_ORDER = [
     "supported", "contradicts", "not_supported", "source_unavailable", "no_source", "failed", "unchecked",
 ]  # fmt: skip
@@ -45,11 +41,9 @@ def build(run: Run, out: Path, documents: dict[str, str]) -> None:
         .render(
             run=run,
             cards=sorted(run.cards, key=lambda card: card.score),
-            forest=_forest(run),
-            cheap_layer=_cheap_layer(run),
-            spend=_spend(run),
-            tour=_tour(run),
-            settings=_settings(run),
+            how=_how(run),
+            launch=_launch(run),
+            dropped=_dropped(run),
             documents=documents,
             assets=_publish_assets(out),
         )
@@ -153,35 +147,126 @@ def _publish_assets(out: Path) -> dict[str, str]:
     }
 
 
-def _forest(run: Run) -> list[dict]:
-    carded = {card.slug for card in run.cards}
-    control = set(run.control.slugs)
-    wrongly_rejected = set(run.control.wrongly_rejected)
-    companies = []
-    for gate in run.gates:
-        passports = {passport.id: passport for passport in gate.passports}
-        answers = {
-            decision.question_id: {
-                "decision": decision,
-                "passport": passports.get(decision.passport_id),
-            }
-            for decision in gate.decisions
-        }
-        walked = {question for tree in gate.trees for question in tree.path}
-        companies.append(
+def _how(run: Run) -> dict:
+    """Схема конвейера: числа над этапами и факты, которые открываются по нажатию на этап."""
+    funnel = run.funnel
+    pipeline = run.config.get("pipeline", {})
+    checked = _checked(run)
+    advised = sum(1 for card in run.cards if card.advice)
+    counts = [
+        funnel.sourced,
+        funnel.queued + funnel.deep_checked,
+        funnel.deep_checked,
+        funnel.gate_passed,
+        funnel.carded,
+        advised,
+        funnel.carded,
+    ]
+    voters = len(run.voters)
+    stages = [
+        ("catalog", "Каталог", "код"),
+        ("filter", "Дешёвый фильтр", "дешёвая модель"),
+        (
+            "gate",
+            "Проверка по критериям",
+            f"{voters} моделей, решение при {run.quorum} из {voters}",
+        ),
+        ("agents", "Критик и проверяющий", "два агента, не видят друг друга"),
+        ("card", "Карточка", "код считает балл"),
+        ("advisor", "Советник", "модель, на балл не влияет"),
+        ("rating", "Рейтинг", "код"),
+    ]
+    vote = _vote_example(checked)
+    top = min(run.cards, key=lambda card: card.rank, default=None)
+    return {
+        "stages": [
             {
-                "gate": gate,
-                "company": run.companies[gate.slug],
-                "is_control": gate.slug in control,
-                "wrongly_rejected": gate.slug in wrongly_rejected,
-                "has_card": gate.slug in carded,
-                "trees": [{"tree": tree, "steps": _steps(tree, answers)} for tree in gate.trees],
-                "off_path": [
-                    answer for question, answer in answers.items() if question not in walked
-                ],
+                "key": key,
+                "title": title,
+                "who": who,
+                "count": count if index == 0 or count != counts[index - 1] else None,
             }
-        )
-    return sorted(companies, key=lambda company: company["is_control"])
+            for index, ((key, title, who), count) in enumerate(zip(stages, counts, strict=True))
+        ],
+        "source": pipeline.get("source") or {},
+        "funnel": pipeline.get("funnel") or {},
+        "reasons": _rejection_reasons(run)[:3],
+        "path": _example_path(run, vote),
+        "refusals": _refusals(run),
+        "open_questions": _open_questions(run),
+        "isolation": _isolation_example(run, top),
+        "verdicts": Counter(_verdict_key(o) for card in run.cards for o in card.objections),
+        "rubrics": run.config.get("scoring", {}).get("rubrics", []),
+        "advice": Counter(card.advice.verdict for card in run.cards if card.advice),
+        "best": sorted(run.cards, key=lambda card: card.rank)[:3],
+        "top": top,
+        "flow": {
+            "sourced": funnel.sourced,
+            "filtered": funnel.queued + funnel.deep_checked,
+            "deep": funnel.deep_checked,
+            "passed": funnel.gate_passed,
+            "carded": funnel.carded,
+        },
+    }
+
+
+def _rejection_reasons(run: Run) -> list[dict]:
+    titles = {
+        tree["id"]: tree["title"] for tree in run.config.get("criteria", {}).get("trees", [])
+    } | {tree.tree_id: tree.title for gate in run.gates for tree in gate.trees}
+    counts = Counter(
+        prescreen.violations[0].criterion
+        for prescreen in run.prescreens
+        if prescreen.status == "rejected" and prescreen.violations
+    )
+    return [
+        {"title": titles.get(criterion, criterion), "count": count}
+        for criterion, count in counts.most_common()
+    ]
+
+
+def _checked(run: Run) -> list[Gate]:
+    """Компании глубокой проверки, без контрольной выборки отказов."""
+    return [gate for gate in run.gates if gate.slug not in run.control.slugs]
+
+
+def _refusals(run: Run) -> list[dict]:
+    return [
+        {"company": run.companies[gate.slug].name, "tree": tree}
+        for gate in _checked(run)
+        if gate.outcome == "fail"
+        for tree in gate.trees
+        if tree.outcome == "fail"
+    ]
+
+
+def _dropped(run: Run) -> dict:
+    """Кто не дошёл до карточки и почему: коротко, для свёрнутой строки под рейтингом."""
+    funnel = run.funnel
+    return {
+        "total": funnel.prescreen_rejected + funnel.gate_failed + funnel.gate_unknown,
+        "by_description": funnel.prescreen_rejected,
+        "reasons": _rejection_reasons(run)[:3],
+        "refusals": _refusals(run),
+        "unknown": [
+            run.companies[gate.slug].name for gate in _checked(run) if gate.outcome == "unknown"
+        ],
+        "queued": funnel.queued,
+        "deep": funnel.deep_checked,
+    }
+
+
+def _example_path(run: Run, vote: dict | None) -> dict | None:
+    if not vote:
+        return None
+    gate, decision = vote["gate"], vote["decision"]
+    tree = next(tree for tree in gate.trees if decision.question_id in tree.path)
+    passports = {passport.id: passport for passport in gate.passports}
+    answers = {
+        item.question_id: {"decision": item, "passport": passports.get(item.passport_id)}
+        for item in gate.decisions
+    }
+    return {"company": run.companies[gate.slug].name, "tree": tree, "steps": _steps(tree, answers)}
 
 
 def _steps(tree: TreeResult, answers: dict[str, dict]) -> list[dict]:
@@ -195,59 +280,18 @@ def _steps(tree: TreeResult, answers: dict[str, dict]) -> list[dict]:
     ]
 
 
-def _cheap_layer(run: Run) -> dict:
-    titles = {tree.tree_id: tree.title for gate in run.gates for tree in gate.trees}
-    groups: dict[str, list[dict]] = {}
-    for prescreen in run.prescreens:
-        if prescreen.status != "rejected" or not prescreen.violations:
+def _open_questions(run: Run) -> list[dict]:
+    """По компании со статусом «не удалось проверить»: вопросы, от которых зависит её исход."""
+    companies = []
+    for gate in _checked(run):
+        if gate.outcome != "unknown":
             continue
-        violation = prescreen.violations[0]
-        groups.setdefault(violation.criterion, []).append(
-            {"company": run.companies[prescreen.slug], "reason": violation.reason}
-        )
-    queued = [p for p in run.prescreens if p.status == "queued"]
-    return {
-        "rejected": [
-            {"title": titles.get(criterion, criterion), "companies": rows}
-            for criterion, rows in sorted(groups.items(), key=lambda group: -len(group[1]))
-        ],
-        "queued": [
-            {"company": run.companies[p.slug], "prescreen": p}
-            for p in sorted(queued, key=lambda p: -p.speed)
-        ],
-        "failed": [run.companies[p.slug] for p in run.prescreens if p.status == "failed"],
-    }
-
-
-def _spend(run: Run) -> dict:
-    by_provider: dict[str, float] = {}
-    for cost in run.costs:
-        by_provider[cost.provider] = by_provider.get(cost.provider, 0.0) + cost.usd
-    return {"by_provider": by_provider, "total": sum(by_provider.values())}
-
-
-def _tour(run: Run) -> dict:
-    """Примеры для демонстрации берутся из данных прогона: имена компаний заранее не известны."""
-    control = set(run.control.slugs)
-    checked = [gate for gate in run.gates if gate.slug not in control]
-    ranked = sorted(run.cards, key=lambda card: card.rank)
-    top = ranked[0] if ranked else None
-    return {
-        "refusal": _refusal_example(checked),
-        "vote": _vote_example(checked),
-        "top": top,
-        "objection": _objection_example(top),
-        "isolation": _isolation_example(run.isolation, top),
-        "best": ranked[:3],
-    }
-
-
-def _refusal_example(gates: list[Gate]) -> dict | None:
-    for gate in gates:
-        tree = next((tree for tree in gate.trees if tree.outcome == "fail"), None)
-        if gate.outcome == "fail" and tree:
-            return {"gate": gate, "tree": tree}
-    return None
+        decisions = {decision.question_id: decision for decision in gate.decisions}
+        questions = [
+            decisions[tree.path[-1]].question for tree in gate.trees if tree.outcome == "unknown"
+        ]
+        companies.append({"company": run.companies[gate.slug].name, "questions": questions})
+    return companies
 
 
 def _vote_example(gates: list[Gate]) -> dict | None:
@@ -276,73 +320,84 @@ def _agreed(decision: Decision) -> int:
     return round(decision.agreement * len(decision.votes))
 
 
-def _objection_example(card: Card | None) -> Objection | None:
-    checked = (
-        [objection for objection in card.objections if objection.sent_to_verifier] if card else []
-    )
-    return min(
-        checked,
-        key=lambda objection: (
-            VERDICT_EXAMPLE_ORDER.get(objection.verdict, 3),
-            -objection.strength,
-        ),
-        default=None,
-    )
-
-
-def _isolation_example(checks: list[Isolation], card: Card | None) -> Isolation | None:
-    usable = [check for check in checks if check.verifier]
+def _isolation_example(run: Run, card: Card | None) -> dict | None:
+    usable = [check for check in run.isolation if check.verifier]
     own = [check for check in usable if card and check.slug == card.slug]
-    return (own or usable or [None])[0]
-
-
-def _settings(run: Run) -> dict:
-    """Конфиг прогона в том виде, в каком его читает человек: без имён полей и ключей доступа."""
-    config = run.config
-    pipeline = config.get("pipeline", {})
-    profiles = config.get("models", {}).get("profiles", {})
-    profile = run.profile if run.profile in profiles else pipeline.get("profile", "")
-    overrides = config.get("overrides") or {}
+    check = (own or usable or [None])[0]
+    if not check:
+        return None
     return {
-        "trees": [_tree_map(tree) for tree in config.get("criteria", {}).get("trees", [])],
-        "scoring": config.get("scoring", {}),
-        "pipeline": pipeline,
-        "profile": profile,
-        "roles": _roles(profiles.get(profile, {})),
-        "other_profiles": {
-            name: _roles(spec) for name, spec in profiles.items() if name != profile
-        },
-        "budgets": {
-            name: provider.get("budget_usd")
-            for name, provider in config.get("models", {}).get("providers", {}).items()
-        },
-        "prices": config.get("models", {}).get("prices", {}),
-        "overrides": sum(len(answers) for answers in overrides.values()),
-        "open_questions": _open_questions(run),
-        "holding": (config.get("holding") or {}).get("companies") or [],
-        "prompts": dict(
-            sorted(run.prompts.items(), key=lambda item: _position(PROMPT_ORDER, item[0]))
-        ),
+        "company": run.companies[check.slug].name,
+        "critic": [_input_name(part) for part in check.critic.inputs],
+        "verifier": [_input_name(part) for part in check.verifier[0].inputs],
+        "leaks": sum(1 for item in run.isolation if item.leaked),
+        "checks": len(run.isolation),
     }
 
 
-def _open_questions(run: Run) -> list[dict]:
-    """Вопросы, от которых зависит исход компании со статусом «не удалось проверить»."""
-    questions = []
-    for gate in run.gates:
-        if gate.outcome != "unknown" or gate.slug in run.control.slugs:
-            continue
-        decisions = {decision.question_id: decision for decision in gate.decisions}
-        for tree in gate.trees:
-            if tree.outcome == "unknown":
-                questions.append(
-                    {
-                        "slug": gate.slug,
-                        "company": run.companies[gate.slug].name,
-                        "question": decisions[tree.path[-1]].question,
-                    }
-                )
-    return questions
+def _input_name(part: str) -> str:
+    """Во входах записан отпечаток каждой части запроса: человеку он не нужен."""
+    return re.sub(r"\s*\([0-9a-f]{8,}\)$", "", part)
+
+
+def _launch(run: Run) -> dict:
+    """Значения формы запуска берутся из конфига этого прогона."""
+    config = run.config
+    pipeline = config.get("pipeline", {})
+    source = pipeline.get("source") or {}
+    funnel = pipeline.get("funnel") or {}
+    assumptions = pipeline.get("assumptions") or {}
+    rubrics = config.get("scoring", {}).get("rubrics", [])
+    providers = config.get("models", {}).get("providers", {})
+    profiles = config.get("models", {}).get("profiles", {})
+    stand = pipeline.get("stand") or {}
+    budgets = stand.get("budget_usd") or {
+        name: provider["budget_usd"]
+        for name, provider in providers.items()
+        if provider.get("budget_usd") is not None
+    }
+    industries = Counter(company.industry for company in run.companies.values()).most_common()
+    return {
+        "industries": industries,
+        "rubrics": [{"id": rubric["id"], "title": rubric["title"]} for rubric in rubrics],
+        "profiles": [
+            {"key": key, "voters": len(profiles[key].get("voters", []))}
+            for key in PROFILES
+            if key in profiles
+        ],
+        "trees": [_tree_map(tree) for tree in config.get("criteria", {}).get("trees", [])],
+        "data": {
+            "runId": run.id,
+            "liveUrl": stand.get("live_url"),
+            "lastCost": round(sum(run.spent.values()) or sum(cost.usd for cost in run.costs), 2),
+            "budgets": budgets,
+            "costs": _cost_shares(run.costs),
+            "measured": {"sample": run.funnel.sourced, "deep": run.funnel.deep_checked},
+            "defaults": {
+                "sample_size": source.get("sample_size", run.funnel.sourced),
+                "deep_check": funnel.get("deep_check", run.funnel.deep_checked),
+                "industries": [name for name, _ in industries],
+                "weights": {rubric["id"]: rubric["weight"] for rubric in rubrics},
+                "assumptions": {
+                    "team": assumptions.get("team", ""),
+                    "test_budget_usd": assumptions.get("test_budget_usd", 0),
+                    "horizon_weeks": assumptions.get("horizon_weeks", 0),
+                },
+                "profile": run.profile if run.profile in profiles else pipeline.get("profile"),
+                "max_usd": sum(budgets.values()),
+            },
+        },
+    }
+
+
+def _cost_shares(costs: list[Cost]) -> dict:
+    """Расход прогона по провайдерам: отдельно дешёвый слой, отдельно всё после него."""
+    shares: dict[str, dict[str, float]] = {}
+    for cost in costs:
+        stage = "prescreen" if cost.role == "prescreen" else "deep"
+        provider = shares.setdefault(cost.provider, {"prescreen": 0.0, "deep": 0.0})
+        provider[stage] = round(provider[stage] + cost.usd, 4)
+    return shares
 
 
 def _tree_map(tree: dict) -> dict:
@@ -376,33 +431,3 @@ def _tree_map(tree: dict) -> dict:
             {"number": number[node_id], "label": nodes[node_id]["label"], "branches": branches}
         )
     return {"title": tree["title"], "questions": questions}
-
-
-def _roles(profile: dict) -> list[dict]:
-    """Строка на каждое место: у голосующих их несколько, подпись роли стоит только у первого."""
-    rows = []
-    for role in ROLE_ORDER:
-        spec = profile.get(role)
-        if not spec:
-            continue
-        seats = spec if role == "voters" else [spec]
-        for position, seat in enumerate(seats):
-            routes = [_route(route) for route in seat.get("routes", [])]
-            rows.append(
-                {
-                    "role": role if position == 0 else None,
-                    "main": routes[0],
-                    "fallbacks": routes[1:],
-                    "effort": seat.get("effort"),
-                }
-            )
-    return rows
-
-
-def _position(order: list[str], key: str) -> int:
-    return order.index(key) if key in order else len(order)
-
-
-def _route(route: str) -> dict:
-    provider, _, model = route.partition(":")
-    return {"provider": provider, "model": model}

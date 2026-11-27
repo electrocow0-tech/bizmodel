@@ -48,7 +48,7 @@ def page(site: Path) -> str:
 
 
 def card_blocks(page: str) -> dict[str, str]:
-    rating = page[page.index('id="panel-rating"') : page.index('id="panel-compare"')]
+    rating = page[page.index('id="panel-rating"') : page.index('id="panel-run"')]
     blocks = rating.split('<li class="card foldable"')[1:]
     return {re.search(r'data-slug="([^"]+)"', block).group(1): block for block in blocks}
 
@@ -59,7 +59,6 @@ def test_every_card_is_on_the_page(run: Run, page: str):
     assert set(blocks) == {card.slug for card in run.cards}
     for card in run.cards:
         assert card.name in blocks[card.slug]
-        assert f'data-col="{card.slug}"' in page
 
 
 def test_cards_share_one_structure(run: Run, page: str):
@@ -76,25 +75,12 @@ def test_rating_runs_from_weak_to_promising(run: Run, page: str):
     assert list(card_blocks(page)) == weakest_first
 
 
-def test_compare_columns_have_equal_rows(run: Run, page: str):
-    compare = page[page.index('id="panel-compare"') : page.index('id="panel-forest"')]
-    columns = compare.split('<div class="cmp__col')[1:]
-
-    assert len(columns) == len(run.cards) + 1
-    assert len({column.count('class="cmp__cell') for column in columns}) == 1
-
-
-def test_every_checked_company_has_its_path(run: Run, page: str):
-    for gate in run.gates:
-        assert f'id="gate-{gate.slug}"' in page
-
-
 def test_documents_are_rendered_or_announced(page: str):
-    decisions = page[page.index('id="panel-decisions"') : page.index('id="panel-improve"')]
+    how = page[page.index('id="panel-how"') : page.index('id="panel-rating"')]
     improve = page[page.index('id="panel-improve"') :]
 
-    assert "Веса лежат в конфиге." in decisions
-    assert "<h1>Почему так</h1>" not in decisions
+    assert "Веса лежат в конфиге." in how
+    assert "<h1>Почему так</h1>" not in how
     assert "Список появится здесь после финального прогона." in improve
     assert "Полная версия" in improve
 
@@ -147,46 +133,53 @@ def test_tour_targets_exist_in_the_page(page: str):
     steps = tour_steps(page)
 
     assert steps[-1]["final"] is True
-    assert sum(not step.get("final") for step in steps) == 12
+    assert len(steps) == 6
     for step in steps:
         for element in [step["target"], *step["open"]]:
             assert f'id="{element}"' in page, (step["title"], element)
+        if step["stage"]:
+            assert f'id="stage-panel-{step["stage"]}"' in page
 
 
 def test_tour_uses_voters_and_quorum_of_the_run(run: Run, page: str):
-    votes = next(step for step in tour_steps(page) if step["title"] == "Голоса моделей")
+    check = next(step for step in tour_steps(page) if step["stage"] == "gate")
 
-    assert f"согласны {run.quorum} из {len(run.voters)}" in votes["text"]
+    assert f"согласны {run.quorum} из {len(run.voters)}" in check["text"]
 
 
-def test_tour_skips_examples_the_run_does_not_have(tmp_path):
+def test_tour_without_cards_skips_card_steps(tmp_path):
     run = Run.model_validate_json(FIXTURE.read_text(encoding="utf-8"))
-    run.gates = [gate for gate in run.gates if gate.outcome != "fail"]
-    for gate in run.gates:
-        for decision in gate.decisions:
-            decision.decided_by = "vote"
+    run.cards = []
     build(run, tmp_path, {"decisions": "", "limitations": ""})
     page = (tmp_path / "index.html").read_text(encoding="utf-8")
     steps = tour_steps(page)
 
-    assert "Отказ с причиной" not in [step["title"] for step in steps]
-    assert "решал арбитр" not in next(s for s in steps if s["title"] == "Голоса моделей")["text"]
+    assert [step["tab"] for step in steps] == ["how", "how", "run", "improve"]
     for step in steps:
         assert f'id="{step["target"]}"' in page
 
 
-def test_settings_speak_plainly(run: Run, page: str):
-    settings = page[page.index('id="panel-settings"') : page.index('id="panel-decisions"')]
-    unresolved = sum(
-        tree.outcome == "unknown"
-        for g in run.gates
-        if g.outcome == "unknown" and g.slug not in run.control.slugs
-        for tree in g.trees
-    )
+def test_flow_shows_the_funnel_of_the_run(run: Run, page: str):
+    f = run.funnel
+    counts = re.findall(r'<span class="flow__count">(\d*)</span>', page)
+    expected = [f.sourced, f.queued + f.deep_checked, f.deep_checked, f.gate_passed, f.carded]
 
-    assert settings.count('class="box__title"') == len(run.config["criteria"]["trees"])
-    assert f"Открытые вопросы этого прогона: {unresolved}" in settings
+    assert [int(count) for count in counts if count] == expected
+    assert page.count('class="flow__node"') == 7
+    for stage in ("catalog", "filter", "gate", "agents", "card", "advisor", "rating"):
+        assert f'id="stage-panel-{stage}"' in page
+
+
+def test_launch_form_starts_from_this_run(run: Run, page: str):
+    found = re.search(
+        r'<script type="application/json" id="launch-data">(.*?)</script>', page, re.DOTALL
+    )
+    defaults = json.loads(found.group(1))["defaults"]
+    pipeline = run.config["pipeline"]
+
+    assert defaults["sample_size"] == pipeline["source"]["sample_size"]
+    assert defaults["deep_check"] == pipeline["funnel"]["deep_check"]
+    assert sum(defaults["weights"].values()) == 100
+    assert set(defaults["industries"]) == {company.industry for company in run.companies.values()}
     assert "API_KEY" not in page
     assert "key_env" not in page
-    for role in run.prompts:
-        assert '<pre class="prompt">' in settings, role
