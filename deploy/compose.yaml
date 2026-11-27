@@ -1,0 +1,15 @@
+services:
+  bizmodel:
+    build: .
+    container_name: bizmodel
+    restart: unless-stopped
+    env_file: [.env, run_code.env]
+    volumes:
+      - ./app:/app
+    mem_limit: 768m
+    networks: [web]
+
+networks:
+  web:
+    external: true
+    name: health-bot_default
